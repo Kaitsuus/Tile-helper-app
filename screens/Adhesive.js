@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
-import { Picker } from '@react-native-picker/picker'
+import { Picker } from '@react-native-picker/picker';
 import { Button } from 'react-native-elements';
 import { MaskedTextInput } from 'react-native-mask-text';
 
@@ -40,9 +40,21 @@ const Adhesive = () => {
         style={styles.picker}
         onValueChange={(itemValue) => setThickness(itemValue)}
       >
-        <Picker.Item label="3.5 mm" value="3.5" color={thickness === "3.5" ? "#ED7931" : "black"}/>
-        <Picker.Item label="6 mm" value="6" color={thickness === "6" ? "#ED7931" : "black"}/>
-        <Picker.Item label="10 mm" value="10" color={thickness === "10" ? "#ED7931" : "black"}/>
+        <Picker.Item
+          label="3.5 mm"
+          value="3.5"
+          color={thickness === '3.5' ? '#ED7931' : 'black'}
+        />
+        <Picker.Item
+          label="6 mm"
+          value="6"
+          color={thickness === '6' ? '#ED7931' : 'black'}
+        />
+        <Picker.Item
+          label="10 mm"
+          value="10"
+          color={thickness === '10' ? '#ED7931' : 'black'}
+        />
       </Picker>
       <Text style={styles.label}>Syötä alue (m²):</Text>
       <MaskedTextInput
@@ -53,7 +65,11 @@ const Adhesive = () => {
         keyboardType="numeric"
         placeholder="Syötä m²"
       />
-      <Button buttonStyle={styles.button}  title="Laske" onPress={calculateConsumption} />
+      <Button
+        buttonStyle={styles.button}
+        title="Laske"
+        onPress={calculateConsumption}
+      />
       {adhesiveAmount !== '' && (
         <Text style={styles.result}>Laasti määrä: {adhesiveAmount} kg</Text>
       )}
@@ -61,9 +77,9 @@ const Adhesive = () => {
         title="Lisää listaan"
         buttonStyle={styles.button}
         onPress={() => {
-        const message = `Laasti ${adhesiveAmount} kg lisätty listalle`;
-        Alert.alert(message);
-      }}
+          const message = `Laasti ${adhesiveAmount} kg lisätty listalle`;
+          Alert.alert(message);
+        }}
       />
     </View>
   );
@@ -80,13 +96,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 20
   },
   label: {
     fontSize: 24,
     marginBottom: 20,
     textAlign: 'center',
-    color: '#fafafa',
+    color: '#fafafa'
   },
   picker: {
     width: 250,
@@ -111,13 +127,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 10,
     marginBottom: 10,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   button: {
     backgroundColor: '#ED7931',
     width: 200,
-    marginBottom: 10,
-  },
+    marginBottom: 10
+  }
 });
 
 export default Adhesive;

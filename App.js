@@ -5,9 +5,7 @@ import { Image } from 'react-native';
 import Home from './screens/Home';
 import Grout from './screens/Grout';
 import Adhesive from './screens/Adhesive';
-
-
-
+import WaterProof from './screens/WaterProof';
 
 const Stack = createStackNavigator();
 
@@ -26,7 +24,7 @@ function HomeStack() {
               style={{ width: 50, height: 50 }}
               resizeMode="contain"
             />
-          ),
+          )
         }}
       />
       <Stack.Screen
@@ -37,6 +35,11 @@ function HomeStack() {
       <Stack.Screen
         name="Adhesive"
         component={Adhesive}
+        options={{ headerStyle: { backgroundColor: 'black' } }}
+      />
+      <Stack.Screen
+        name="WaterProof"
+        component={WaterProof}
         options={{ headerStyle: { backgroundColor: 'black' } }}
       />
     </Stack.Navigator>
@@ -52,7 +55,5 @@ function RootNavigator() {
 }
 
 export default function App() {
-  return (
-    <RootNavigator />
-  );
+  return <RootNavigator />;
 }

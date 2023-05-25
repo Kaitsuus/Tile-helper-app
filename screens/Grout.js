@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Button } from 'react-native-elements';
-import { Picker } from '@react-native-picker/picker'
+import { Picker } from '@react-native-picker/picker';
 
 const Grout = () => {
   const [brand, setBrand] = useState('Kiilto Pro Tilegrout');
@@ -42,7 +42,6 @@ const Grout = () => {
     setTotalResult(total.toFixed(2));
   };
 
-
   return (
     <View style={styles.container}>
       <Picker
@@ -50,18 +49,32 @@ const Grout = () => {
         style={styles.picker}
         onValueChange={(itemValue) => setBrand(itemValue)}
       >
-        <Picker.Item label="Kiilto Pro Tilegrout" value="KiiltoProTilegrout" color={brand === "KiiltoProTilegrout" ? "#ED7931" : "black"} />
-        <Picker.Item label="Litokol Stylegrout" value="LitokolStylegrout" color={brand === "LitokolStylegrout" ? "#ED7931" : "black"} />
-        <Picker.Item label="Ardex G8S Flex" value="yet a other brand" color={brand === "yet a other brand" ? "#ED7931" : "black"} />
+        <Picker.Item
+          label="Kiilto Pro Tilegrout"
+          value="KiiltoProTilegrout"
+          color={brand === 'KiiltoProTilegrout' ? '#ED7931' : 'black'}
+        />
+        <Picker.Item
+          label="Litokol Stylegrout"
+          value="LitokolStylegrout"
+          color={brand === 'LitokolStylegrout' ? '#ED7931' : 'black'}
+        />
+        <Picker.Item
+          label="Ardex G8S Flex"
+          value="yet a other brand"
+          color={brand === 'yet a other brand' ? '#ED7931' : 'black'}
+        />
       </Picker>
-      <Text style={styles.label}>Syötä laatan mitat (mm) ja sauman leveys (mm)</Text>
+      <Text style={styles.label}>
+        Syötä laatan mitat (mm) ja sauman leveys (mm)
+      </Text>
       <MaskedTextInput
         style={styles.input}
         mask="9999"
         onChangeText={(text) => setA(text)}
         value={A}
         keyboardType="numeric"
-        placeholder='Laatan pituus (mm)'
+        placeholder="Laatan pituus (mm)"
       />
       <MaskedTextInput
         style={styles.input}
@@ -69,7 +82,7 @@ const Grout = () => {
         onChangeText={(text) => setB(text)}
         value={B}
         keyboardType="numeric"
-        placeholder='Laatan leveys (mm)'
+        placeholder="Laatan leveys (mm)"
       />
       <MaskedTextInput
         style={styles.input}
@@ -77,7 +90,7 @@ const Grout = () => {
         onChangeText={(text) => setC(text)}
         value={C}
         keyboardType="numeric"
-        placeholder='Laatan paksuus (mm)'
+        placeholder="Laatan paksuus (mm)"
       />
       <MaskedTextInput
         style={styles.input}
@@ -85,7 +98,7 @@ const Grout = () => {
         onChangeText={(text) => setD(text)}
         value={D}
         keyboardType="numeric"
-        placeholder='Sauman leveys (mm)'
+        placeholder="Sauman leveys (mm)"
       />
       <MaskedTextInput
         style={styles.input}
@@ -93,7 +106,7 @@ const Grout = () => {
         onChangeText={(text) => setE(text)}
         value={E}
         keyboardType="numeric"
-        placeholder='Saumattava alue (m²)'
+        placeholder="Saumattava alue (m²)"
       />
       <Button
         title="Laske"
@@ -104,21 +117,23 @@ const Grout = () => {
         <Text style={styles.result}>Menekki: {groutResult} kg/m²</Text>
       )}
       {groutResult !== '' && (
-        <Text style={styles.result}>Menekki: {totalResult} kg/{E}m²</Text>
+        <Text style={styles.result}>
+          Menekki: {totalResult} kg/{E}m²
+        </Text>
       )}
       <Button
         title="Lisää listaan"
         buttonStyle={styles.button}
         onPress={() => {
-            let quantity = 1;
-        if (totalResult < 3) {
-        quantity = 1;
-        } else {
-        quantity = Math.ceil(totalResult / 3);
-        }
-        const message = `${brand} 3kg ${quantity} kpl lisätty listalle`;
-        Alert.alert(message);
-      }}
+          let quantity = 1;
+          if (totalResult < 3) {
+            quantity = 1;
+          } else {
+            quantity = Math.ceil(totalResult / 3);
+          }
+          const message = `${brand} 3kg ${quantity} kpl lisätty listalle`;
+          Alert.alert(message);
+        }}
       />
     </View>
   );
@@ -151,14 +166,14 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#ED7931',
     width: 200,
-    marginBottom: 10,
+    marginBottom: 10
   },
   result: {
     color: '#fafafa',
     fontSize: 16,
     marginTop: 10,
     marginBottom: 10,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   picker: {
     width: 250,
@@ -167,7 +182,7 @@ const styles = StyleSheet.create({
     height: 5,
     marginBottom: 10,
     backgroundColor: '#fafafa'
-  },
+  }
 });
 
 export default Grout;
