@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Image } from 'react-native';
 import Home from './screens/Home';
 import Grout from './screens/Grout';
+import Adhesive from './screens/Adhesive';
 
 
 
@@ -21,7 +22,7 @@ function HomeStack() {
           headerTintColor: 'black',
           headerTitle: () => (
             <Image
-              source={require('./assets/apuri.png')}
+              source={require('./assets/apuriLogo.png')}
               style={{ width: 50, height: 50 }}
               resizeMode="contain"
             />
@@ -31,6 +32,11 @@ function HomeStack() {
       <Stack.Screen
         name="Grout"
         component={Grout}
+        options={{ headerStyle: { backgroundColor: 'black' } }}
+      />
+      <Stack.Screen
+        name="Adhesive"
+        component={Adhesive}
         options={{ headerStyle: { backgroundColor: 'black' } }}
       />
     </Stack.Navigator>

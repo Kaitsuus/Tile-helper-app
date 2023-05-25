@@ -5,16 +5,16 @@ import { Button } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker'
 
 const Grout = () => {
-  const [brand, setBrand] = useState('LitokolStylegrout');
+  const [brand, setBrand] = useState('Kiilto Pro Tilegrout');
   const [groutResult, setGroutResult] = useState('');
   const [totalResult, setTotalResult] = useState('');
   let consumption = 0;
 
   switch (brand) {
-    case 'LitokolStylegrout':
+    case 'Kiilto Pro Tilegrout':
       consumption = 1.6;
       break;
-    case 'Kiilto Pro Tilegrout':
+    case 'LitokolStylegrout':
       consumption = 1.6;
       break;
     case 'Ardex G8S Flex':
@@ -50,9 +50,9 @@ const Grout = () => {
         style={styles.picker}
         onValueChange={(itemValue) => setBrand(itemValue)}
       >
-        <Picker.Item label="Litokol Stylegrout" value="LitokolStylegrout" />
-        <Picker.Item label="Kiilto Pro Tilegrout" value="other brand" />
-        <Picker.Item label="Ardex G8S Flex" value="yet a other brand" />
+        <Picker.Item label="Kiilto Pro Tilegrout" value="KiiltoProTilegrout" color={brand === "KiiltoProTilegrout" ? "#ED7931" : "black"} />
+        <Picker.Item label="Litokol Stylegrout" value="LitokolStylegrout" color={brand === "LitokolStylegrout" ? "#ED7931" : "black"} />
+        <Picker.Item label="Ardex G8S Flex" value="yet a other brand" color={brand === "yet a other brand" ? "#ED7931" : "black"} />
       </Picker>
       <Text style={styles.label}>Syötä laatan mitat (mm) ja sauman leveys (mm)</Text>
       <MaskedTextInput
@@ -116,7 +116,7 @@ const Grout = () => {
         } else {
         quantity = Math.ceil(totalResult / 3);
         }
-        const message = `${brand} 3kg ${quantity} kpl lisätty litalle`;
+        const message = `${brand} 3kg ${quantity} kpl lisätty listalle`;
         Alert.alert(message);
       }}
       />
