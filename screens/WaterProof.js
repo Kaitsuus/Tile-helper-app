@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Alert } from 'react-native';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Button } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
+import styles from '../src/styles/style'
 
 const WaterProof = () => {
   const [floorlitre, setFloorlitre] = useState('');
@@ -105,43 +106,5 @@ const WaterProof = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: '#000'
-  },
-  label: {
-    fontSize: 20,
-    marginBottom: 20,
-    textAlign: 'center',
-    color: '#fafafa'
-  },
-  input: {
-    width: '100%',
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    backgroundColor: '#fafafa'
-  },
-  button: {
-    backgroundColor: '#ED7931',
-    width: 200,
-    marginBottom: 10
-  },
-  result: {
-    color: '#fafafa',
-    fontSize: 16,
-    marginTop: 10,
-    marginBottom: 10,
-    textAlign: 'center'
-  }
-});
 
 export default WaterProof;

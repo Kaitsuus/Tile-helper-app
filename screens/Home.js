@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-elements';
 
+
 const Home = () => {
   const navigation = useNavigation();
 
@@ -30,7 +31,7 @@ const Home = () => {
       />
       <Button
         title="Tasausjärjestelmät"
-        onPress={() => navigation.navigate('Adhesive')}
+        onPress={() => navigation.navigate('Test')}
         buttonStyle={styles.button}
       />
     </View>

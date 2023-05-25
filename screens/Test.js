@@ -5,10 +5,8 @@ import { Button } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 
 import { groutOptions } from '../src/data/groutData';
-import styles from '../src/styles/style'
 
-
-const Grout = () => {
+const Test = () => {
   const [brand, setBrand] = useState(groutOptions[0].value);
   const [groutResult, setGroutResult] = useState('');
   const [totalResult, setTotalResult] = useState('');
@@ -34,7 +32,13 @@ const Grout = () => {
   };
 
   const addButtonPressed = () => {
-    const message = `${brand} ${totalResult}kg lisätty listalle`;
+    let quantity = 1;
+    if (totalResult < 3) {
+      quantity = 1;
+    } else {
+      quantity = Math.ceil(totalResult / 3);
+    }
+    const message = `${brand} 3kg ${quantity} kpl lisätty listalle`;
     Alert.alert(message);
   };
 
@@ -111,4 +115,50 @@ const Grout = () => {
   );
 };
 
-export default Grout;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: '#000'
+  },
+  label: {
+    fontSize: 24,
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#fafafa'
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#fafafa'
+  },
+  button: {
+    backgroundColor: '#ED7931',
+    width: 200,
+    marginBottom: 10
+  },
+  result: {
+    color: '#fafafa',
+    fontSize: 16,
+    marginTop: 10,
+    marginBottom: 10,
+    textAlign: 'center'
+  },
+  picker: {
+    width: 250,
+    borderWidth: 1,
+    borderColor: '#ED7931',
+    height: 5,
+    marginBottom: 10,
+    backgroundColor: '#fafafa'
+  }
+});
+
+export default Test;

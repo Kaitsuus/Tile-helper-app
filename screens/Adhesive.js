@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Button } from 'react-native-elements';
 import { MaskedTextInput } from 'react-native-mask-text';
+import styles from '../src/styles/style'
 
 const Adhesive = () => {
   const [thickness, setThickness] = useState('3.5');
@@ -84,56 +85,5 @@ const Adhesive = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: '#000'
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20
-  },
-  label: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-    color: '#fafafa'
-  },
-  picker: {
-    width: 250,
-    borderWidth: 1,
-    borderColor: '#ED7931',
-    height: 5,
-    marginBottom: 10,
-    backgroundColor: '#fafafa'
-  },
-  input: {
-    width: '100%',
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    backgroundColor: '#fafafa'
-  },
-  result: {
-    color: '#fafafa',
-    fontSize: 16,
-    marginTop: 10,
-    marginBottom: 10,
-    textAlign: 'center'
-  },
-  button: {
-    backgroundColor: '#ED7931',
-    width: 200,
-    marginBottom: 10
-  }
-});
 
 export default Adhesive;

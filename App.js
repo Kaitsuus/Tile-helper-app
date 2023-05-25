@@ -6,6 +6,7 @@ import Home from './screens/Home';
 import Grout from './screens/Grout';
 import Adhesive from './screens/Adhesive';
 import WaterProof from './screens/WaterProof';
+import Test from './screens/Test';
 
 const Stack = createStackNavigator();
 
@@ -40,6 +41,11 @@ function HomeStack() {
       <Stack.Screen
         name="WaterProof"
         component={WaterProof}
+        options={{ headerStyle: { backgroundColor: 'black' } }}
+      />
+      <Stack.Screen
+        name="Test"
+        component={Test}
         options={{ headerStyle: { backgroundColor: 'black' } }}
       />
     </Stack.Navigator>
