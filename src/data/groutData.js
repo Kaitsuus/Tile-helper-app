@@ -13,7 +13,7 @@ export const groutOptions = [
     {
       label: 'Ardex G8S Flex',
       value: 'Ardex G8S Flex',
-      consumption: 1.6,
+      consumption: 1.8,
     },
   ];
   

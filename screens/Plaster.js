@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { Button } from 'react-native-elements';
+import { Alert } from 'react-native';
+import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
 import styles from '../src/styles/style'
 import { plasterOptions } from '../src/data/plasterData';
@@ -26,23 +25,22 @@ const Plaster = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tasoite laskuri</Text>
-      <Picker
-        selectedValue={brand}
-        style={styles.picker}
-        onValueChange={(itemValue) => setBrand(itemValue)}
-      >
-        {plasterOptions.map((option) => (
-          <Picker.Item
+    <Center w="100%" flex={1} px="3" background='#000'>
+    <Box safeArea p="2" py="8" w="90%" maxW="290">
+      <Text color='#fafafa'>Tasoite laskuri</Text>
+      <Select bg="white" selectedValue={brand} minWidth="200" accessibilityLabel="Valikoi tuote" placeholder="Valikoi tuote" _selectedItem={{
+        bg: "orange.500",
+        endIcon: <CheckIcon size="5" />
+      }} mt={1} onValueChange={itemValue => setBrand(itemValue)}>
+      {plasterOptions.map((option) => (
+          <Select.Item 
             key={option.value}
             label={option.label}
             value={option.value}
-            color={brand === option.value ? '#ED7931' : 'black'}
-          />
+           />
         ))}
-      </Picker>
-      <Text style={styles.label}>Syötä alue (m²):</Text>
+        </Select> 
+      <Text mt="2" mb="2" color='#fafafa'>Syötä alue (m²):</Text>
       <MaskedTextInput
         style={styles.input}
         mask="9999"
@@ -52,19 +50,23 @@ const Plaster = () => {
         placeholder="Syötä m²"
       />
       <Button
-        buttonStyle={styles.button}
-        title="Laske"
+        colorScheme="orange"
+        _text={{fontSize: "xl", fontWeight: 'bold'}}
+        mt="2"
         onPress={calculateConsumption}
-      />
+      >Laske</Button>
       {plasterAmount !== '' && (
-        <Text style={styles.result}>Tasoite määrä: {plasterAmount} kg</Text>
+        <Text mt="2" color='#fafafa'>Tasoite määrä: {plasterAmount} kg</Text>
       )}
+      <Text mt="2" color='#fafafa'>Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä huomioida olosuhteita tai ainehukkaa.</Text>
       <Button
-        title="Lisää listaan"
-        buttonStyle={styles.button}
+        colorScheme="orange"
+        _text={{fontSize: "xl", fontWeight: 'bold'}}
+        mt="2"
         onPress={addButtonPressed}
-      />
-    </View>
+      >Lisää Listaan</Button>
+    </Box>
+    </Center>
   );
 };
 

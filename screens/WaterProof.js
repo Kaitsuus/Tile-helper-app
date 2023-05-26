@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { Alert } from 'react-native';
+import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
-import { Button } from 'react-native-elements';
-import { Picker } from '@react-native-picker/picker';
 import { waterproofOptions } from '../src/data/waterproofData';
 import styles from '../src/styles/style'
 
@@ -18,16 +17,22 @@ const WaterProof = () => {
   const [wallLitres, setWallLitres] = useState(0);
   const [qty, setQty] = useState(0);
 
+  const selectedOption = waterproofOptions.find((option) => option.value === brand);
+  const consumptionWL = selectedOption ? selectedOption.consumptionWL : 0;
+  const consumptionWKg = selectedOption ? selectedOption.consumptionWKg : 0;
+  const consumptionFL = selectedOption ? selectedOption.consumptionFL : 0;
+  const consumptionFKg = selectedOption ? selectedOption.consumptionFKg : 0;
+
   const calculateKilogrammat = () => {
     const floorsLitres = parseFloat(floorlitre);
     const wallsLitres = parseFloat(wallLitre);
     const floorsTimes = parseInt(floorTimes);
     const wallsTimes = parseInt(wallTimes);
 
-    const floorKg = isNaN(floorsLitres) ? 0 : floorsLitres * 1 * floorsTimes; // 1 kg/m²
-    const wallKg = isNaN(wallsLitres) ? 0 : wallsLitres * 0.8 * wallsTimes; // 0.8 kg/m²
-    const floorL = isNaN(floorsLitres) ? 0 : floorsLitres * 0.8 * floorsTimes; // 0.8 kg/m²
-    const wallL = isNaN(wallsLitres) ? 0 : wallsLitres * 0.6 * wallsTimes; // 0.8 kg/m²
+    const floorKg = isNaN(floorsLitres) ? 0 : floorsLitres * consumptionFKg * floorsTimes;
+    const wallKg = isNaN(wallsLitres) ? 0 : wallsLitres * consumptionWKg * wallsTimes;
+    const floorL = isNaN(floorsLitres) ? 0 : floorsLitres * consumptionFL * floorsTimes;
+    const wallL = isNaN(wallsLitres) ? 0 : wallsLitres * consumptionWL * wallsTimes;
     const totalLQty = floorL + wallL;
 
     setFloorKilos(floorKg.toFixed(2));
@@ -45,29 +50,28 @@ const WaterProof = () => {
   };
 
   return (
-    <View style={styles.container}>
-    <Picker
-        selectedValue={brand}
-        style={styles.picker}
-        onValueChange={(itemValue) => setBrand(itemValue)}
-      >
-        {waterproofOptions.map((option) => (
-          <Picker.Item
+    <Center w="100%" flex={1} px="3" background='#000'>
+    <Box safeArea p="2" py="8" w="90%" maxW="290">
+    <Select bg="white" selectedValue={brand} minWidth="200" accessibilityLabel="Valikoi tuote" placeholder="Valikoi tuote" _selectedItem={{
+        bg: "orange.500",
+        endIcon: <CheckIcon size="5" />
+      }} mt={1} onValueChange={itemValue => setBrand(itemValue)}>
+      {waterproofOptions.map((option) => (
+          <Select.Item 
             key={option.value}
             label={option.label}
             value={option.value}
-            color={brand === option.value ? '#ED7931' : 'black'}
-          />
+           />
         ))}
-      </Picker>
-      <Text style={styles.label}>Syötä pinta-alat m²</Text>
+        </Select>
+      <Text mt="2" mb="2" color='#fafafa'>Syötä pinta-alat m²</Text>
       <MaskedTextInput
         style={styles.input}
         mask="9999"
         onChangeText={(text) => setFloorlitre(text)}
         value={floorlitre}
         keyboardType="numeric"
-        placeholder="Anna lattioiden pinta-ala m²  (väh. 0,8 l/m² = 1 kg/m²)"
+        placeholder="Anna lattioiden pinta-ala m²"
       />
       <MaskedTextInput
         style={styles.input}
@@ -75,7 +79,7 @@ const WaterProof = () => {
         onChangeText={(text) => setWallLitre(text)}
         value={wallLitre}
         keyboardType="numeric"
-        placeholder="Anna seinien pinta-ala m² (väh. 0,6 l/m² = 0.8 kg/m²)"
+        placeholder="Anna seinien pinta-ala m²"
       />
       <MaskedTextInput
         style={styles.input}
@@ -83,7 +87,7 @@ const WaterProof = () => {
         onChangeText={(text) => setFloorTimes(text)}
         value={floorTimes}
         keyboardType="numeric"
-        placeholder="Anna lattioiden levityskerrat (väh. 2)"
+        placeholder="Anna lattioiden levityskerrat"
       />
       <MaskedTextInput
         style={styles.input}
@@ -91,37 +95,41 @@ const WaterProof = () => {
         onChangeText={(text) => setWallTimes(text)}
         value={wallTimes}
         keyboardType="numeric"
-        placeholder="Anna seinien levityskerrat (väh. 2)"
+        placeholder="Anna seinien levityskerrat"
       />
       <Button
-        title="Laske"
+        colorScheme="orange"
+        _text={{fontSize: "xl", fontWeight: 'bold'}}
+        mt="2"
         onPress={calculateKilogrammat}
-        buttonStyle={styles.button}
-      />
+      >Laske</Button>
       {floorTimes !== '' && (
-        <Text style={styles.result}>
+        <Text mt="2" color='#fafafa'>
           Lattioiden levityskerrat: {floorTimes}
         </Text>
       )}
       {wallTimes !== '' && (
-        <Text style={styles.result}>Seinien levityskerrat: {wallTimes}</Text>
+        <Text color='#fafafa'>Seinien levityskerrat: {wallTimes}</Text>
       )}
       {floorKilos !== 0 && (
-        <Text style={styles.result}>
+        <Text mt="2" color='#fafafa'>
           Lattiat menekki {floorKilos}kg / {floorLitres}l
         </Text>
       )}
       {wallKilos !== 0 && (
-        <Text style={styles.result}>
+        <Text color='#fafafa'>
           Seinät menekki {wallKilos}kg / {wallLitres}l
         </Text>
       )}
+      <Text mt="2" color='#fafafa'>Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä huomioida olosuhteita tai ainehukkaa.</Text>
       <Button
-        title="Lisää listaan"
-        buttonStyle={styles.button}
+        colorScheme="orange"
+        _text={{fontSize: "xl", fontWeight: 'bold'}}
+        mt="2"
         onPress={addButtonPressed}
-      />
-    </View>
+      >Lisää listaan</Button>
+    </Box>
+    </Center>
   );
 };
 

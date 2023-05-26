@@ -1,76 +1,55 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Button } from 'react-native-elements';
-
-
+import { Button, Box, Text, Center } from 'native-base';
 const Home = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <Center w="100%" flex={1} px="3" background='#000'>
+    <Box safeArea p="2" py="8" w="90%" maxW="290">
       <Button
-        title="Saumaus"
         onPress={() => navigation.navigate('Grout')}
-        buttonStyle={styles.button}
-      />
+        colorScheme="orange"
+        _text={{fontSize: "xl", fontWeight: 'bold'}}
+        mt="2"
+      >
+        Saumaus
+      </Button>
       <Button
-        title="Vedeneristys"
         onPress={() => navigation.navigate('WaterProof')}
-        buttonStyle={styles.button}
-      />
+        colorScheme="orange"
+        _text={{fontSize: "xl", fontWeight: 'bold'}}
+        mt="2"
+      >
+        Vedeneristys
+      </Button>
       <Button
-        title="Kiinnitys"
         onPress={() => navigation.navigate('Adhesive')}
-        buttonStyle={styles.button}
-      />
+        _text={{fontSize: "xl", fontWeight: 'bold'}}
+        colorScheme="orange"
+        mt="2"
+      >
+        Kiinnitys
+      </Button>
       <Button
-        title="Tasoitus"
         onPress={() => navigation.navigate('Plaster')}
-        buttonStyle={styles.button}
-      />
+        _text={{fontSize: "xl", fontWeight: 'bold'}}
+        colorScheme="orange"
+        mt="2"
+      >
+        Tasoitus
+      </Button>
       <Button
-        title="Tasausjärjestelmät"
         onPress={() => navigation.navigate('Test')}
-        buttonStyle={styles.button}
-      />
-    </View>
+        _text={{fontSize: "xl", fontWeight: 'bold'}}
+        colorScheme="orange"
+        mt="2"
+      >
+        Tasausjärjestelmät
+      </Button>
+    </Box>
+    </Center>
   );
 };
 
 export default Home;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000'
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 10,
-    textAlign: 'center',
-    color: '#fafafa'
-  },
-  button: {
-    backgroundColor: '#ED7931',
-    width: '60%',
-    marginBottom: 8,
-    borderRadius: 8,
-    textAlign: 'center', // center the text
-    width: 250, // set a fixed width
-    height: 50
-  },
-  result: {
-    fontSize: 16,
-    marginTop: 10,
-    marginBottom: 10,
-    textAlign: 'center'
-  },
-  picker: {
-    width: 200,
-    height: 50,
-    marginBottom: 20
-  }
-});
