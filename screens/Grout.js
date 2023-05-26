@@ -12,11 +12,11 @@ const Grout = () => {
   const [brand, setBrand] = useState(groutOptions[0].value);
   const [groutResult, setGroutResult] = useState('');
   const [totalResult, setTotalResult] = useState('');
-  const [A, setA] = useState('');
-  const [B, setB] = useState('');
-  const [C, setC] = useState('');
-  const [D, setD] = useState('');
-  const [E, setE] = useState('');
+  const [A, setA] = useState(''); // tile height mm
+  const [B, setB] = useState(''); // tile width mm
+  const [C, setC] = useState(''); // tile thickness mm
+  const [D, setD] = useState(''); // grout width mm
+  const [E, setE] = useState(''); // area m²
 
   const selectedOption = groutOptions.find((option) => option.value === brand);
   const consumption = selectedOption ? selectedOption.consumption : 0;

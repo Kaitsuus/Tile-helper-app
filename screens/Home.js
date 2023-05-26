@@ -26,7 +26,7 @@ const Home = () => {
       />
       <Button
         title="Tasoitus"
-        onPress={() => navigation.navigate('Adhesive')}
+        onPress={() => navigation.navigate('Plaster')}
         buttonStyle={styles.button}
       />
       <Button

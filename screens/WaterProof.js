@@ -3,9 +3,11 @@ import { View, Text, StyleSheet, Alert } from 'react-native';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Button } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
+import { waterproofOptions } from '../src/data/waterproofData';
 import styles from '../src/styles/style'
 
 const WaterProof = () => {
+  const [brand, setBrand] = useState(waterproofOptions[0].value);
   const [floorlitre, setFloorlitre] = useState('');
   const [wallLitre, setWallLitre] = useState('');
   const [floorTimes, setFloorTimes] = useState('');
@@ -26,7 +28,7 @@ const WaterProof = () => {
     const wallKg = isNaN(wallsLitres) ? 0 : wallsLitres * 0.8 * wallsTimes; // 0.8 kg/m²
     const floorL = isNaN(floorsLitres) ? 0 : floorsLitres * 0.8 * floorsTimes; // 0.8 kg/m²
     const wallL = isNaN(wallsLitres) ? 0 : wallsLitres * 0.6 * wallsTimes; // 0.8 kg/m²
-    const totalKgQty = floorKg + wallKg;
+    const totalLQty = floorL + wallL;
 
     setFloorKilos(floorKg.toFixed(2));
     setWallKilos(wallKg.toFixed(2));
@@ -34,11 +36,30 @@ const WaterProof = () => {
     setWallLitres(wallL.toFixed(2));
     setFloorTimes(isNaN(floorsTimes) ? '' : floorsTimes.toFixed(0));
     setWallTimes(isNaN(wallsTimes) ? '' : wallsTimes.toFixed(0));
-    setQty(totalKgQty.toFixed(2));
+    setQty(totalLQty.toFixed(2));
+  };
+
+  const addButtonPressed = () => {
+    const message = `${brand} ${qty} l lisätty listalle`;
+    Alert.alert(message);
   };
 
   return (
     <View style={styles.container}>
+    <Picker
+        selectedValue={brand}
+        style={styles.picker}
+        onValueChange={(itemValue) => setBrand(itemValue)}
+      >
+        {waterproofOptions.map((option) => (
+          <Picker.Item
+            key={option.value}
+            label={option.label}
+            value={option.value}
+            color={brand === option.value ? '#ED7931' : 'black'}
+          />
+        ))}
+      </Picker>
       <Text style={styles.label}>Syötä pinta-alat m²</Text>
       <MaskedTextInput
         style={styles.input}
@@ -98,10 +119,7 @@ const WaterProof = () => {
       <Button
         title="Lisää listaan"
         buttonStyle={styles.button}
-        onPress={() => {
-          const message = `vesieriste ${qty}kg lisätty listalle`;
-          Alert.alert(message);
-        }}
+        onPress={addButtonPressed}
       />
     </View>
   );
