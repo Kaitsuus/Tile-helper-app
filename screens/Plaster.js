@@ -25,8 +25,8 @@ const Plaster = () => {
   };
 
   return (
-    <Center w="100%" flex={1} px="3" background='#000'>
-    <Box safeArea p="2" py="8" w="90%" maxW="290">
+    <Center w="100%" flex={1} px="3" background="#D9D9D9">
+    <Box safeArea p="2" py="8" w="90%" maxW="290" h="80%">
       <Text color='#fafafa'>Tasoite laskuri</Text>
       <Select bg="white" selectedValue={brand} minWidth="200" accessibilityLabel="Valikoi tuote" placeholder="Valikoi tuote" _selectedItem={{
         bg: "orange.500",
@@ -66,6 +66,7 @@ const Plaster = () => {
         onPress={addButtonPressed}
       >Lisää Listaan</Button>
     </Box>
+    <Box w="100%" position='absolute' height='85%' bottom='0' background='#242424' opacity='100' roundedTopLeft='20' zIndex='-10'></Box>
     </Center>
   );
 };

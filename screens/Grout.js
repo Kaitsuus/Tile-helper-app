@@ -3,13 +3,11 @@ import { Alert, Keyboard } from 'react-native';
 import { MaskedTextInput, } from 'react-native-mask-text';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { groutOptions } from '../src/data/groutData';
-import KeyboardEvent from '../src/components/KeyboardEvent';
 import styles from '../src/styles/style'
 
 
 const Grout = () => {
   const [brand, setBrand] = useState(groutOptions[0].value);
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [groutResult, setGroutResult] = useState('');
   const [totalResult, setTotalResult] = useState('');
   const [A, setA] = useState(''); // tile height mm
@@ -38,12 +36,9 @@ const Grout = () => {
     Alert.alert(message);
   };
 
-  KeyboardEvent('keyboardDidShow', () => setIsKeyboardOpen(true));
-  KeyboardEvent('keyboardDidHide', () => setIsKeyboardOpen(false));
-
   return (
-    <Center w="100%" flex={1} px="3" style={{ backgroundColor: isKeyboardOpen ? '#242424' : '#D9D9D9' }}>
-    <Box safeArea p="2" py="8" w="90%" maxW="290">
+    <Center w="100%" flex={1} px="3" background="#D9D9D9">
+    <Box safeArea p="2" py="8" w="90%" maxW="290" h="80%">
       <Select bg="white" selectedValue={brand} minWidth="200" accessibilityLabel="Valikoi tuote" placeholder="Valikoi tuote" _selectedItem={{
         bg: "orange.500",
         endIcon: <CheckIcon size="5" />
