@@ -14,7 +14,7 @@ const Home: React.FC = () => {
       <NavigationButton screenName="WaterProof" title="Vedeneristys" />
       <NavigationButton screenName="Adhesive" title="Kiinnitys" />
       <NavigationButton screenName="Plaster" title="Tasoitus" />
-      <NavigationButton screenName="Test" title="Tasausjärjestelmät" />
+      <NavigationButton screenName="ShoppingList" title="Oma lista" />
     </Box>
     <Box w="100%" position='absolute' height='85%' bottom='0' background='#242424' opacity='100' roundedTopLeft='20' zIndex='-10'></Box>
     </Center>

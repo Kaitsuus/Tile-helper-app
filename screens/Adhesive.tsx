@@ -4,12 +4,15 @@ import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
 import styles from '../src/styles/style';
 import { adhesiveOptions } from '../src/data/adhesiveData';
+import mockData from '../src/data/mockData.json'
 
 const Adhesive: React.FC = () => {
   const [brand, setBrand] = useState<string>(adhesiveOptions[0].value);
   const [thickness, setThickness] = useState<string>('3.5');
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [adhesiveAmount, setAdhesiveAmount] = useState<string>('');
+
+  const currentUserIndex = 0; // Index of the current user (hardcoded for now)
 
   const calculateConsumption = () => {
     const sqm = parseFloat(squareMeters);
@@ -34,8 +37,15 @@ const Adhesive: React.FC = () => {
   };
 
   const addButtonPressed = () => {
-    const message = `${brand} ${adhesiveAmount}kg lisätty listalle`;
-    Alert.alert(message);
+    const user = mockData.users[currentUserIndex];
+    const newItem = {
+      name: `${brand} ${adhesiveAmount}`,
+      amount: parseFloat(adhesiveAmount),
+      unit: 'kg',
+    };
+    user.shoppingList.push(newItem);
+    Alert.alert(`${newItem.name} kg lisätty listalle`);
+    console.log(user)
   };
 
   return (

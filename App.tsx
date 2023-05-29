@@ -8,7 +8,7 @@ import Grout from './screens/Grout';
 import Adhesive from './screens/Adhesive';
 import WaterProof from './screens/WaterProof';
 import Plaster from './screens/Plaster';
-import Test from './screens/Test';
+import ShoppingList from './screens/ShoppingList';
 
 type AvatarProps = {
   bg?: string;
@@ -22,7 +22,7 @@ type RootStackParamList = {
   Adhesive: undefined;
   WaterProof: undefined;
   Plaster: undefined;
-  Test: undefined;
+  ShoppingList: undefined;
 };
 
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
@@ -72,7 +72,7 @@ const HomeStack: React.FC = () => {
       <Stack.Screen name="Adhesive" component={Adhesive} options={{ title: 'Adhesive' }} />
       <Stack.Screen name="WaterProof" component={WaterProof} options={{ title: 'WaterProof' }} />
       <Stack.Screen name="Plaster" component={Plaster} options={{ title: 'Plaster' }} />
-      <Stack.Screen name="Test" component={Test} options={{ title: 'Test' }} />
+      <Stack.Screen name="ShoppingList" component={ShoppingList} options={{ title: 'ShoppingList' }} />
     </Stack.Navigator>
   );
 };

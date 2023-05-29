@@ -4,6 +4,7 @@ import { MaskedTextInput } from 'react-native-mask-text';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { groutOptions } from '../src/data/groutData';
 import styles from '../src/styles/style';
+import mockData from '../src/data/mockData.json'
 
 const Grout: React.FC = () => {
   const [brand, setBrand] = useState<string>(groutOptions[0].value);
@@ -14,6 +15,9 @@ const Grout: React.FC = () => {
   const [C, setC] = useState<string>(''); // tile thickness mm
   const [D, setD] = useState<string>(''); // grout width mm
   const [E, setE] = useState<string>(''); // area m²
+
+  const currentUserIndex = 0; // Index of the current user (hardcoded for now)
+
 
   const selectedOption = groutOptions.find((option) => option.value === brand);
   const consumption = selectedOption ? selectedOption.consumption : 0;
@@ -31,8 +35,15 @@ const Grout: React.FC = () => {
   };
 
   const addButtonPressed = () => {
-    const message = `${brand} ${totalResult}kg lisätty listalle`;
-    Alert.alert(message);
+    const user = mockData.users[currentUserIndex];
+    const newItem = {
+      name: `${brand} ${totalResult}`,
+      amount: parseFloat(totalResult),
+      unit: 'kg',
+    };
+    user.shoppingList.push(newItem);
+    Alert.alert(`${newItem.name} lisätty listalle`);
+    console.log(user)
   };
 
   return (

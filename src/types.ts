@@ -5,6 +5,6 @@ export type RootStackParamList = {
     Adhesive: undefined;
     WaterProof: undefined;
     Plaster: undefined;
-    Test: undefined;
+    ShoppingList: undefined;
 };
 export type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;

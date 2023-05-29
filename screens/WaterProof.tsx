@@ -4,6 +4,7 @@ import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { waterproofOptions } from '../src/data/waterproofData';
 import styles from '../src/styles/style';
+import mockData from '../src/data/mockData.json'
 
 const WaterProof = () => {
   const [brand, setBrand] = useState<string>(waterproofOptions[0].value);
@@ -16,6 +17,8 @@ const WaterProof = () => {
   const [floorLitres, setFloorLitres] = useState<number>(0);
   const [wallLitres, setWallLitres] = useState<number>(0);
   const [qty, setQty] = useState<number>(0);
+
+  const currentUserIndex = 0; // Index of the current user (hardcoded for now)
 
   const selectedOption = waterproofOptions.find((option) => option.value === brand);
   const consumptionWL = selectedOption ? selectedOption.consumptionWL : 0;
@@ -45,8 +48,15 @@ const WaterProof = () => {
   };
 
   const addButtonPressed = () => {
-    const message = `${brand} ${qty} l lisätty listalle`;
-    Alert.alert(message);
+    const user = mockData.users[currentUserIndex];
+    const newItem = {
+      name: `${brand} ${qty}`,
+      amount: (qty),
+      unit: 'l',
+    };
+    user.shoppingList.push(newItem);
+    Alert.alert(`${newItem.name}${newItem.unit} lisätty listalle`);
+    console.log(user)
   };
 
   const handleFloorlitreChange = (text: string) => {

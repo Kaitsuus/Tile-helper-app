@@ -4,11 +4,14 @@ import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
 import styles from '../src/styles/style';
 import { plasterOptions } from '../src/data/plasterData';
+import mockData from '../src/data/mockData.json'
 
 const Plaster: React.FC = () => {
   const [brand, setBrand] = useState<string>(plasterOptions[0].value);
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [plasterAmount, setPlasterAmount] = useState<string>('');
+
+  const currentUserIndex = 0; // Index of the current user (hardcoded for now)
 
   const selectedOption = plasterOptions.find((option) => option.value === brand);
   const consumption = selectedOption ? selectedOption.consumption : 0;
@@ -20,8 +23,15 @@ const Plaster: React.FC = () => {
   };
 
   const addButtonPressed = () => {
-    const message = `${brand} ${plasterAmount}kg lisätty listalle`;
-    Alert.alert(message);
+    const user = mockData.users[currentUserIndex];
+    const newItem = {
+      name: `${brand} ${plasterAmount}`,
+      amount: parseFloat(plasterAmount),
+      unit: 'kg',
+    };
+    user.shoppingList.push(newItem);
+    Alert.alert(`${newItem.name}${newItem.unit} lisätty listalle`);
+    console.log(user)
   };
 
   return (
