@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, KeyboardEventName, KeyboardEvent } from 'react-native';
 
-export default function KeyboardEvent(eventName, callback) {
+export default function useKeyboardEvent(eventName: KeyboardEventName, callback: (event: KeyboardEvent) => void) {
   useEffect(() => {
     const subscription = Keyboard.addListener(eventName, callback);
 
