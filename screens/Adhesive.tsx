@@ -2,11 +2,25 @@ import React, { useState } from 'react';
 import { Alert } from 'react-native';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
+import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { adhesiveOptions } from '../src/data/adhesiveData';
 import mockData from '../src/data/mockData.json'
 
+import { RootStackParamList, HomeScreenNavigationProp } from '../src/types'
+
+
+
+
+
+
+
 const Adhesive: React.FC = () => {
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+  const navigateToShoppingList = () => {
+    navigation.navigate('ShoppingList');
+  };
+
   const [brand, setBrand] = useState<string>(adhesiveOptions[0].value);
   const [thickness, setThickness] = useState<string>('3.5');
   const [squareMeters, setSquareMeters] = useState<string>('');
@@ -44,8 +58,20 @@ const Adhesive: React.FC = () => {
       unit: 'kg',
     };
     user.shoppingList.push(newItem);
-    Alert.alert(`${newItem.name} kg lisätty listalle`);
-    console.log(user)
+    const message = `${newItem.name} kg lisätty listalle`
+    
+    Alert.alert(
+      message,
+      '',
+      [
+        {
+          text: "Ei",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Kyllä", onPress: () => navigateToShoppingList()}
+      ]
+    );
   };
 
   return (

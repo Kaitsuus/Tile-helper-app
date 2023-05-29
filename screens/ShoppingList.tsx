@@ -153,6 +153,14 @@ const ShoppingList: React.FC = () => {
           Add
         </Button>
       </Box>
+      <Box style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, gap: 2 }}>
+      <Button onPress={addItem} colorScheme="orange" mt={2} w={20}>
+          save
+        </Button>
+        <Button onPress={addItem} colorScheme="orange" mt={2} w={20}>
+          share
+        </Button>
+        </Box>
     </Center>
   );
 };
