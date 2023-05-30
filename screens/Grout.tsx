@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Alert, Keyboard } from 'react-native';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
-import { groutOptions } from '../src/data/groutData';
+import { groutOptions } from '../src/data/groutMockData';
 import styles from '../src/styles/style';
 import mockData from '../src/data/mockData.json'
 
