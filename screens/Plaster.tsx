@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
 import styles from '../src/styles/style';
-import { plasterOptions } from '../src/data/plasterData';
+import { plasterOptions } from '../src/data/plasterMockData';
 import mockData from '../src/data/mockData.json'
 
 const Plaster: React.FC = () => {

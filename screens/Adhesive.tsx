@@ -4,7 +4,7 @@ import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
-import { adhesiveOptions } from '../src/data/adhesiveData';
+import { adhesiveOptions } from '../src/data/adhesiveMockData';
 import mockData from '../src/data/mockData.json'
 
 import { RootStackParamList, HomeScreenNavigationProp } from '../src/types'

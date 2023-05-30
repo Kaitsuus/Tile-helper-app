@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Alert } from 'react-native';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
-import { waterproofOptions } from '../src/data/waterproofData';
+import { waterproofOptions } from '../src/data/waterproofMockData';
 import styles from '../src/styles/style';
 import mockData from '../src/data/mockData.json'
 
