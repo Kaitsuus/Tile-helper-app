@@ -33,3 +33,7 @@ export type AuthStackParamList = {
 export type HomeStackParamList = {
   Home: undefined;
 };
+export type LoginProps = {
+    handleLogin: () => void;
+    handleSignup: () => void;
+};

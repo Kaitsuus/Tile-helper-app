@@ -6,7 +6,7 @@ import { waterproofOptions } from '../src/data/waterproofMockData';
 import styles from '../src/styles/style';
 import mockData from '../src/data/mockData.json';
 
-const WaterProof = () => {
+const WaterProof: React.FC = () => {
   const [brand, setBrand] = useState<string>(waterproofOptions[0].value);
   const [floorlitre, setFloorlitre] = useState<string>('');
   const [wallLitre, setWallLitre] = useState<string>('');
