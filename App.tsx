@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState} from 'react';
 import { Image, TouchableOpacity } from 'react-native';
 import { NativeBaseProvider, Avatar } from 'native-base';
 import { NavigationContainer, useNavigation, RouteProp } from '@react-navigation/native';
@@ -9,31 +9,24 @@ import Adhesive from './screens/Adhesive';
 import WaterProof from './screens/WaterProof';
 import Plaster from './screens/Plaster';
 import ShoppingList from './screens/ShoppingList';
+import { RootStackParamList, HomeScreenNavigationProp } from './src/types';
+import Login from './screens/Login';
+import Signup from './screens/Signup';
 
-type AvatarProps = {
-  bg?: string;
-  source?: { uri: string };
-  children: string;
-};
-
-type RootStackParamList = {
-  Home: undefined;
-  Grout: undefined;
-  Adhesive: undefined;
-  WaterProof: undefined;
-  Plaster: undefined;
-  ShoppingList: undefined;
-};
-
-type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
-
-type Props = {
-  route: HomeScreenRouteProp;
-  navigation: HomeScreenNavigationProp;
-};
 
 const Stack = createStackNavigator<RootStackParamList>();
+
+const AuthStack: React.FC<{ handleLogin: () => void; handleSignup: () => void }> = ({ handleLogin, handleSignup }) => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Login">
+        {(props) => <Login {...props} handleLogin={handleLogin} handleSignup={handleSignup} />}
+      </Stack.Screen>
+      <Stack.Screen name="Signup" component={Signup} />
+    </Stack.Navigator>
+  );
+};
+
 
 const HomeStack: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -77,18 +70,27 @@ const HomeStack: React.FC = () => {
   );
 };
 
-const RootNavigator: React.FC = () => {
+const RootNavigator: React.FC<{ user: boolean; handleLogin: () => void; handleSignup: () => void }> = ({ user, handleLogin, handleSignup }) => {
   return (
     <NavigationContainer>
-      <HomeStack />
+       {user ? <HomeStack /> : <AuthStack handleLogin={handleLogin} handleSignup={handleSignup}/>}
     </NavigationContainer>
   );
 };
 
 const App: React.FC = () => {
+  const [user, setUser] = useState(false);
+
+  const handleLogin = () => {
+    setUser(true);
+  };
+
+  const handleSignup = () => {
+    // Handle signup logic here
+  };
   return (
     <NativeBaseProvider>
-      <RootNavigator />
+      <RootNavigator user={user} handleLogin={handleLogin} handleSignup={handleSignup} />
     </NativeBaseProvider>
   );
 };

@@ -1,4 +1,5 @@
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
+import { NavigationContainer, useNavigation, RouteProp } from '@react-navigation/native';
 export type RootStackParamList = {
     Home: undefined;
     Grout: undefined;
@@ -6,5 +7,19 @@ export type RootStackParamList = {
     WaterProof: undefined;
     Plaster: undefined;
     ShoppingList: undefined;
+    Login: undefined;
+    Signup: undefined;
+    Auth: undefined;
 };
 export type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+export type AuthScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Auth'>;
+export type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
+export type StackProps = {
+    navigation: HomeScreenNavigationProp;
+};
+export type AuthStackParamList = {
+    Auth: undefined;
+};
+export  type HomeStackParamList = {
+    Home: undefined;
+};
