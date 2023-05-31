@@ -99,11 +99,24 @@ const ShoppingList: React.FC = () => {
   return (
     <Center w="100%" flex={1} px={3} background="#fafafa">
       <Box safeArea p={2} py={8} w="100%" h="80%">
+      {items.length === 0 ? (
+        <Box
+        p={4}
+        borderBottomWidth={1}
+        borderBottomColor="gray"
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Text style={{ textAlign: 'center' }}>Shopping list is empty</Text>
+          </Box>
+        ) : (
         <FlatList
           data={items}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
         />
+        )}
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
           <TextInput
             value={newItemName}
