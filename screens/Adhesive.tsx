@@ -5,15 +5,9 @@ import { MaskedTextInput } from 'react-native-mask-text';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { adhesiveOptions } from '../src/data/adhesiveMockData';
-import mockData from '../src/data/mockData.json'
+import mockData from '../src/data/mockData.json';
 
-import { RootStackParamList, HomeScreenNavigationProp } from '../src/types'
-
-
-
-
-
-
+import { RootStackParamList, HomeScreenNavigationProp } from '../src/types';
 
 const Adhesive: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -55,23 +49,19 @@ const Adhesive: React.FC = () => {
     const newItem = {
       name: `${brand} ${adhesiveAmount}`,
       amount: parseFloat(adhesiveAmount),
-      unit: 'kg',
+      unit: 'kg'
     };
     user.shoppingList.push(newItem);
-    const message = `${newItem.name} kg lisätty listalle`
-    
-    Alert.alert(
-      message,
-      '',
-      [
-        {
-          text: "Ei",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "Kyllä", onPress: () => navigateToShoppingList()}
-      ]
-    );
+    const message = `${newItem.name} kg lisätty listalle`;
+
+    Alert.alert(message, '', [
+      {
+        text: 'Ei',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel'
+      },
+      { text: 'Kyllä', onPress: () => navigateToShoppingList() }
+    ]);
   };
 
   return (
@@ -87,8 +77,8 @@ const Adhesive: React.FC = () => {
           accessibilityLabel="Valikoi tuote"
           placeholder="Valikoi tuote"
           _selectedItem={{
-            bg: "orange.500",
-            endIcon: <CheckIcon size="5" />,
+            bg: 'orange.500',
+            endIcon: <CheckIcon size="5" />
           }}
           mt={1}
           onValueChange={(itemValue) => setBrand(itemValue)}
@@ -111,8 +101,8 @@ const Adhesive: React.FC = () => {
           accessibilityLabel="Choose Service"
           placeholder="Choose Service"
           _selectedItem={{
-            bg: "orange.500",
-            endIcon: <CheckIcon size="5" />,
+            bg: 'orange.500',
+            endIcon: <CheckIcon size="5" />
           }}
           mt={1}
           onValueChange={(itemValue) => setThickness(itemValue)}
@@ -134,7 +124,7 @@ const Adhesive: React.FC = () => {
         />
         <Button
           colorScheme="orange"
-          _text={{ fontSize: "xl", fontWeight: 'bold' }}
+          _text={{ fontSize: 'xl', fontWeight: 'bold' }}
           mt="2"
           onPress={calculateConsumption}
         >
@@ -146,18 +136,28 @@ const Adhesive: React.FC = () => {
           </Text>
         )}
         <Text mt="2" color="#fafafa">
-          Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä huomioida olosuhteita tai ainehukkaa.
+          Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä
+          huomioida olosuhteita tai ainehukkaa.
         </Text>
         <Button
           colorScheme="orange"
-          _text={{ fontSize: "xl", fontWeight: 'bold' }}
+          _text={{ fontSize: 'xl', fontWeight: 'bold' }}
           mt="2"
           onPress={addButtonPressed}
         >
           Lisää listaan
         </Button>
       </Box>
-      <Box w="100%" position="absolute" height="85%" bottom="0" background="#242424" opacity="100" roundedTopLeft="20" zIndex="-10"></Box>
+      <Box
+        w="100%"
+        position="absolute"
+        height="85%"
+        bottom="0"
+        background="#242424"
+        opacity="100"
+        roundedTopLeft="20"
+        zIndex="-10"
+      ></Box>
     </Center>
   );
 };

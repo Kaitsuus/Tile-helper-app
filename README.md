@@ -22,10 +22,9 @@ The project structure of this Expo app looks as follows:
 
 │ ├── styles/
 
-  ├── types
+├── types
 
 └── App.js
-
 
 ## Getting Started
 
@@ -36,4 +35,3 @@ To get started with the Expo app, follow these steps:
 3. Install the app dependencies by running `npm install` or `yarn install` in the project root directory.
 4. Run the app using the command `expo start` or `npm start`/`yarn start`.
 5. Expo will start a development server and provide you with options to run the app on an emulator, a connected device, or a web browser.
-

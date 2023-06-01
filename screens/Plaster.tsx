@@ -4,7 +4,7 @@ import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
 import styles from '../src/styles/style';
 import { plasterOptions } from '../src/data/plasterMockData';
-import mockData from '../src/data/mockData.json'
+import mockData from '../src/data/mockData.json';
 
 const Plaster: React.FC = () => {
   const [brand, setBrand] = useState<string>(plasterOptions[0].value);
@@ -13,7 +13,9 @@ const Plaster: React.FC = () => {
 
   const currentUserIndex = 0; // Index of the current user (hardcoded for now)
 
-  const selectedOption = plasterOptions.find((option) => option.value === brand);
+  const selectedOption = plasterOptions.find(
+    (option) => option.value === brand
+  );
   const consumption = selectedOption ? selectedOption.consumption : 0;
 
   const calculateConsumption = () => {
@@ -27,11 +29,11 @@ const Plaster: React.FC = () => {
     const newItem = {
       name: `${brand} ${plasterAmount}`,
       amount: parseFloat(plasterAmount),
-      unit: 'kg',
+      unit: 'kg'
     };
     user.shoppingList.push(newItem);
     Alert.alert(`${newItem.name}${newItem.unit} lisätty listalle`);
-    console.log(user)
+    console.log(user);
   };
 
   return (
@@ -45,8 +47,8 @@ const Plaster: React.FC = () => {
           accessibilityLabel="Valikoi tuote"
           placeholder="Valikoi tuote"
           _selectedItem={{
-            bg: "orange.500",
-            endIcon: <CheckIcon size="5" />,
+            bg: 'orange.500',
+            endIcon: <CheckIcon size="5" />
           }}
           mt={1}
           onValueChange={(itemValue) => setBrand(itemValue)}
@@ -72,7 +74,7 @@ const Plaster: React.FC = () => {
         />
         <Button
           colorScheme="orange"
-          _text={{ fontSize: "xl", fontWeight: 'bold' }}
+          _text={{ fontSize: 'xl', fontWeight: 'bold' }}
           mt="2"
           onPress={calculateConsumption}
         >
@@ -84,18 +86,28 @@ const Plaster: React.FC = () => {
           </Text>
         )}
         <Text mt="2" color="#fafafa">
-          Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä huomioida olosuhteita tai ainehukkaa.
+          Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä
+          huomioida olosuhteita tai ainehukkaa.
         </Text>
         <Button
           colorScheme="orange"
-          _text={{ fontSize: "xl", fontWeight: 'bold' }}
+          _text={{ fontSize: 'xl', fontWeight: 'bold' }}
           mt="2"
           onPress={addButtonPressed}
         >
           Lisää Listaan
         </Button>
       </Box>
-      <Box w="100%" position="absolute" height="85%" bottom="0" background="#242424" opacity="100" roundedTopLeft="20" zIndex="-10"></Box>
+      <Box
+        w="100%"
+        position="absolute"
+        height="85%"
+        bottom="0"
+        background="#242424"
+        opacity="100"
+        roundedTopLeft="20"
+        zIndex="-10"
+      ></Box>
     </Center>
   );
 };

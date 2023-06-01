@@ -4,9 +4,9 @@ import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { waterproofOptions } from '../src/data/waterproofMockData';
 import styles from '../src/styles/style';
-import mockData from '../src/data/mockData.json'
+import mockData from '../src/data/mockData.json';
 
-const WaterProof = () => {
+const WaterProof: React.FC = () => {
   const [brand, setBrand] = useState<string>(waterproofOptions[0].value);
   const [floorlitre, setFloorlitre] = useState<string>('');
   const [wallLitre, setWallLitre] = useState<string>('');
@@ -20,7 +20,9 @@ const WaterProof = () => {
 
   const currentUserIndex = 0; // Index of the current user (hardcoded for now)
 
-  const selectedOption = waterproofOptions.find((option) => option.value === brand);
+  const selectedOption = waterproofOptions.find(
+    (option) => option.value === brand
+  );
   const consumptionWL = selectedOption ? selectedOption.consumptionWL : 0;
   const consumptionWKg = selectedOption ? selectedOption.consumptionWKg : 0;
   const consumptionFL = selectedOption ? selectedOption.consumptionFL : 0;
@@ -32,10 +34,18 @@ const WaterProof = () => {
     const floorsTimes = parseInt(floorTimes);
     const wallsTimes = parseInt(wallTimes);
 
-    const floorKg = isNaN(floorsLitres) ? 0 : floorsLitres * consumptionFKg * floorsTimes;
-    const wallKg = isNaN(wallsLitres) ? 0 : wallsLitres * consumptionWKg * wallsTimes;
-    const floorL = isNaN(floorsLitres) ? 0 : floorsLitres * consumptionFL * floorsTimes;
-    const wallL = isNaN(wallsLitres) ? 0 : wallsLitres * consumptionWL * wallsTimes;
+    const floorKg = isNaN(floorsLitres)
+      ? 0
+      : floorsLitres * consumptionFKg * floorsTimes;
+    const wallKg = isNaN(wallsLitres)
+      ? 0
+      : wallsLitres * consumptionWKg * wallsTimes;
+    const floorL = isNaN(floorsLitres)
+      ? 0
+      : floorsLitres * consumptionFL * floorsTimes;
+    const wallL = isNaN(wallsLitres)
+      ? 0
+      : wallsLitres * consumptionWL * wallsTimes;
     const totalLQty = floorL + wallL;
 
     setFloorKilos(parseFloat(floorKg.toFixed(2)));
@@ -51,12 +61,12 @@ const WaterProof = () => {
     const user = mockData.users[currentUserIndex];
     const newItem = {
       name: `${brand} ${qty}`,
-      amount: (qty),
-      unit: 'l',
+      amount: qty,
+      unit: 'l'
     };
     user.shoppingList.push(newItem);
     Alert.alert(`${newItem.name}${newItem.unit} lisätty listalle`);
-    console.log(user)
+    console.log(user);
   };
 
   const handleFloorlitreChange = (text: string) => {
@@ -97,14 +107,18 @@ const WaterProof = () => {
           accessibilityLabel="Valikoi tuote"
           placeholder="Valikoi tuote"
           _selectedItem={{
-            bg: "orange.500",
-            endIcon: <CheckIcon size="5" />,
+            bg: 'orange.500',
+            endIcon: <CheckIcon size="5" />
           }}
           mt={1}
           onValueChange={(itemValue) => setBrand(itemValue)}
         >
           {waterproofOptions.map((option) => (
-            <Select.Item key={option.value} label={option.label} value={option.value} />
+            <Select.Item
+              key={option.value}
+              label={option.label}
+              value={option.value}
+            />
           ))}
         </Select>
         <Text mt="2" mb="2" color="#fafafa">
@@ -142,11 +156,22 @@ const WaterProof = () => {
           keyboardType="numeric"
           placeholder="Anna seinien levityskerrat"
         />
-        <Button colorScheme="orange" _text={{ fontSize: "xl", fontWeight: 'bold' }} mt="2" onPress={calculateKilogrammat}>
+        <Button
+          colorScheme="orange"
+          _text={{ fontSize: 'xl', fontWeight: 'bold' }}
+          mt="2"
+          onPress={calculateKilogrammat}
+        >
           Laske
         </Button>
-        {parseInt(floorTimes) !== 0 && <Text mt="2" color="#fafafa">Lattioiden levityskerrat: {floorTimes}</Text>}
-        {parseInt(wallTimes) !== 0 && <Text color="#fafafa">Seinien levityskerrat: {wallTimes}</Text>}
+        {parseInt(floorTimes) !== 0 && (
+          <Text mt="2" color="#fafafa">
+            Lattioiden levityskerrat: {floorTimes}
+          </Text>
+        )}
+        {parseInt(wallTimes) !== 0 && (
+          <Text color="#fafafa">Seinien levityskerrat: {wallTimes}</Text>
+        )}
         {floorKilos !== 0 && (
           <Text mt="2" color="#fafafa">
             Lattiat menekki {floorKilos}kg / {floorLitres}l
@@ -158,13 +183,28 @@ const WaterProof = () => {
           </Text>
         )}
         <Text mt="2" color="#fafafa">
-          Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä huomioida olosuhteita tai ainehukkaa.
+          Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä
+          huomioida olosuhteita tai ainehukkaa.
         </Text>
-        <Button colorScheme="orange" _text={{ fontSize: "xl", fontWeight: 'bold' }} mt="2" onPress={addButtonPressed}>
+        <Button
+          colorScheme="orange"
+          _text={{ fontSize: 'xl', fontWeight: 'bold' }}
+          mt="2"
+          onPress={addButtonPressed}
+        >
           Lisää listaan
         </Button>
       </Box>
-      <Box w="100%" position="absolute" height="85%" bottom="0" background="#242424" opacity={100} roundedTopLeft={20} zIndex={-10}></Box>
+      <Box
+        w="100%"
+        position="absolute"
+        height="85%"
+        bottom="0"
+        background="#242424"
+        opacity={100}
+        roundedTopLeft={20}
+        zIndex={-10}
+      ></Box>
     </Center>
   );
 };
