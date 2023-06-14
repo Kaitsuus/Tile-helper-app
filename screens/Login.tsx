@@ -4,24 +4,26 @@ import { Button, Box, Text, Center, Heading, Image } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { HomeScreenNavigationProp } from '../src/types';
-import { LoginProps } from '../src/types';
+import { login } from '../service/auth'; // Assuming you have an API function to handle login
+import { useAuth } from '../service/AuthContext';
 
 
-const Login: React.FC<LoginProps> = ({ handleLogin, handleSignup }) => {
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+const Login: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { setUser } = useAuth();
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
-  const handleLoginPress = () => {
-    if (username === '') {
-      Alert.alert('Error', 'Please enter a username');
-    } else {
-      handleLogin(); // Call the handleLogin prop to handle the login logic
-
-      // You can also use the navigation object directly
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      const response = await login(email, password);
+      console.log('Login successful:', response.data);
+      setUser(true); // Update the user state after successful login
+    } catch (error) {
+      console.error('Login failed:', error);
+      // Show an error message to the user
     }
   };
-
   const handleSignupPress = () => {
     navigation.navigate('Signup')
   }
@@ -42,10 +44,10 @@ const Login: React.FC<LoginProps> = ({ handleLogin, handleSignup }) => {
       </Heading>
         <TextInput
           placeholder="Käyttäjätunnus"
-          value={username}
+          value={email}
           style={styles.input}
           keyboardType="default"
-          onChangeText={(text) => setUsername(text)}
+          onChangeText={(text) => setEmail(text)}
         />
         <TextInput
           placeholder="Salasana"
@@ -56,7 +58,7 @@ const Login: React.FC<LoginProps> = ({ handleLogin, handleSignup }) => {
           onChangeText={(text) => setPassword(text)}
         />
         <Button
-          onPress={handleLoginPress}
+          onPress={() => handleLogin(email, password)}
           colorScheme="orange"
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}
           mt="2"
