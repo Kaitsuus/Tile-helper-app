@@ -1,20 +1,37 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { fetchUserDataById, getLoggedInUserId } from './auth';
 
-interface UserContextType {
-  user: boolean;
-  setUser: React.Dispatch<React.SetStateAction<boolean>>;
-}
+const UserContext = createContext(null);
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+export const useUserContext = () => {
+  return useContext(UserContext);
+};
 
-const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(false);
+export const UserProvider = ({ children }) => {
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userId = await getLoggedInUserId();
+        // Check if the user ID exists before making the request
+        if (userId) {
+          const response = await fetchUserDataById(userId);
+          setUserData(response.data);
+        } else {
+          console.log('User not logged in, skipping user data fetch.');
+        }
+      } catch (error) {
+        console.error('Error while fetching user data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={userData}>
       {children}
     </UserContext.Provider>
   );
 };
 
-export { UserProvider };

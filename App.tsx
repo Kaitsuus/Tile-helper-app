@@ -17,6 +17,8 @@ import { RootStackParamList } from './src/types';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
 import AuthContext from './service/AuthContext';
+import { UserProvider, useUserContext } from './service/UserContext';
+
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -26,6 +28,7 @@ const App: React.FC = () => {
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
+      <UserProvider>
     <NativeBaseProvider>
       <NavigationContainer>
         <Stack.Navigator>
@@ -94,6 +97,7 @@ const App: React.FC = () => {
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
+    </UserProvider>
     </AuthContext.Provider>
   );
 };
