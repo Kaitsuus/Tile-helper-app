@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { fetchUserDataById, getLoggedInUserId } from './auth';
+import AuthContext from './AuthContext';
 
 const UserContext = createContext(null);
 
@@ -9,6 +10,7 @@ export const useUserContext = () => {
 
 export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,7 +28,7 @@ export const UserProvider = ({ children }) => {
       }
     };
     fetchData();
-  }, []);
+  }, [user]);
 
   return (
     <UserContext.Provider value={userData}>
