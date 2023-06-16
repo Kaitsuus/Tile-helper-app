@@ -5,20 +5,28 @@ import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { HomeScreenNavigationProp } from '../src/types';
 import { LoginProps } from '../src/types';
+import { signupUser } from '../service/auth'
 
 const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
   const [email, setEmail] = useState<string>('');
-  const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordAgain, setPasswordAgain] = useState<string>('');
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
-  const handleSignupPress = () => {
-    if (username === '') {
+  const handleSignupPress = async () => {
+    if (email === '') {
       Alert.alert('Error', 'Please enter a username');
+    } else if (password !== passwordAgain) {
+      Alert.alert('Error', "Passwords don't match");
     } else {
-      handleLogin(); // Call the handleLogin prop for now
-      navigation.navigate('Home');
+      try {
+        await signupUser(email, password); // Call the signupUser function
+        Alert.alert('Success', 'You have successfully registered');
+        navigation.navigate('Login');
+      } catch (error) {
+        // Display the custom error message from the server
+        Alert.alert('Error', error.message);
+      }
     }
   };
 
@@ -46,13 +54,6 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
           style={styles.input}
           keyboardType="email-address"
           onChangeText={(text) => setEmail(text)}
-        />
-        <TextInput
-          placeholder="Käyttäjätunnus"
-          value={username}
-          style={styles.input}
-          keyboardType="default"
-          onChangeText={(text) => setUsername(text)}
         />
         <TextInput
           placeholder="Salasana"

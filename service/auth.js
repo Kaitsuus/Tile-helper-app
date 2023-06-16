@@ -2,6 +2,21 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from './api';
 
+export const signupUser = async (email, password) => {
+  try {
+    const response = await axios.post(baseUrl + '/users', { email, password });
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+      // Throw a custom error with the error message from the server
+      throw new Error(error.response.data.error);
+    } else {
+      // Throw the original error if there's no custom error message from the server
+      throw error;
+    }
+  }
+};
+
 export const login = async (email, password) => {
   try {
     const response = await axios.post(
@@ -23,7 +38,13 @@ export const login = async (email, password) => {
     return response;
   } catch (error) {
     console.error('Error during login:', error);
-    throw error;
+    if (error.response && error.response.data && error.response.data.error) {
+      // Throw a custom error with the error message from the server
+      throw new Error(error.response.data.error);
+    } else {
+      // Throw the original error if there's no custom error message from the server
+      throw error;
+    }
   }
 };
 

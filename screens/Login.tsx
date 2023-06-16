@@ -21,7 +21,8 @@ const Login: React.FC = () => {
       setUser(true); // Update the user state after successful login
     } catch (error) {
       console.error('Login failed:', error);
-      // Show an error message to the user
+      // Show the custom error message from the server in an alert
+      Alert.alert('Error', error.message);
     }
   };
   const handleSignupPress = () => {
