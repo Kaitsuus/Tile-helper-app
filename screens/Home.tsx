@@ -2,15 +2,19 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Box, Text, Center, Heading } from 'native-base';
 import NavigationButton from '../src/components/NavigationButton';
+import { useUserContext } from '../service/UserContext';
 
 const Home: React.FC = () => {
+  const userData = useUserContext();
+  const userEmailPrefix = userData?.email.split('@')[0];
+
   return (
     <Center w="100%" flex={1} px="3" background="#D9D9D9">
       <Heading size="2xl" color="#D9D9D9" pt="5">
         TERVETULOA
       </Heading>
       <Heading size="xl" color="#D9D9D9" pt="5">
-        Käyttäjä
+        {userEmailPrefix}
       </Heading>
       <Box pt="16" w="90%" maxW="290" position="relative">
         <NavigationButton screenName="Grout" title="Saumaus" />
