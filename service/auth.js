@@ -125,3 +125,27 @@ export const fetchUserDataById = async (userId) => {
     throw error;
   }
 };
+
+export const deleteItemFromDB = async (listId, itemId) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      throw new Error('No token available. User is not logged in.');
+    }
+
+    // Replace this URL with the appropriate URL for your backend server
+    const url = `${api.lists}/${listId}/items/${itemId}`;
+
+    console.log('Deleting item with URL:', url); // Add this line to log the URL
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    };
+
+    await axios.delete(url, { headers: headers });
+  } catch (error) {
+    console.error('Error during delete item from DB:', error);
+    throw error;
+  }
+};
