@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Image, TouchableOpacity } from 'react-native';
 import { NativeBaseProvider } from 'native-base';
 import {
   NavigationContainer,
@@ -19,8 +18,10 @@ import Signup from './screens/Signup';
 import AuthContext from './service/AuthContext';
 import { UserProvider } from './service/UserContext';
 import HeaderAvatar from './src/components/HeaderAvatar';
+import HeaderLeft from './src/components/HeaderLeft';
 
 const Stack = createStackNavigator<RootStackParamList>();
+
 
 const App: React.FC = () => {
   const [user, setUser] = useState(false);
@@ -37,16 +38,7 @@ const App: React.FC = () => {
                     headerTransparent: true,
                     headerTintColor: '#EF6F20',
                     headerLeft: () => (
-                      <TouchableOpacity
-                        style={{ paddingLeft: 10 }}
-                      >
-                        <Image
-                          source={require('./assets/apuriLogo.png')}
-                          style={{ width: 50, height: 50, marginLeft: 10 }}
-                          resizeMode="contain"
-                          alt="Apuri logo"
-                        />
-                      </TouchableOpacity>
+                    <HeaderLeft />
                     ),
                     headerRight: () => <HeaderAvatar />
                   }}

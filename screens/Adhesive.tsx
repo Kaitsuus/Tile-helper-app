@@ -7,7 +7,7 @@ import styles from '../src/styles/style';
 import { adhesiveOptions } from '../src/data/adhesiveMockData';
 import mockData from '../src/data/mockData.json';
 
-import { RootStackParamList, HomeScreenNavigationProp } from '../src/types';
+import { HomeScreenNavigationProp } from '../src/types';
 
 const Adhesive: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
