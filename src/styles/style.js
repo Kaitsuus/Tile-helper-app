@@ -6,13 +6,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#000'
+    backgroundColor: '#000',
   },
   label: {
     fontSize: 20,
     marginBottom: 20,
     textAlign: 'center',
-    color: '#fafafa'
+    color: '#fafafa',
   },
   input: {
     width: '100%',
@@ -22,19 +22,19 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     paddingHorizontal: 10,
-    backgroundColor: '#fafafa'
+    backgroundColor: '#fafafa',
   },
   button: {
     backgroundColor: '#ED7931',
     width: 200,
-    marginBottom: 10
+    marginBottom: 10,
   },
   result: {
     color: '#fafafa',
     fontSize: 16,
     marginTop: 10,
     marginBottom: 10,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   picker: {
     width: 250,
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     borderColor: '#ED7931',
     height: 5,
     marginBottom: 10,
-    backgroundColor: '#fafafa'
-  }
+    backgroundColor: '#fafafa',
+  },
 });
 
 export default styles;

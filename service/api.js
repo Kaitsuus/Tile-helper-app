@@ -5,5 +5,5 @@ const baseUrl = BASE_URL;
 export default {
   login: `${baseUrl}/login`,
   users: `${baseUrl}/users`,
-  lists: `${baseUrl}/lists`
+  lists: `${baseUrl}/lists`,
 };

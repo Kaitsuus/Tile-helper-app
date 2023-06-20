@@ -23,12 +23,12 @@ export const login = async (email, password) => {
       api.login,
       {
         email: email,
-        password: password
+        password: password,
       },
       {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       }
     );
     await AsyncStorage.setItem('token', response.data.token); // Store the token in local storage
@@ -63,8 +63,8 @@ export const makeAuthenticatedRequest = async (url, method, data = null) => {
       data: data,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response;
   } catch (error) {
@@ -140,12 +140,35 @@ export const deleteItemFromDB = async (listId, itemId) => {
 
     const headers = {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     };
 
     await axios.delete(url, { headers: headers });
   } catch (error) {
     console.error('Error during delete item from DB:', error);
+    throw error;
+  }
+};
+export const deleteListFromDB = async (listId) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      throw new Error('No token available. User is not logged in.');
+    }
+
+    // Replace this URL with the appropriate URL for your backend server
+    const url = `${api.lists}/${listId}`;
+
+    console.log('Deleting item with URL:', url); // Add this line to log the URL
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+
+    await axios.delete(url, { headers: headers });
+  } catch (error) {
+    console.error('Error during delete list from DB:', error);
     throw error;
   }
 };

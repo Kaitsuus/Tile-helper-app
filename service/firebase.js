@@ -12,7 +12,7 @@ const firebaseConfig = {
   messaginSenderId: constants.manifest.extra.messagingSenderId,
   appId: constants.manifest.extra.appId,
   databaseURL: constants.manifest.extra.databaseURL,
-  measurementId: constants.manifest.extra.measurementId
+  measurementId: constants.manifest.extra.measurementId,
 };
 
 // Initialize Firebase
