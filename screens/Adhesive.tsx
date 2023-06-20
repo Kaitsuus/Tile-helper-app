@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
@@ -6,19 +6,66 @@ import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { adhesiveOptions } from '../src/data/adhesiveMockData';
 import mockData from '../src/data/mockData.json';
-
+import { makeAuthenticatedRequest, deleteItemFromDB, deleteListFromDB } from '../service/auth';
+import api from '../service/api';
 import { HomeScreenNavigationProp } from '../src/types';
+
+interface ShoppingList {
+  _id: string;
+  title: string;
+  user: string;
+  items: ShoppingItem[];
+}
+interface ShoppingItemContent {
+  amount: number;
+  name: string;
+  unit: string;
+}
+
+interface ShoppingItem {
+  _id: string;
+  amount: number;
+  content: ShoppingItemContent;
+}
 
 const Adhesive: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const navigateToShoppingList = () => {
     navigation.navigate('ShoppingList');
   };
-
+  const [lists, setLists] = useState<ShoppingList[]>([]);
   const [brand, setBrand] = useState<string>(adhesiveOptions[0].value);
   const [thickness, setThickness] = useState<string>('3.5');
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [adhesiveAmount, setAdhesiveAmount] = useState<string>('');
+  const [currentListIndex, setCurrentListIndex] = useState<string>('0');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await makeAuthenticatedRequest(api.lists, 'GET');
+        const transformedLists = response.data.map((list: any) => {
+          const transformedItems = list.items.map((item: any) => {
+            return {
+              ...item,
+              _id: item._id,
+              amount: item.amount || 0,
+            };
+          });
+  
+          return {
+            ...list,
+            _id: list.id,
+            items: transformedItems,
+          };
+        });
+        setLists(transformedLists);
+      } catch (error) {
+        console.error('Error while fetching lists:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const currentUserIndex = 0; // Index of the current user (hardcoded for now)
 
@@ -44,15 +91,25 @@ const Adhesive: React.FC = () => {
     setAdhesiveAmount(result.toFixed(2));
   };
 
-  const addButtonPressed = () => {
-    const user = mockData.users[currentUserIndex];
-    const newItem = {
-      name: `${brand} ${adhesiveAmount}`,
-      amount: parseFloat(adhesiveAmount),
-      unit: 'kg'
+  const addButtonPressed = async () => {
+    const newItem: Omit<ShoppingItem, '_id'> = {
+      amount: 0,
+      content: {
+        name: `${brand} ${adhesiveAmount}`,
+        amount: parseFloat(adhesiveAmount),
+        unit: 'kg',
+      },
     };
-    user.shoppingList.push(newItem);
-    const message = `${newItem.name} kg lisätty listalle`;
+    try {
+      const response = await makeAuthenticatedRequest(
+        `${api.lists}/${lists[currentListIndex]?._id}/items`,
+        'POST',
+        { content: newItem.content }
+      );
+    } catch (error) {
+      console.error('Error adding item to the list:', error);
+    }
+    const message = `${newItem.content.name} kg lisätty listalle`;
 
     Alert.alert(message, '', [
       {
@@ -139,6 +196,24 @@ const Adhesive: React.FC = () => {
           Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä
           huomioida olosuhteita tai ainehukkaa.
         </Text>
+        <Select
+          bg="white"
+          selectedValue={currentListIndex}
+          _selectedItem={{
+            bg: 'orange.500',
+            endIcon: <CheckIcon size="5" />
+          }}
+          mt={1}
+          onValueChange={(value) => setCurrentListIndex(value)}
+        >
+          {lists.length > 0 ? (
+            lists.map((list: ShoppingList, index: number) => (
+              <Select.Item key={list._id} label={list.title} value={index.toString()} />
+            ))
+          ) : (
+            <Select.Item label="No lists available" value="" />
+          )}
+        </Select>
         <Button
           colorScheme="orange"
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}
