@@ -23,12 +23,12 @@ export const login = async (email, password) => {
       api.login,
       {
         email: email,
-        password: password
+        password: password,
       },
       {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       }
     );
     await AsyncStorage.setItem('token', response.data.token); // Store the token in local storage
@@ -63,8 +63,8 @@ export const makeAuthenticatedRequest = async (url, method, data = null) => {
       data: data,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response;
   } catch (error) {
@@ -122,6 +122,43 @@ export const fetchUserDataById = async (userId) => {
     return response;
   } catch (error) {
     console.error(`Error during fetch user data (ID: ${userId}):`, error);
+    throw error;
+  }
+};
+
+export const deleteItemFromDB = async (listId, itemId) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      throw new Error('No token available. User is not logged in.');
+    }
+    const url = `${api.lists}/${listId}/items/${itemId}`;
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+
+    await axios.delete(url, { headers: headers });
+  } catch (error) {
+    console.error('Error during delete item from DB:', error);
+    throw error;
+  }
+};
+export const deleteListFromDB = async (listId) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      throw new Error('No token available. User is not logged in.');
+    }
+    const url = `${api.lists}/${listId}`;
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+
+    await axios.delete(url, { headers: headers });
+  } catch (error) {
+    console.error('Error during delete list from DB:', error);
     throw error;
   }
 };

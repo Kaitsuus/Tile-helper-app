@@ -1,18 +1,57 @@
 {
   "users": [
     {
-      "name": "John",
-      "shoppingList": [
-        { "name": "60x60 laattaa", "amount": 156, "unit": "m²" },
-        { "name": "Hiomalaikka 125mm", "amount": 1, "unit": "kpl" },
-        { "name": "Motivaatio juoma", "amount": 3, "unit": "ltk" }
+      "_id": "60cc4a1270a8c42a303d5d01",
+      "name": "John"
+    },
+    {
+      "_id": "60cc4a1270a8c42a303d5d02",
+      "name": "Jane"
+    }
+  ],
+  "lists": [
+    {
+      "_id": "60cc4a1270a8c42a303d5d03",
+      "title": "John's Shopping List",
+      "user": "60cc4a1270a8c42a303d5d01",
+      "items": [
+        {
+          "_id": "60cc4a1270a8c42a303d5d04",
+          "name": "60x60 laattaa",
+          "amount": 156,
+          "unit": "m²"
+        },
+        {
+          "_id": "60cc4a1270a8c42a303d5d05",
+          "name": "Hiomalaikka 125mm",
+          "amount": 1,
+          "unit": "kpl"
+        },
+        {
+          "_id": "60cc4a1270a8c42a303d5d06",
+          "name": "Motivaatio juoma",
+          "amount": 3,
+          "unit": "ltk"
+        }
       ]
     },
     {
-      "name": "Jane",
-      "shoppingList": [
-        { "name": "Bread", "amount": 2, "unit": "kpl" },
-        { "name": "Eggs", "amount": 6, "unit": "kpl" }
+      "_id": "60cc4a1270a8c42a303d5d07",
+      "title": "Jane's Shopping List",
+      "user": "60cc4a1270a8c42a303d5d02",
+      "items": [
+        {
+          "_id": "60cc4a1270a8c42a303d5d08",
+          "name": "Bread",
+          "amount": 2,
+          "unit": "kpl"
+        },
+        {
+          "_id": "60cc4a1270a8c42a303d5d09",
+          "name": "Eggs",
+          "amount": 6,
+          "unit": "kpl"
+        }
       ]
     }
   ]

@@ -1,79 +1,177 @@
-import React, { useState } from 'react';
-import {
-  FlatList,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from 'react-native';
-import { Center, Box, Select, CheckIcon, Button } from 'native-base';
-import mockData from '../src/data/mockData.json';
+import React, { useState, useEffect } from 'react';
+import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Center, Box, Select, Button, CheckIcon, Modal, FormControl, Input } from 'native-base';
+import { makeAuthenticatedRequest, deleteItemFromDB, deleteListFromDB } from '../service/auth';
+import api from '../service/api';
 
-interface ShoppingItem {
-  name: string;
+interface ShoppingItemContent {
   amount: number;
+  name: string;
   unit: string;
 }
 
+interface ShoppingItem {
+  _id: string;
+  amount: number;
+  content: ShoppingItemContent;
+}
+
+interface ShoppingList {
+  _id: string;
+  title: string;
+  user: string;
+  items: ShoppingItem[];
+}
+
+interface EditingAmount {
+  index: number;
+  value: number;
+}
+
 const ShoppingList: React.FC = () => {
-  const [users, setUsers] = useState(mockData.users);
-  const [newItemName, setNewItemName] = useState<string>('');
+  const [lists, setLists] = useState<ShoppingList[]>([]);
+  const [newListName, setNewListName] = useState('');
+  const [newItemName, setNewItemName] = useState('');
   const [newItemAmount, setNewItemAmount] = useState<number>(0);
-  const [newItemUnit, setNewItemUnit] = useState<string>('');
+  const [newItemUnit, setNewItemUnit] = useState<string>('kpl');
+  const [editingAmount, setEditingAmount] = useState<EditingAmount | null>(null);
+  const [currentListIndex, setCurrentListIndex] = useState<string>('0');
+  const [items, setItems] = useState<ShoppingItem[]>([]);
+  const [showModal, setShowModal] = useState(false);
 
-  const currentUserIndex = 0; // Index of the current user (hardcoded for now)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await makeAuthenticatedRequest(api.lists, 'GET');
+        const transformedLists = response.data.map((list: any) => {
+          const transformedItems = list.items.map((item: any) => {
+            return {
+              ...item,
+              _id: item._id,
+              amount: item.amount || 0,
+            };
+          });
+  
+          return {
+            ...list,
+            _id: list.id,
+            items: transformedItems,
+          };
+        });
+        setLists(transformedLists);
+      } catch (error) {
+        console.error('Error while fetching lists:', error);
+      }
+    };
+    fetchData();
+  }, []);
+  
+  useEffect(() => {
+    if (lists.length > 0) {
+      setItems(lists[currentListIndex]?.items || []);
+    }
+  }, [lists, currentListIndex]);
 
-  const shoppingList = users[currentUserIndex].shoppingList;
-  const [items, setItems] = useState<ShoppingItem[]>(shoppingList);
+  const addItem = async () => {
+    const newItem: Omit<ShoppingItem, '_id'> = {
+      amount: 0,
+      content: {
+        name: newItemName,
+        amount: newItemAmount,
+        unit: newItemUnit,
+      },
+    };
+    try {
+      const response = await makeAuthenticatedRequest(
+        `${api.lists}/${lists[currentListIndex]?._id}/items`,
+        'POST',
+        { content: newItem.content }
+      );
+      const createdItem = response.data;
+      const updatedLists = [...lists];
+      updatedLists[currentListIndex].items.push(createdItem);
 
-  const updateMockData = (updatedUsers: any) => {
-    const updatedMockData = { ...mockData, users: updatedUsers };
-    setUsers(updatedUsers);
-    console.log(updatedMockData);
+      setLists(updatedLists);
+      setNewItemName('');
+      setNewItemAmount(0);
+      setNewItemUnit('');
+    } catch (error) {
+      console.error('Error adding item to the list:', error);
+    }
   };
 
-  const addItem = () => {
-    const updatedItems = [
-      ...items,
-      { name: newItemName, amount: newItemAmount, unit: newItemUnit }
-    ];
-    const updatedUsers = [...users];
-    updatedUsers[currentUserIndex].shoppingList = updatedItems;
-    updateMockData(updatedUsers);
+  // Delete the item from the database
+  const deleteItem = async (index: number) => {
+    const itemToDelete = items[index];
+    const itemId = itemToDelete._id;
+    const listId = lists[currentListIndex]._id;
 
-    setItems(updatedItems);
-    setNewItemName('');
-    setNewItemAmount(0);
-    setNewItemUnit('');
-  };
-
-  const deleteItem = (index: number) => {
+    try {
+      await deleteItemFromDB(listId, itemId);
+    } catch (error) {
+      console.error('Error deleting item from the database:', error);
+      return;
+    }
+    // Update the local state
     const updatedItems = [...items];
     updatedItems.splice(index, 1);
-    const updatedUsers = [...users];
-    updatedUsers[currentUserIndex].shoppingList = updatedItems;
-    updateMockData(updatedUsers);
-
-    setItems(updatedItems);
+    const updatedLists = [...lists];
+    updatedLists[currentListIndex].items = updatedItems;
+  
+    setLists(updatedLists);
   };
 
-  const updateAmount = (index: number, value: number) => {
+  const deleteList = async (listId: string) => {
+    try {
+      await deleteListFromDB(listId);
+      const updatedLists = lists.filter((list) => list._id !== listId);
+      setLists(updatedLists);
+      setCurrentListIndex('0');
+    } catch (error) {
+      console.error('Error deleting list:', error);
+    }
+  };
+
+  const updateAmount = async (index: number, value: number) => {
     const updatedItems = [...items];
-    updatedItems[index].amount = value;
-    const updatedUsers = [...users];
-    updatedUsers[currentUserIndex].shoppingList = updatedItems;
-    updateMockData(updatedUsers);
-
-    setItems(updatedItems);
+    const updatedContent = {
+      ...updatedItems[index].content,
+      amount: value,
+    };
+    updatedItems[index].content = updatedContent;
+    const updatedLists = [...lists];
+    updatedLists[currentListIndex].items = updatedItems;
+  
+    try {
+      await makeAuthenticatedRequest(
+        `${api.lists}/${lists[currentListIndex]._id}/items/${updatedItems[index]._id}`,
+        'PUT',
+        { content: updatedContent } // Update the request body to contain the entire updated content object
+      );
+      setLists(updatedLists);
+    } catch (error) {
+      console.error('Error updating item amount:', error);
+    }
   };
 
-  const renderItem = ({
-    item,
-    index
-  }: {
-    item: ShoppingItem;
-    index: number;
-  }) => {
+  const createNewList = async (title: string) => {
+    try {
+      const newList = {
+        title,
+        items: [],
+      };
+      const response = await makeAuthenticatedRequest(`${api.lists}`, 'POST', newList);
+      const createdList = response.data;
+      setLists([...lists, createdList]);
+      setCurrentListIndex((lists.length).toString());
+    } catch (error) {
+      console.error('Error creating new list:', error);
+    }
+  };
+
+  const renderItem = ({ item, index }: { item: ShoppingItem; index: number }) => {
+    const content = item.content;
+    
     return (
       <Box
         p={4}
@@ -83,23 +181,28 @@ const ShoppingList: React.FC = () => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Text>{item.name}</Text>
+        <Text>{content.name}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TextInput
-            value={item.amount.toString()}
-            onChangeText={(text) => updateAmount(index, Number(text))}
+        <TextInput
+            value={editingAmount !== null && index === editingAmount.index ? editingAmount.value.toString() : content.amount.toString()}
+            onChangeText={(text) => setEditingAmount({ index, value: Number(text) })}
+            onBlur={() => {
+              if (editingAmount !== null && index === editingAmount.index) {
+                updateAmount(editingAmount.index, editingAmount.value);
+                setEditingAmount(null);
+              }
+            }}
             keyboardType="numeric"
             style={{
               borderWidth: 1,
               borderColor: 'gray',
               borderRadius: 4,
-              padding: 4,
-              width: 50,
-              marginRight: 10,
-              textAlign: 'center'
+              padding: 8,
+              marginRight: 8,
+              width: 60,
             }}
           />
-          <Text>{item.unit}</Text>
+          <Text>{content.unit}</Text>
           <TouchableOpacity onPress={() => deleteItem(index)}>
             <Text style={{ color: 'red', marginLeft: 10 }}>Delete</Text>
           </TouchableOpacity>
@@ -107,53 +210,63 @@ const ShoppingList: React.FC = () => {
       </Box>
     );
   };
-
+  
   return (
     <Center w="100%" flex={1} px={3} background="#fafafa">
       <Box safeArea p={2} py={8} w="100%" h="80%">
+        <Select
+          selectedValue={currentListIndex}
+          onValueChange={(value) => setCurrentListIndex(value)}
+        >
+          {lists.length > 0 ? (
+            lists.map((list: ShoppingList, index: number) => (
+              <Select.Item key={list._id} label={list.title} value={index.toString()} />
+            ))
+          ) : (
+            <Select.Item label="No lists available" value="" />
+          )}
+        </Select>
         <FlatList
           data={items}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => renderItem({ item, index })}
+          keyExtractor={(item) => item._id}
         />
-        <View
-          style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}
-        >
+        <Box flexDirection="row" alignItems="center" marginTop={4}>
           <TextInput
             value={newItemName}
             onChangeText={setNewItemName}
-            placeholder="Tuote"
+            placeholder="Item name"
             style={{
               borderWidth: 1,
               borderColor: 'gray',
               borderRadius: 4,
-              padding: 4,
-              width: 150,
-              marginRight: 10
+              padding: 8,
+              marginRight: 8,
+              flex: 1,
             }}
           />
           <TextInput
             value={newItemAmount.toString()}
             onChangeText={(text) => setNewItemAmount(Number(text))}
-            keyboardType="numeric"
             placeholder="Amount"
+            keyboardType="numeric"
             style={{
               borderWidth: 1,
               borderColor: 'gray',
               borderRadius: 4,
-              padding: 4,
-              width: 70,
-              marginRight: 10
+              padding: 8,
+              marginRight: 8,
+              width: 60,
             }}
           />
           <Select
             selectedValue={newItemUnit}
-            minWidth="120"
+            minWidth="90"
             onValueChange={(value) => setNewItemUnit(value)}
-            placeholder="yksikkö"
+            placeholder="kpl"
             _selectedItem={{
               bg: 'orange.500',
-              endIcon: <CheckIcon size={4} />
+              endIcon: <CheckIcon size={3} />
             }}
           >
             <Select.Item label="m²" value="m²" />
@@ -162,10 +275,9 @@ const ShoppingList: React.FC = () => {
             <Select.Item label="pkt" value="pkt" />
             <Select.Item label="kg" value="kg" />
           </Select>
-        </View>
-        <Button onPress={addItem} colorScheme="orange" mt={2}>
-          Add
-        </Button>
+
+          <Button onPress={addItem} colorScheme="orange" marginLeft={2}>Add Item</Button>
+        </Box>
       </Box>
       <Box
         style={{
@@ -175,13 +287,48 @@ const ShoppingList: React.FC = () => {
           gap: 2
         }}
       >
-        <Button onPress={addItem} colorScheme="orange" mt={2} w={20}>
+        <Button colorScheme="orange" mt={2} w={20}>
           save
         </Button>
-        <Button onPress={addItem} colorScheme="orange" mt={2} w={20}>
+        <Button colorScheme="orange" mt={2} w={20}>
           share
         </Button>
+        <Button onPress={() => deleteList(lists[currentListIndex]._id)} colorScheme="orange" mt={2} w={20}>
+          delete
+        </Button>
+        <Button onPress={() => setShowModal(true)} colorScheme="orange" mt={2} w={20}>new</Button>
       </Box>
+        <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+      <Modal.Content maxWidth="400px">
+        <Modal.CloseButton />
+        <Modal.Header>Create new list</Modal.Header>
+        <Modal.Body>
+          <FormControl>
+            <FormControl.Label>List Name</FormControl.Label>
+            <Input value={newListName} onChangeText={(text) => setNewListName(text)} />
+          </FormControl>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button.Group space={2}>
+            <Button variant="ghost" onPress={() => setShowModal(false)} colorScheme="orange">
+              Cancel
+            </Button>
+            <Button
+              onPress={() => {
+                if (newListName.trim() !== '') {
+                  createNewList(newListName.trim());
+                  setNewListName('');
+                  setShowModal(false);
+                }
+              }}
+              colorScheme="orange"
+            >
+              Create
+            </Button>
+          </Button.Group>
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal>
     </Center>
   );
 };

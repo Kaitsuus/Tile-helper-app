@@ -5,7 +5,7 @@ export const waterproofOptions = [
     consumptionWL: 0.6,
     consumptionWKg: 0.8,
     consumptionFL: 0.8,
-    consumptionFKg: 1.0
+    consumptionFKg: 1.0,
   },
   {
     label: 'Ardex S 1-K',
@@ -13,6 +13,6 @@ export const waterproofOptions = [
     consumptionWL: 0.88,
     consumptionWKg: 1.1,
     consumptionFL: 0.88,
-    consumptionFKg: 1.1
-  }
+    consumptionFKg: 1.1,
+  },
 ];
