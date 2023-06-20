@@ -132,12 +132,7 @@ export const deleteItemFromDB = async (listId, itemId) => {
     if (!token) {
       throw new Error('No token available. User is not logged in.');
     }
-
-    // Replace this URL with the appropriate URL for your backend server
     const url = `${api.lists}/${listId}/items/${itemId}`;
-
-    console.log('Deleting item with URL:', url); // Add this line to log the URL
-
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -155,12 +150,7 @@ export const deleteListFromDB = async (listId) => {
     if (!token) {
       throw new Error('No token available. User is not logged in.');
     }
-
-    // Replace this URL with the appropriate URL for your backend server
     const url = `${api.lists}/${listId}`;
-
-    console.log('Deleting item with URL:', url); // Add this line to log the URL
-
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
