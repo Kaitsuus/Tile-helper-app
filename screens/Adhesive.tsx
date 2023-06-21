@@ -8,6 +8,7 @@ import { adhesiveOptions } from '../src/data/adhesiveMockData';
 import api from '../service/api';
 import { fetchAndTransformLists, makeAuthenticatedRequest } from '../service/auth';
 import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/types'
+import ShoppingListSelect from '../src/components/ShoppingListSelect';
 
 const Adhesive: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -161,24 +162,11 @@ const Adhesive: React.FC = () => {
           Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä
           huomioida olosuhteita tai ainehukkaa.
         </Text>
-        <Select
-          bg="white"
-          selectedValue={currentListIndex}
-          _selectedItem={{
-            bg: 'orange.500',
-            endIcon: <CheckIcon size="5" />
-          }}
-          mt={1}
-          onValueChange={(value) => setCurrentListIndex(value)}
-        >
-          {lists.length > 0 ? (
-            lists.map((list: ShoppingList, index: number) => (
-              <Select.Item key={list._id} label={list.title} value={index.toString()} />
-            ))
-          ) : (
-            <Select.Item label="No lists available" value="" />
-          )}
-        </Select>
+        <ShoppingListSelect
+          lists={lists}
+          currentListIndex={currentListIndex}
+          setCurrentListIndex={setCurrentListIndex}
+        />
         <Button
           colorScheme="orange"
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}

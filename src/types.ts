@@ -57,3 +57,8 @@ export interface EditingAmount {
   index: number;
   value: number;
 }
+export interface ShoppingListSelectProps {
+  lists: ShoppingList[];
+  currentListIndex: string;
+  setCurrentListIndex: (index: string) => void;
+}
