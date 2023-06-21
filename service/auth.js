@@ -4,7 +4,7 @@ import api from './api';
 
 export const signupUser = async (email, password) => {
   try {
-    const response = await axios.post(baseUrl + '/users', { email, password });
+    const response = await axios.post(api.users, { email, password });
     return response.data;
   } catch (error) {
     if (error.response && error.response.data && error.response.data.error) {
@@ -163,8 +163,9 @@ export const deleteListFromDB = async (listId) => {
   }
 };
 export const fetchAndTransformLists = async () => {
+  const userId = await getLoggedInUserId();
   try {
-    const response = await makeAuthenticatedRequest(api.lists, 'GET');
+    const response = await makeAuthenticatedRequest(`${api.lists}/user/${userId}/lists`, 'GET');
     const transformedLists = response.data.map((list) => {
       const transformedItems = list.items.map((item) => {
         return {
