@@ -162,3 +162,27 @@ export const deleteListFromDB = async (listId) => {
     throw error;
   }
 };
+export const fetchAndTransformLists = async () => {
+  try {
+    const response = await makeAuthenticatedRequest(api.lists, 'GET');
+    const transformedLists = response.data.map((list) => {
+      const transformedItems = list.items.map((item) => {
+        return {
+          ...item,
+          _id: item._id,
+          amount: item.amount || 0,
+        };
+      });
+
+      return {
+        ...list,
+        _id: list.id,
+        items: transformedItems,
+      };
+    });
+    return transformedLists;
+  } catch (error) {
+    console.error('Error while fetching lists:', error);
+    throw error;
+  }
+};

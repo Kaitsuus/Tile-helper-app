@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList, HomeScreenNavigationProp } from '../types';
 
 const HeaderAvatar: React.FC = () => {
-  const userData = useUserContext();
+  const { userData } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const navigateToShoppingList = () => {
     navigation.navigate('Home');

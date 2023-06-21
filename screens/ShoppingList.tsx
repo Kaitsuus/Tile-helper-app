@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Center, Box, Select, Button, CheckIcon, Modal, FormControl, Input } from 'native-base';
-import { makeAuthenticatedRequest, deleteItemFromDB, deleteListFromDB } from '../service/auth';
+import { makeAuthenticatedRequest, deleteItemFromDB, deleteListFromDB, fetchAndTransformLists } from '../service/auth';
 import api from '../service/api';
-
-interface ShoppingItemContent {
-  amount: number;
-  name: string;
-  unit: string;
-}
-
-interface ShoppingItem {
-  _id: string;
-  amount: number;
-  content: ShoppingItemContent;
-}
+import { ShoppingItem, EditingAmount } from '../src/types'
+import ShoppingListSelect from '../src/components/ShoppingListSelect';
+import { useUserContext } from '../service/UserContext';
 
 interface ShoppingList {
   _id: string;
@@ -23,41 +14,23 @@ interface ShoppingList {
   items: ShoppingItem[];
 }
 
-interface EditingAmount {
-  index: number;
-  value: number;
-}
 
 const ShoppingList: React.FC = () => {
+  const { currentListIndex, setCurrentListIndex } = useUserContext();
   const [lists, setLists] = useState<ShoppingList[]>([]);
   const [newListName, setNewListName] = useState('');
   const [newItemName, setNewItemName] = useState('');
   const [newItemAmount, setNewItemAmount] = useState<number>(0);
   const [newItemUnit, setNewItemUnit] = useState<string>('kpl');
   const [editingAmount, setEditingAmount] = useState<EditingAmount | null>(null);
-  const [currentListIndex, setCurrentListIndex] = useState<string>('0');
+
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await makeAuthenticatedRequest(api.lists, 'GET');
-        const transformedLists = response.data.map((list: any) => {
-          const transformedItems = list.items.map((item: any) => {
-            return {
-              ...item,
-              _id: item._id,
-              amount: item.amount || 0,
-            };
-          });
-  
-          return {
-            ...list,
-            _id: list.id,
-            items: transformedItems,
-          };
-        });
+        const transformedLists = await fetchAndTransformLists();
         setLists(transformedLists);
       } catch (error) {
         console.error('Error while fetching lists:', error);
@@ -214,18 +187,11 @@ const ShoppingList: React.FC = () => {
   return (
     <Center w="100%" flex={1} px={3} background="#fafafa">
       <Box safeArea p={2} py={8} w="100%" h="80%">
-        <Select
-          selectedValue={currentListIndex}
-          onValueChange={(value) => setCurrentListIndex(value)}
-        >
-          {lists.length > 0 ? (
-            lists.map((list: ShoppingList, index: number) => (
-              <Select.Item key={list._id} label={list.title} value={index.toString()} />
-            ))
-          ) : (
-            <Select.Item label="No lists available" value="" />
-          )}
-        </Select>
+      <ShoppingListSelect
+          lists={lists}
+          currentListIndex={currentListIndex}
+          setCurrentListIndex={setCurrentListIndex}
+        />
         <FlatList
           data={items}
           renderItem={({ item, index }) => renderItem({ item, index })}

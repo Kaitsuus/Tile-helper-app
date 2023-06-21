@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { Alert, Keyboard } from 'react-native';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { groutOptions } from '../src/data/groutMockData';
 import styles from '../src/styles/style';
-import mockData from '../src/data/mockData.json';
+import api from '../service/api';
+import { fetchAndTransformLists, makeAuthenticatedRequest } from '../service/auth';
+import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/types'
+import ShoppingListSelect from '../src/components/ShoppingListSelect';
+import { useUserContext } from '../service/UserContext';
 
 const Grout: React.FC = () => {
+  const { currentListIndex, setCurrentListIndex } = useUserContext();
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+  const navigateToShoppingList = () => {
+    navigation.navigate('ShoppingList');
+  };
+  const [lists, setLists] = useState<ShoppingList[]>([]);
   const [brand, setBrand] = useState<string>(groutOptions[0].value);
   const [groutResult, setGroutResult] = useState<string>('');
   const [totalResult, setTotalResult] = useState<string>('');
@@ -15,8 +26,6 @@ const Grout: React.FC = () => {
   const [C, setC] = useState<string>(''); // tile thickness mm
   const [D, setD] = useState<string>(''); // grout width mm
   const [E, setE] = useState<string>(''); // area m²
-
-  const currentUserIndex = 0; // Index of the current user (hardcoded for now)
 
   const selectedOption = groutOptions.find((option) => option.value === brand);
   const consumption = selectedOption ? selectedOption.consumption : 0;
@@ -33,16 +42,46 @@ const Grout: React.FC = () => {
     setTotalResult(total.toFixed(2));
   };
 
-  const addButtonPressed = () => {
-    const user = mockData.users[currentUserIndex];
-    const newItem = {
-      name: `${brand} ${totalResult}`,
-      amount: parseFloat(totalResult),
-      unit: 'kg'
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const transformedLists = await fetchAndTransformLists();
+        setLists(transformedLists);
+      } catch (error) {
+        console.error('Error while fetching lists:', error);
+      }
     };
-    user.shoppingList.push(newItem);
-    Alert.alert(`${newItem.name} lisätty listalle`);
-    console.log(user);
+    fetchData();
+  }, []);
+
+  const addButtonPressed = async () => {
+    const newItem: Omit<ShoppingItem, '_id'> = {
+      amount: 0,
+      content: {
+        name: `${brand} ${totalResult}`,
+        amount: parseFloat(totalResult),
+        unit: 'kg',
+      },
+    };
+    try {
+      const response = await makeAuthenticatedRequest(
+        `${api.lists}/${lists[currentListIndex]?._id}/items`,
+        'POST',
+        { content: newItem.content }
+      );
+    } catch (error) {
+      console.error('Error adding item to the list:', error);
+    }
+    const message = `${newItem.content.name} kg lisätty listalle`;
+
+    Alert.alert(message, 'Siirrytäänkö listalle?', [
+      {
+        text: 'Ei',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel'
+      },
+      { text: 'Kyllä', onPress: () => navigateToShoppingList() }
+    ]);
   };
 
   return (
@@ -134,6 +173,11 @@ const Grout: React.FC = () => {
           Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä
           huomioida olosuhteita tai ainehukkaa.
         </Text>
+        <ShoppingListSelect
+          lists={lists}
+          currentListIndex={currentListIndex}
+          setCurrentListIndex={setCurrentListIndex}
+        />
         <Button
           onPress={addButtonPressed}
           colorScheme="orange"

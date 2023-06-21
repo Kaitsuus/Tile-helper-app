@@ -1,26 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { adhesiveOptions } from '../src/data/adhesiveMockData';
-import mockData from '../src/data/mockData.json';
-
-import { HomeScreenNavigationProp } from '../src/types';
+import api from '../service/api';
+import { fetchAndTransformLists, makeAuthenticatedRequest } from '../service/auth';
+import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/types'
+import ShoppingListSelect from '../src/components/ShoppingListSelect';
+import { useUserContext } from '../service/UserContext';
 
 const Adhesive: React.FC = () => {
+  const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const navigateToShoppingList = () => {
     navigation.navigate('ShoppingList');
   };
-
+  const [lists, setLists] = useState<ShoppingList[]>([]);
   const [brand, setBrand] = useState<string>(adhesiveOptions[0].value);
   const [thickness, setThickness] = useState<string>('3.5');
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [adhesiveAmount, setAdhesiveAmount] = useState<string>('');
 
-  const currentUserIndex = 0; // Index of the current user (hardcoded for now)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const transformedLists = await fetchAndTransformLists();
+        setLists(transformedLists);
+      } catch (error) {
+        console.error('Error while fetching lists:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
 
   const calculateConsumption = () => {
     const sqm = parseFloat(squareMeters);
@@ -44,17 +58,27 @@ const Adhesive: React.FC = () => {
     setAdhesiveAmount(result.toFixed(2));
   };
 
-  const addButtonPressed = () => {
-    const user = mockData.users[currentUserIndex];
-    const newItem = {
-      name: `${brand} ${adhesiveAmount}`,
-      amount: parseFloat(adhesiveAmount),
-      unit: 'kg'
+  const addButtonPressed = async () => {
+    const newItem: Omit<ShoppingItem, '_id'> = {
+      amount: 0,
+      content: {
+        name: `${brand} ${adhesiveAmount}`,
+        amount: parseFloat(adhesiveAmount),
+        unit: 'kg',
+      },
     };
-    user.shoppingList.push(newItem);
-    const message = `${newItem.name} kg lisätty listalle`;
+    try {
+      const response = await makeAuthenticatedRequest(
+        `${api.lists}/${lists[currentListIndex]?._id}/items`,
+        'POST',
+        { content: newItem.content }
+      );
+    } catch (error) {
+      console.error('Error adding item to the list:', error);
+    }
+    const message = `${newItem.content.name} kg lisätty listalle`;
 
-    Alert.alert(message, '', [
+    Alert.alert(message, 'Siirrytäänkö listalle?', [
       {
         text: 'Ei',
         onPress: () => console.log('Cancel Pressed'),
@@ -139,6 +163,11 @@ const Adhesive: React.FC = () => {
           Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä
           huomioida olosuhteita tai ainehukkaa.
         </Text>
+        <ShoppingListSelect
+          lists={lists}
+          currentListIndex={currentListIndex}
+          setCurrentListIndex={setCurrentListIndex}
+        />
         <Button
           colorScheme="orange"
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}

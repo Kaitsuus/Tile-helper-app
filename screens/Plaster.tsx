@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
 import styles from '../src/styles/style';
 import { plasterOptions } from '../src/data/plasterMockData';
-import mockData from '../src/data/mockData.json';
+import api from '../service/api';
+import { fetchAndTransformLists, makeAuthenticatedRequest } from '../service/auth';
+import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/types'
+import ShoppingListSelect from '../src/components/ShoppingListSelect';
+import { useUserContext } from '../service/UserContext';
 
 const Plaster: React.FC = () => {
+  const { currentListIndex, setCurrentListIndex } = useUserContext();
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+  const navigateToShoppingList = () => {
+    navigation.navigate('ShoppingList');
+  };
+  const [lists, setLists] = useState<ShoppingList[]>([]);
   const [brand, setBrand] = useState<string>(plasterOptions[0].value);
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [plasterAmount, setPlasterAmount] = useState<string>('');
-
-  const currentUserIndex = 0; // Index of the current user (hardcoded for now)
 
   const selectedOption = plasterOptions.find(
     (option) => option.value === brand
@@ -24,16 +33,46 @@ const Plaster: React.FC = () => {
     setPlasterAmount(result.toFixed(2));
   };
 
-  const addButtonPressed = () => {
-    const user = mockData.users[currentUserIndex];
-    const newItem = {
-      name: `${brand} ${plasterAmount}`,
-      amount: parseFloat(plasterAmount),
-      unit: 'kg'
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const transformedLists = await fetchAndTransformLists();
+        setLists(transformedLists);
+      } catch (error) {
+        console.error('Error while fetching lists:', error);
+      }
     };
-    user.shoppingList.push(newItem);
-    Alert.alert(`${newItem.name}${newItem.unit} lisätty listalle`);
-    console.log(user);
+    fetchData();
+  }, []);
+
+  const addButtonPressed = async () => {
+    const newItem: Omit<ShoppingItem, '_id'> = {
+      amount: 0,
+      content: {
+        name: `${brand} ${plasterAmount}`,
+        amount: parseFloat(plasterAmount),
+        unit: 'kg',
+      },
+    };
+    try {
+      const response = await makeAuthenticatedRequest(
+        `${api.lists}/${lists[currentListIndex]?._id}/items`,
+        'POST',
+        { content: newItem.content }
+      );
+    } catch (error) {
+      console.error('Error adding item to the list:', error);
+    }
+    const message = `${newItem.content.name} kg lisätty listalle`;
+
+    Alert.alert(message, 'Siirrytäänkö listalle?', [
+      {
+        text: 'Ei',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel'
+      },
+      { text: 'Kyllä', onPress: () => navigateToShoppingList() }
+    ]);
   };
 
   return (
@@ -89,6 +128,11 @@ const Plaster: React.FC = () => {
           Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä
           huomioida olosuhteita tai ainehukkaa.
         </Text>
+        <ShoppingListSelect
+          lists={lists}
+          currentListIndex={currentListIndex}
+          setCurrentListIndex={setCurrentListIndex}
+        />
         <Button
           colorScheme="orange"
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}
