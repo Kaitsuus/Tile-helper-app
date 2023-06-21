@@ -109,19 +109,19 @@ const Adhesive: React.FC = () => {
         'POST',
         { content: newItem.content }
       );
+      const message = `${newItem.content.name} ${newItem.content.amount} kg lisätty listalle`;
+  
+      Alert.alert(message, 'Siirrytäänkö listalle?', [
+        {
+          text: 'Ei',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel'
+        },
+        { text: 'Kyllä', onPress: () => navigateToShoppingList() }
+      ]);
     } catch (error) {
       console.error('Error adding item to the list:', error);
     }
-    const message = `${newItem.content.name} ${newItem.content.amount} kg lisätty listalle`;
-
-    Alert.alert(message, 'Siirrytäänkö listalle?', [
-      {
-        text: 'Ei',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel'
-      },
-      { text: 'Kyllä', onPress: () => navigateToShoppingList() }
-    ]);
   };
 
   return (

@@ -129,19 +129,19 @@ const WaterProof: React.FC = () => {
         'POST',
         { content: newItem.content }
       );
+      const message = `${newItem.content.name} ${newItem.content.amount} ${newItem.content.unit} lisätty listalle`;
+      Alert.alert(message, 'Siirrytäänkö listalle?', [
+        {
+          text: 'Ei',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel'
+        },
+        { text: 'Kyllä', onPress: () => navigateToShoppingList() }
+      ]);
     } catch (error) {
       console.error('Error adding item to the list:', error);
     }
-    const message = `${newItem.content.name} ${newItem.content.amount} ${newItem.content.unit} lisätty listalle`;
 
-    Alert.alert(message, 'Siirrytäänkö listalle?', [
-      {
-        text: 'Ei',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel'
-      },
-      { text: 'Kyllä', onPress: () => navigateToShoppingList() }
-    ]);
   };
 
   const handleFloorlitreChange = (text: string) => {
