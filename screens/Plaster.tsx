@@ -78,6 +78,10 @@ const Plaster: React.FC = () => {
   };
 
   const addButtonPressed = async () => {
+    if (lists.length === 0) {
+      setShowModal(true);
+      return;
+    }
     const newItem: Omit<ShoppingItem, '_id'> = {
       amount: 0,
       content: {

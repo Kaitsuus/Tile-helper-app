@@ -54,6 +54,10 @@ const ShoppingList: React.FC = () => {
   }, [lists, currentListIndex]);
 
   const addItem = async () => {
+    if (lists.length === 0) {
+      setShowModal(true);
+      return;
+    }
     const newItem: Omit<ShoppingItem, '_id'> = {
       amount: 0,
       content: {
