@@ -4,6 +4,8 @@ import { Center, Box, Select, Button, CheckIcon, Modal, FormControl, Input } fro
 import { makeAuthenticatedRequest, deleteItemFromDB, deleteListFromDB, fetchAndTransformLists } from '../service/auth';
 import api from '../service/api';
 import { ShoppingItem, EditingAmount } from '../src/types'
+import ShoppingListSelect from '../src/components/ShoppingListSelect';
+import { useUserContext } from '../service/UserContext';
 
 interface ShoppingList {
   _id: string;
@@ -14,13 +16,14 @@ interface ShoppingList {
 
 
 const ShoppingList: React.FC = () => {
+  const { currentListIndex, setCurrentListIndex } = useUserContext();
   const [lists, setLists] = useState<ShoppingList[]>([]);
   const [newListName, setNewListName] = useState('');
   const [newItemName, setNewItemName] = useState('');
   const [newItemAmount, setNewItemAmount] = useState<number>(0);
   const [newItemUnit, setNewItemUnit] = useState<string>('kpl');
   const [editingAmount, setEditingAmount] = useState<EditingAmount | null>(null);
-  const [currentListIndex, setCurrentListIndex] = useState<string>('0');
+
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [showModal, setShowModal] = useState(false);
 
@@ -184,18 +187,11 @@ const ShoppingList: React.FC = () => {
   return (
     <Center w="100%" flex={1} px={3} background="#fafafa">
       <Box safeArea p={2} py={8} w="100%" h="80%">
-        <Select
-          selectedValue={currentListIndex}
-          onValueChange={(value) => setCurrentListIndex(value)}
-        >
-          {lists.length > 0 ? (
-            lists.map((list: ShoppingList, index: number) => (
-              <Select.Item key={list._id} label={list.title} value={index.toString()} />
-            ))
-          ) : (
-            <Select.Item label="No lists available" value="" />
-          )}
-        </Select>
+      <ShoppingListSelect
+          lists={lists}
+          currentListIndex={currentListIndex}
+          setCurrentListIndex={setCurrentListIndex}
+        />
         <FlatList
           data={items}
           renderItem={({ item, index }) => renderItem({ item, index })}
