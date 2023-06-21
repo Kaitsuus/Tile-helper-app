@@ -10,6 +10,7 @@ import { fetchAndTransformLists, makeAuthenticatedRequest } from '../service/aut
 import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/types'
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
+import CreateListModal from '../src/components/CreateListModal';
 
 const Plaster: React.FC = () => {
   const { currentListIndex, setCurrentListIndex } = useUserContext();
@@ -17,6 +18,8 @@ const Plaster: React.FC = () => {
   const navigateToShoppingList = () => {
     navigation.navigate('ShoppingList');
   };
+  const [items, setItems] = useState<ShoppingItem[]>([]);
+  const [showModal, setShowModal] = useState(false);
   const [lists, setLists] = useState<ShoppingList[]>([]);
   const [brand, setBrand] = useState<string>(plasterOptions[0].value);
   const [squareMeters, setSquareMeters] = useState<string>('');
@@ -33,23 +36,56 @@ const Plaster: React.FC = () => {
     setPlasterAmount(result.toFixed(2));
   };
 
+  const fetchLists = async () => {
+    try {
+      const transformedLists = await fetchAndTransformLists();
+      setLists(transformedLists);
+    } catch (error) {
+      console.error('Error while fetching lists:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const transformedLists = await fetchAndTransformLists();
-        setLists(transformedLists);
-      } catch (error) {
-        console.error('Error while fetching lists:', error);
-      }
-    };
-    fetchData();
+    fetchLists();
   }, []);
+  
+  useEffect(() => {
+    if (lists.length > 0) {
+      setItems(lists[currentListIndex]?.items || []);
+    }
+  }, [lists, currentListIndex]);
+  
+  useEffect(() => {
+    if (lists.length > 0) {
+      setItems(lists[currentListIndex]?.items || []);
+    }
+  }, [lists, currentListIndex]);
+
+  const createNewList = async (title: string) => {
+    try {
+      const newList = {
+        title,
+        items: [],
+      };
+      const response = await makeAuthenticatedRequest(`${api.lists}`, 'POST', newList);
+      const createdList = response.data;
+      setLists([...lists, createdList]);
+      setCurrentListIndex((lists.length).toString());
+      fetchLists();
+    } catch (error) {
+      console.error('Error creating new list:', error);
+    }
+  };
 
   const addButtonPressed = async () => {
+    if (lists.length === 0) {
+      setShowModal(true);
+      return;
+    }
     const newItem: Omit<ShoppingItem, '_id'> = {
       amount: 0,
       content: {
-        name: `${brand} ${plasterAmount}`,
+        name: `${brand}`,
         amount: parseFloat(plasterAmount),
         unit: 'kg',
       },
@@ -63,7 +99,7 @@ const Plaster: React.FC = () => {
     } catch (error) {
       console.error('Error adding item to the list:', error);
     }
-    const message = `${newItem.content.name} kg lisätty listalle`;
+    const message = `${newItem.content.name} ${newItem.content.amount} kg lisätty listalle`;
 
     Alert.alert(message, 'Siirrytäänkö listalle?', [
       {
@@ -133,6 +169,10 @@ const Plaster: React.FC = () => {
           currentListIndex={currentListIndex}
           setCurrentListIndex={setCurrentListIndex}
         />
+        <Button onPress={() => setShowModal(true)} colorScheme="orange"
+         _text={{ fontSize: 'xl', fontWeight: 'bold' }}
+          mt="2"
+        >Uusi lista</Button>
         <Button
           colorScheme="orange"
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}
@@ -152,6 +192,11 @@ const Plaster: React.FC = () => {
         roundedTopLeft="20"
         zIndex="-10"
       ></Box>
+        <CreateListModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        createNewList={createNewList}
+      />
     </Center>
   );
 };
