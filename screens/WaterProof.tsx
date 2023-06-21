@@ -9,14 +9,15 @@ import api from '../service/api';
 import { fetchAndTransformLists, makeAuthenticatedRequest } from '../service/auth';
 import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/types'
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
+import { useUserContext } from '../service/UserContext';
 
 const WaterProof: React.FC = () => {
+  const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const navigateToShoppingList = () => {
     navigation.navigate('ShoppingList');
   };
   const [lists, setLists] = useState<ShoppingList[]>([]);
-  const [currentListIndex, setCurrentListIndex] = useState<string>('0');
   const [brand, setBrand] = useState<string>(waterproofOptions[0].value);
   const [floorlitre, setFloorlitre] = useState<string>('');
   const [wallLitre, setWallLitre] = useState<string>('');

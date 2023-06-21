@@ -9,8 +9,10 @@ import api from '../service/api';
 import { fetchAndTransformLists, makeAuthenticatedRequest } from '../service/auth';
 import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/types'
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
+import { useUserContext } from '../service/UserContext';
 
 const Grout: React.FC = () => {
+  const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const navigateToShoppingList = () => {
     navigation.navigate('ShoppingList');
@@ -24,8 +26,6 @@ const Grout: React.FC = () => {
   const [C, setC] = useState<string>(''); // tile thickness mm
   const [D, setD] = useState<string>(''); // grout width mm
   const [E, setE] = useState<string>(''); // area m²
-
-  const [currentListIndex, setCurrentListIndex] = useState<string>('0');
 
   const selectedOption = groutOptions.find((option) => option.value === brand);
   const consumption = selectedOption ? selectedOption.consumption : 0;

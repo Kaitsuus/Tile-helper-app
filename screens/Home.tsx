@@ -5,7 +5,7 @@ import NavigationButton from '../src/components/NavigationButton';
 import { useUserContext } from '../service/UserContext';
 
 const Home: React.FC = () => {
-  const userData = useUserContext();
+  const { userData } = useUserContext();
   const userEmailPrefix = userData?.email.split('@')[0];
 
   return (

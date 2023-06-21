@@ -62,3 +62,22 @@ export interface ShoppingListSelectProps {
   currentListIndex: string;
   setCurrentListIndex: (index: string) => void;
 }
+export interface ShoppingListContextData {
+  currentListIndex: string;
+  setCurrentListIndex: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface UserData {
+  avatar: string;
+  email: string;
+  id: string;
+  languagePreference: string;
+  token: string;
+}
+
+export interface UserContextData extends ShoppingListContextData {
+  userData: UserData;
+}
+export interface UserProviderProps {
+  children: React.ReactNode;
+}

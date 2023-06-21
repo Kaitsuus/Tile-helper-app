@@ -1,12 +1,9 @@
 import React from 'react';
 import { Select, CheckIcon } from 'native-base';
-import { ShoppingList, ShoppingListSelectProps } from '../types';
+import { ShoppingListSelectProps } from '../types';
+import { useUserContext } from '../../service/UserContext';
 
-const ShoppingListSelect: React.FC<ShoppingListSelectProps> = ({
-  lists,
-  currentListIndex,
-  setCurrentListIndex,
-}) => {
+const ShoppingListSelect: React.FC<ShoppingListSelectProps> = ({ lists, currentListIndex, setCurrentListIndex }) => {
   return (
     <Select
       bg="white"
@@ -19,7 +16,7 @@ const ShoppingListSelect: React.FC<ShoppingListSelectProps> = ({
       onValueChange={(value) => setCurrentListIndex(value)}
     >
       {lists.length > 0 ? (
-        lists.map((list: ShoppingList, index: number) => (
+        lists.map((list, index) => (
           <Select.Item key={list._id} label={list.title} value={index.toString()} />
         ))
       ) : (

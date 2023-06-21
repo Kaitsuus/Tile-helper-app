@@ -9,8 +9,10 @@ import api from '../service/api';
 import { fetchAndTransformLists, makeAuthenticatedRequest } from '../service/auth';
 import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/types'
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
+import { useUserContext } from '../service/UserContext';
 
 const Adhesive: React.FC = () => {
+  const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const navigateToShoppingList = () => {
     navigation.navigate('ShoppingList');
@@ -20,7 +22,6 @@ const Adhesive: React.FC = () => {
   const [thickness, setThickness] = useState<string>('3.5');
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [adhesiveAmount, setAdhesiveAmount] = useState<string>('');
-  const [currentListIndex, setCurrentListIndex] = useState<string>('0');
 
   useEffect(() => {
     const fetchData = async () => {

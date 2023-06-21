@@ -9,14 +9,15 @@ import api from '../service/api';
 import { fetchAndTransformLists, makeAuthenticatedRequest } from '../service/auth';
 import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/types'
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
+import { useUserContext } from '../service/UserContext';
 
 const Plaster: React.FC = () => {
+  const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const navigateToShoppingList = () => {
     navigation.navigate('ShoppingList');
   };
   const [lists, setLists] = useState<ShoppingList[]>([]);
-  const [currentListIndex, setCurrentListIndex] = useState<string>('0');
   const [brand, setBrand] = useState<string>(plasterOptions[0].value);
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [plasterAmount, setPlasterAmount] = useState<string>('');
