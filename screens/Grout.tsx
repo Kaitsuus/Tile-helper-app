@@ -10,13 +10,16 @@ import { fetchAndTransformLists, makeAuthenticatedRequest } from '../service/aut
 import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/types'
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
+import CreateListModal from '../src/components/CreateListModal';
 
 const Grout: React.FC = () => {
   const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
+  const [showModal, setShowModal] = useState(false);
   const navigateToShoppingList = () => {
     navigation.navigate('ShoppingList');
   };
+  const [items, setItems] = useState<ShoppingItem[]>([]);
   const [lists, setLists] = useState<ShoppingList[]>([]);
   const [brand, setBrand] = useState<string>(groutOptions[0].value);
   const [groutResult, setGroutResult] = useState<string>('');
@@ -42,23 +45,52 @@ const Grout: React.FC = () => {
     setTotalResult(total.toFixed(2));
   };
 
+  const fetchLists = async () => {
+    try {
+      const transformedLists = await fetchAndTransformLists();
+      setLists(transformedLists);
+    } catch (error) {
+      console.error('Error while fetching lists:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const transformedLists = await fetchAndTransformLists();
-        setLists(transformedLists);
-      } catch (error) {
-        console.error('Error while fetching lists:', error);
-      }
-    };
-    fetchData();
+    fetchLists();
   }, []);
+  
+  useEffect(() => {
+    if (lists.length > 0) {
+      setItems(lists[currentListIndex]?.items || []);
+    }
+  }, [lists, currentListIndex]);
+  
+  useEffect(() => {
+    if (lists.length > 0) {
+      setItems(lists[currentListIndex]?.items || []);
+    }
+  }, [lists, currentListIndex]);
+
+  const createNewList = async (title: string) => {
+    try {
+      const newList = {
+        title,
+        items: [],
+      };
+      const response = await makeAuthenticatedRequest(`${api.lists}`, 'POST', newList);
+      const createdList = response.data;
+      setLists([...lists, createdList]);
+      setCurrentListIndex((lists.length).toString());
+      fetchLists();
+    } catch (error) {
+      console.error('Error creating new list:', error);
+    }
+  };
 
   const addButtonPressed = async () => {
     const newItem: Omit<ShoppingItem, '_id'> = {
       amount: 0,
       content: {
-        name: `${brand} ${totalResult}`,
+        name: `${brand}`,
         amount: parseFloat(totalResult),
         unit: 'kg',
       },
@@ -72,7 +104,7 @@ const Grout: React.FC = () => {
     } catch (error) {
       console.error('Error adding item to the list:', error);
     }
-    const message = `${newItem.content.name} kg lisätty listalle`;
+    const message = `${newItem.content.name} ${newItem.content.amount} kg lisätty listalle`;
 
     Alert.alert(message, 'Siirrytäänkö listalle?', [
       {
@@ -178,6 +210,10 @@ const Grout: React.FC = () => {
           currentListIndex={currentListIndex}
           setCurrentListIndex={setCurrentListIndex}
         />
+                <Button onPress={() => setShowModal(true)} colorScheme="orange"
+         _text={{ fontSize: 'xl', fontWeight: 'bold' }}
+          mt="2"
+        >Uusi lista</Button>
         <Button
           onPress={addButtonPressed}
           colorScheme="orange"
@@ -197,6 +233,11 @@ const Grout: React.FC = () => {
         roundedTopLeft="20"
         zIndex="-10"
       ></Box>
+        <CreateListModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        createNewList={createNewList}
+      />
     </Center>
   );
 };

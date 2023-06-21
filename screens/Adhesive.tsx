@@ -94,7 +94,7 @@ const Adhesive: React.FC = () => {
     const newItem: Omit<ShoppingItem, '_id'> = {
       amount: 0,
       content: {
-        name: `${brand} ${adhesiveAmount}`,
+        name: `${brand}`,
         amount: parseFloat(adhesiveAmount),
         unit: 'kg',
       },
@@ -108,7 +108,7 @@ const Adhesive: React.FC = () => {
     } catch (error) {
       console.error('Error adding item to the list:', error);
     }
-    const message = `${newItem.content.name} kg lisätty listalle`;
+    const message = `${newItem.content.name} ${newItem.content.amount} kg lisätty listalle`;
 
     Alert.alert(message, 'Siirrytäänkö listalle?', [
       {
