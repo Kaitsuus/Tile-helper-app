@@ -1,7 +1,6 @@
 import React from 'react';
 import { Select, CheckIcon } from 'native-base';
 import { ShoppingListSelectProps } from '../types';
-import { useUserContext } from '../../service/UserContext';
 
 const ShoppingListSelect: React.FC<ShoppingListSelectProps> = ({ lists, currentListIndex, setCurrentListIndex }) => {
   return (

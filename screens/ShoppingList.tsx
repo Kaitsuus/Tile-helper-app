@@ -6,6 +6,7 @@ import api from '../service/api';
 import { ShoppingItem, EditingAmount } from '../src/types'
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
+import CreateListModal from '../src/components/CreateListModal';
 
 interface ShoppingList {
   _id: string;
@@ -27,17 +28,24 @@ const ShoppingList: React.FC = () => {
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [showModal, setShowModal] = useState(false);
 
+  const fetchLists = async () => {
+    try {
+      const transformedLists = await fetchAndTransformLists();
+      setLists(transformedLists);
+    } catch (error) {
+      console.error('Error while fetching lists:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const transformedLists = await fetchAndTransformLists();
-        setLists(transformedLists);
-      } catch (error) {
-        console.error('Error while fetching lists:', error);
-      }
-    };
-    fetchData();
+    fetchLists();
   }, []);
+  
+  useEffect(() => {
+    if (lists.length > 0) {
+      setItems(lists[currentListIndex]?.items || []);
+    }
+  }, [lists, currentListIndex]);
   
   useEffect(() => {
     if (lists.length > 0) {
@@ -55,6 +63,9 @@ const ShoppingList: React.FC = () => {
       },
     };
     try {
+      console.log("currentListIndex:", currentListIndex);
+      console.log("lists:", lists);
+      console.log("listId:", lists[currentListIndex]?._id);
       const response = await makeAuthenticatedRequest(
         `${api.lists}/${lists[currentListIndex]?._id}/items`,
         'POST',
@@ -137,6 +148,7 @@ const ShoppingList: React.FC = () => {
       const createdList = response.data;
       setLists([...lists, createdList]);
       setCurrentListIndex((lists.length).toString());
+      fetchLists();
     } catch (error) {
       console.error('Error creating new list:', error);
     }
@@ -264,37 +276,11 @@ const ShoppingList: React.FC = () => {
         </Button>
         <Button onPress={() => setShowModal(true)} colorScheme="orange" mt={2} w={20}>new</Button>
       </Box>
-        <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-      <Modal.Content maxWidth="400px">
-        <Modal.CloseButton />
-        <Modal.Header>Create new list</Modal.Header>
-        <Modal.Body>
-          <FormControl>
-            <FormControl.Label>List Name</FormControl.Label>
-            <Input value={newListName} onChangeText={(text) => setNewListName(text)} />
-          </FormControl>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button.Group space={2}>
-            <Button variant="ghost" onPress={() => setShowModal(false)} colorScheme="orange">
-              Cancel
-            </Button>
-            <Button
-              onPress={() => {
-                if (newListName.trim() !== '') {
-                  createNewList(newListName.trim());
-                  setNewListName('');
-                  setShowModal(false);
-                }
-              }}
-              colorScheme="orange"
-            >
-              Create
-            </Button>
-          </Button.Group>
-        </Modal.Footer>
-      </Modal.Content>
-    </Modal>
+      <CreateListModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        createNewList={createNewList}
+      />
     </Center>
   );
 };
