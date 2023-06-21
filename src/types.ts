@@ -37,3 +37,23 @@ export type LoginProps = {
   handleLogin: (username: string, password: string) => void;
   handleSignup: () => void;
 };
+export interface ShoppingList {
+  _id: string;
+  title: string;
+  user: string;
+  items: ShoppingItem[];
+}
+export interface ShoppingItemContent {
+  amount: number;
+  name: string;
+  unit: string;
+}
+export interface ShoppingItem {
+  _id: string;
+  amount: number;
+  content: ShoppingItemContent;
+}
+export interface EditingAmount {
+  index: number;
+  value: number;
+}

@@ -5,28 +5,9 @@ import { MaskedTextInput } from 'react-native-mask-text';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { adhesiveOptions } from '../src/data/adhesiveMockData';
-import mockData from '../src/data/mockData.json';
-import { makeAuthenticatedRequest, deleteItemFromDB, deleteListFromDB } from '../service/auth';
 import api from '../service/api';
-import { HomeScreenNavigationProp } from '../src/types';
-
-interface ShoppingList {
-  _id: string;
-  title: string;
-  user: string;
-  items: ShoppingItem[];
-}
-interface ShoppingItemContent {
-  amount: number;
-  name: string;
-  unit: string;
-}
-
-interface ShoppingItem {
-  _id: string;
-  amount: number;
-  content: ShoppingItemContent;
-}
+import { fetchAndTransformLists, makeAuthenticatedRequest } from '../service/auth';
+import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/types'
 
 const Adhesive: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -43,22 +24,7 @@ const Adhesive: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await makeAuthenticatedRequest(api.lists, 'GET');
-        const transformedLists = response.data.map((list: any) => {
-          const transformedItems = list.items.map((item: any) => {
-            return {
-              ...item,
-              _id: item._id,
-              amount: item.amount || 0,
-            };
-          });
-  
-          return {
-            ...list,
-            _id: list.id,
-            items: transformedItems,
-          };
-        });
+        const transformedLists = await fetchAndTransformLists();
         setLists(transformedLists);
       } catch (error) {
         console.error('Error while fetching lists:', error);
@@ -67,7 +33,6 @@ const Adhesive: React.FC = () => {
     fetchData();
   }, []);
 
-  const currentUserIndex = 0; // Index of the current user (hardcoded for now)
 
   const calculateConsumption = () => {
     const sqm = parseFloat(squareMeters);
@@ -111,7 +76,7 @@ const Adhesive: React.FC = () => {
     }
     const message = `${newItem.content.name} kg lisätty listalle`;
 
-    Alert.alert(message, '', [
+    Alert.alert(message, 'Siirrytäänkö listalle?', [
       {
         text: 'Ei',
         onPress: () => console.log('Cancel Pressed'),

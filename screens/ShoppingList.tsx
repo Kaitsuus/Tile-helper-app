@@ -1,20 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Center, Box, Select, Button, CheckIcon, Modal, FormControl, Input } from 'native-base';
-import { makeAuthenticatedRequest, deleteItemFromDB, deleteListFromDB } from '../service/auth';
+import { makeAuthenticatedRequest, deleteItemFromDB, deleteListFromDB, fetchAndTransformLists } from '../service/auth';
 import api from '../service/api';
-
-interface ShoppingItemContent {
-  amount: number;
-  name: string;
-  unit: string;
-}
-
-interface ShoppingItem {
-  _id: string;
-  amount: number;
-  content: ShoppingItemContent;
-}
+import { ShoppingItem, EditingAmount } from '../src/types'
 
 interface ShoppingList {
   _id: string;
@@ -23,10 +12,6 @@ interface ShoppingList {
   items: ShoppingItem[];
 }
 
-interface EditingAmount {
-  index: number;
-  value: number;
-}
 
 const ShoppingList: React.FC = () => {
   const [lists, setLists] = useState<ShoppingList[]>([]);
@@ -42,22 +27,7 @@ const ShoppingList: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await makeAuthenticatedRequest(api.lists, 'GET');
-        const transformedLists = response.data.map((list: any) => {
-          const transformedItems = list.items.map((item: any) => {
-            return {
-              ...item,
-              _id: item._id,
-              amount: item.amount || 0,
-            };
-          });
-  
-          return {
-            ...list,
-            _id: list.id,
-            items: transformedItems,
-          };
-        });
+        const transformedLists = await fetchAndTransformLists();
         setLists(transformedLists);
       } catch (error) {
         console.error('Error while fetching lists:', error);
