@@ -240,8 +240,10 @@ const ShoppingList: React.FC = () => {
   };
 
   const handleShareImage = async () => {
+    setCaptureScreenshot(true);
     await requestMediaLibraryPermissions();
     if (shoppingListRef.current) {
+      setTimeout(async () => {
       try {
         const uri = await captureRef(shoppingListRef, {
           format: 'png',
@@ -255,7 +257,10 @@ const ShoppingList: React.FC = () => {
         await Sharing.shareAsync(uri);
       } catch (error) {
         console.error('Error sharing shopping list image:', error);
+      } finally {
+          setCaptureScreenshot(false);
       }
+      }, 100);
     }
   };
   
