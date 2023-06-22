@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { FlatList, Text, TextInput, TouchableOpacity, View, Platform } from 'react-native';
 import { Center, Box, Select, Button, CheckIcon, Modal, FormControl, Input } from 'native-base';
 import { makeAuthenticatedRequest, deleteItemFromDB, deleteListFromDB, fetchAndTransformLists } from '../service/auth';
 import api from '../service/api';
+import { captureRef } from 'react-native-view-shot';
+import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing';
 import { ShoppingItem, EditingAmount } from '../src/types'
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
+import ListImage from '../src/components/ListImage';
 
 interface ShoppingList {
   _id: string;
@@ -24,9 +28,11 @@ const ShoppingList: React.FC = () => {
   const [newItemAmount, setNewItemAmount] = useState<number>(0);
   const [newItemUnit, setNewItemUnit] = useState<string>('kpl');
   const [editingAmount, setEditingAmount] = useState<EditingAmount | null>(null);
-
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const shoppingListRef = useRef(null);
+  const [captureScreenshot, setCaptureScreenshot] = useState(false);
+
 
   const fetchLists = async () => {
     try {
@@ -67,9 +73,6 @@ const ShoppingList: React.FC = () => {
       },
     };
     try {
-      console.log("currentListIndex:", currentListIndex);
-      console.log("lists:", lists);
-      console.log("listId:", lists[currentListIndex]?._id);
       const response = await makeAuthenticatedRequest(
         `${api.lists}/${lists[currentListIndex]?._id}/items`,
         'POST',
@@ -82,7 +85,7 @@ const ShoppingList: React.FC = () => {
       setLists(updatedLists);
       setNewItemName('');
       setNewItemAmount(0);
-      setNewItemUnit('');
+      setNewItemUnit('kpl');
     } catch (error) {
       console.error('Error adding item to the list:', error);
     }
@@ -199,9 +202,78 @@ const ShoppingList: React.FC = () => {
       </Box>
     );
   };
+
+  const requestMediaLibraryPermissions = async () => {
+    if (Platform.OS === 'android') {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+
+      if (status === 'granted') {
+        // Permission granted, you can proceed with saving or sharing the image
+      } else {
+        // Permission denied
+      }
+    }
+  };
+
+  const handleSaveImage = async () => {
+    setCaptureScreenshot(true);
+    await requestMediaLibraryPermissions();
+  
+    if (shoppingListRef.current) {
+      setTimeout(async () => {
+        try {
+          const uri = await captureRef(shoppingListRef, {
+            format: 'png',
+          });
+  
+          const asset = await MediaLibrary.createAssetAsync(uri);
+          await MediaLibrary.createAlbumAsync('Shopping Lists', asset, false);
+  
+          console.log('Shopping list image saved successfully.');
+        } catch (error) {
+          console.error('Error saving shopping list image:', error);
+        } finally {
+          setCaptureScreenshot(false);
+        }
+      }, 100);
+    }
+  };
+
+  const handleShareImage = async () => {
+    setCaptureScreenshot(true);
+    await requestMediaLibraryPermissions();
+    if (shoppingListRef.current) {
+      setTimeout(async () => {
+      try {
+        const uri = await captureRef(shoppingListRef, {
+          format: 'png',
+        });
+
+        if (!(await Sharing.isAvailableAsync())) {
+          console.log('Sharing is not available on this device.');
+          return;
+        }
+
+        await Sharing.shareAsync(uri);
+      } catch (error) {
+        console.error('Error sharing shopping list image:', error);
+      } finally {
+          setCaptureScreenshot(false);
+      }
+      }, 100);
+    }
+  };
   
   return (
     <Center w="100%" flex={1} px={3} background="#fafafa">
+      <Modal isOpen={captureScreenshot}>
+        <ListImage
+          ref={shoppingListRef}
+          lists={lists}
+          currentListIndex={currentListIndex}
+          items={items}
+        />
+      </Modal>
       <Box safeArea p={2} py={8} w="100%" h="80%">
       <ShoppingListSelect
           lists={lists}
@@ -269,11 +341,12 @@ const ShoppingList: React.FC = () => {
           gap: 2
         }}
       >
-        <Button colorScheme="orange" mt={2} w={20}>
-          save
+        <Button colorScheme="orange" mt={2} w={20} onPress={handleSaveImage}>
+          Save
         </Button>
-        <Button colorScheme="orange" mt={2} w={20}>
-          share
+
+        <Button colorScheme="orange" mt={2} w={20} onPress={handleShareImage}>
+          Share
         </Button>
         <Button onPress={() => deleteList(lists[currentListIndex]._id)} colorScheme="orange" mt={2} w={20}>
           delete

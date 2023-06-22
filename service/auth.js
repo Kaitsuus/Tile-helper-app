@@ -165,7 +165,10 @@ export const deleteListFromDB = async (listId) => {
 export const fetchAndTransformLists = async () => {
   const userId = await getLoggedInUserId();
   try {
-    const response = await makeAuthenticatedRequest(`${api.lists}/user/${userId}/lists`, 'GET');
+    const response = await makeAuthenticatedRequest(
+      `${api.lists}/user/${userId}/lists`,
+      'GET'
+    );
     const transformedLists = response.data.map((list) => {
       const transformedItems = list.items.map((item) => {
         return {
