@@ -14,6 +14,7 @@ export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
   Auth: undefined;
+  UserMenu: undefined;
 };
 export type HomeScreenNavigationProp = StackNavigationProp<
   RootStackParamList,

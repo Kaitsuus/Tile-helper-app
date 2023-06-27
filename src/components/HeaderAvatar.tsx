@@ -9,12 +9,12 @@ import { RootStackParamList, HomeScreenNavigationProp } from '../types';
 const HeaderAvatar: React.FC = () => {
   const { userData } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  const navigateToShoppingList = () => {
-    navigation.navigate('Home');
+  const navigateToUserMenu = () => {
+    navigation.navigate('UserMenu');
   };
 
   return (
-    <TouchableOpacity style={{ paddingRight: 15 }} onPress={() => navigateToShoppingList()}>
+    <TouchableOpacity style={{ paddingRight: 15 }} onPress={() => navigateToUserMenu()}>
       <Avatar bg="#EF6F20">
         {userData && userData.email ? userData.email[0].toUpperCase() : 'A'}
       </Avatar>
