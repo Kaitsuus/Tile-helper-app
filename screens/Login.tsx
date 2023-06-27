@@ -4,7 +4,7 @@ import { Button, Box, Text, Center, Heading, Image } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { HomeScreenNavigationProp } from '../src/types';
-import { login } from '../service/auth'; // Assuming you have an API function to handle login
+import { login } from '../service/auth';
 import { useAuth } from '../service/AuthContext';
 
 
@@ -47,7 +47,7 @@ const Login: React.FC = () => {
           placeholder="Käyttäjätunnus"
           value={email}
           style={styles.input}
-          keyboardType="default"
+          keyboardType="email-address"
           onChangeText={(text) => setEmail(text)}
         />
         <TextInput

@@ -73,7 +73,7 @@ const App: React.FC = () => {
                   <Stack.Screen
                     name="UserMenu"
                     component={UserMenu}
-                    options={{ title: 'UserMenu' }}
+                    options={{ title: 'ShoppingList' }}
                   />
                 </Stack.Group>
               ) : (

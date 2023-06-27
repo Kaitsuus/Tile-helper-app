@@ -16,7 +16,7 @@ const ShoppingListSelect: React.FC<ShoppingListSelectProps> = ({ lists, currentL
     >
       {lists.length > 0 ? (
         lists.map((list, index) => (
-          <Select.Item key={list._id} label={list.title} value={index.toString()} />
+          <Select.Item key={index} label={list.title} value={index.toString()} />
         ))
       ) : (
         <Select.Item label="No lists available" value="" />

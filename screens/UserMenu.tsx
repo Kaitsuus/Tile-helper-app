@@ -2,19 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Center, Avatar, Box, Text, Select, CheckIcon, Button } from 'native-base';
 import { useUserContext } from '../service/UserContext';
+import { useAuth } from '../service/AuthContext';
+import { useNavigation } from '@react-navigation/native';
+import { HomeScreenNavigationProp } from '../src/types';
 
 const UserMenu: React.FC = () => {
     
     const { userData } = useUserContext();
     const [preffLang, setPreffLang] = useState(userData.languagePreference)
-  
+    const { setUser } = useAuth();
+
+    const handleLogout = () => {
+        setUser(false)
+    }
+
     return (
     <Center w="100%" flex={1} px={3} background="#D9D9D9">
         <Avatar bg="#EF6F20" size="2xl" mt="40">
         {userData && userData.email ? userData.email[0].toUpperCase() : 'A'}
       </Avatar>
         <Text mt="2" fontSize="lg" color="#fafafa">{userData && userData.email ? userData.email : 'error while geting user'}</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleLogout}>
             <Text color="#fafafa">Kirjaudu Ulos</Text>
         </TouchableOpacity>
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="63%">
