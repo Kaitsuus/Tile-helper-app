@@ -26,16 +26,18 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const userId = await getLoggedInUserId();
-        if (userId) {
-          const response = await fetchUserDataById(userId);
-          setUserData(response.data);
-        } else {
-          console.log('User not logged in, skipping user data fetch.');
+      if (user) {
+        try {
+          const userId = await getLoggedInUserId();
+          if (userId) {
+            const response = await fetchUserDataById(userId);
+            setUserData(response.data);
+          } else {
+            console.log('User not logged in, skipping user data fetch.');
+          }
+        } catch (error) {
+          console.error('Error while fetching user data:', error);
         }
-      } catch (error) {
-        console.error('Error while fetching user data:', error);
       }
     };
     fetchData();
