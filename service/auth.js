@@ -155,15 +155,25 @@ export const deleteUserFromDB = async (userId) => {
     if (!token) {
       throw new Error('No token available. User is not logged in.');
     }
+
+    // Fetch all lists associated with the user
+    const lists = await fetchAndTransformLists();
+
+    // Delete each list
+    for (const list of lists) {
+      await deleteListFromDB(list._id);
+    }
+
     const url = `${api.users}/${userId}`;
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
 
+    // Delete the user
     const response = await axios.delete(url, { headers: headers });
     if (response.status === 200) {
-      console.log('User deleted successfully');
+      console.log('User and all associated lists deleted successfully');
     } else {
       console.error('Error deleting user:', response);
     }
