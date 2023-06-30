@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Center, Avatar, Box, Text, Select, CheckIcon, Button } from 'native-base';
 import { useUserContext } from '../service/UserContext';
 import { useAuth } from '../service/AuthContext';
-import { useNavigation } from '@react-navigation/native';
-import { HomeScreenNavigationProp } from '../src/types';
+import { deleteUserFromDB } from '../service/auth';
+import DeleteUserModal from '../src/components/DeleteUserModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const UserMenu: React.FC = () => {
-    
+    const [showModal, setShowModal] = useState(false);
     const { userData } = useUserContext();
     const [preffLang, setPreffLang] = useState(userData.languagePreference)
     const { setUser } = useAuth();
@@ -15,6 +17,15 @@ const UserMenu: React.FC = () => {
     const handleLogout = () => {
         setUser(false)
     }
+    const deleteUser = async (userId: String) => {
+      try {
+        await deleteUserFromDB(userId)
+        await AsyncStorage.removeItem('userId'); // clear user data from AsyncStorage
+        setUser(false)
+      } catch (error) {
+        console.error('Error deleting user:', error);
+      }
+    };
 
     return (
     <Center w="100%" flex={1} px={3} background="#D9D9D9">
@@ -47,7 +58,7 @@ const UserMenu: React.FC = () => {
         <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={8}>Arvostele</Button>
         <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2}>Tietosuoja</Button>
         <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2}>Report Bug</Button>
-        <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2}>Poista Tili</Button>
+        <Button onPress={() => setShowModal(true)} colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2}>Poista Tili</Button>
       </Box>
       <Box
         w="100%"
@@ -59,6 +70,12 @@ const UserMenu: React.FC = () => {
         roundedTopLeft="20"
         zIndex="-10"
       ></Box>
+        <DeleteUserModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        deleteUser={deleteUser}
+        userId={userData.id}
+      />
   </Center>
   )
 }

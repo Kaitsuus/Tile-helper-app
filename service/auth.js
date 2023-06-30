@@ -95,19 +95,6 @@ export const getLoggedInUserId = async () => {
   return userId;
 };
 
-export const fetchSomeData = async () => {
-  try {
-    const token = await AsyncStorage.getItem('token');
-    if (!token) {
-      throw new Error('No token available. User is not logged in.');
-    }
-    const response = await makeAuthenticatedRequest(api.someEndpoint, 'GET');
-    return response;
-  } catch (error) {
-    console.error('Error during fetch some data:', error);
-    throw error;
-  }
-};
 
 export const fetchUserDataById = async (userId) => {
   try {
@@ -159,6 +146,29 @@ export const deleteListFromDB = async (listId) => {
     await axios.delete(url, { headers: headers });
   } catch (error) {
     console.error('Error during delete list from DB:', error);
+    throw error;
+  }
+};
+export const deleteUserFromDB = async (userId) => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      throw new Error('No token available. User is not logged in.');
+    }
+    const url = `${api.users}/${userId}`;
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+
+    const response = await axios.delete(url, { headers: headers });
+    if (response.status === 200) {
+      console.log('User deleted successfully');
+    } else {
+      console.error('Error deleting user:', response);
+    }
+  } catch (error) {
+    console.error('Error during delete User from DB:', error);
     throw error;
   }
 };
