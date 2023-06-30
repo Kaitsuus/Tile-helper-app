@@ -2,7 +2,7 @@ export const groutOptions = [
   {
     label: 'Kiilto Pro Tilegrout',
     value: 'Kiilto Pro Tilegrout',
-    consumption: 1.6,
+    consumption: 1.69,
   },
   {
     label: 'Litokol Stylegrout',

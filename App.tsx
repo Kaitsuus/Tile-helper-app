@@ -12,6 +12,7 @@ import Adhesive from './screens/Adhesive';
 import WaterProof from './screens/WaterProof';
 import Plaster from './screens/Plaster';
 import ShoppingList from './screens/ShoppingList';
+import UserMenu from './screens/UserMenu';
 import { RootStackParamList } from './src/types';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
@@ -67,6 +68,11 @@ const App: React.FC = () => {
                   <Stack.Screen
                     name="ShoppingList"
                     component={ShoppingList}
+                    options={{ title: 'ShoppingList' }}
+                  />
+                  <Stack.Screen
+                    name="UserMenu"
+                    component={UserMenu}
                     options={{ title: 'ShoppingList' }}
                   />
                 </Stack.Group>
