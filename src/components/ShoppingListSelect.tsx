@@ -2,6 +2,12 @@ import React from 'react';
 import { Select, CheckIcon } from 'native-base';
 import { ShoppingListSelectProps } from '../types';
 
+/**
+ * @component ShoppingListSelect
+ * @description The ShoppingListSelect component.
+ * @param {ShoppingListSelectProps} props - The props for the ShoppingListSelect component.
+ * @returns {React.FC} A React functional component.
+ */
 const ShoppingListSelect: React.FC<ShoppingListSelectProps> = ({ lists, currentListIndex, setCurrentListIndex }) => {
   return (
     <Select
