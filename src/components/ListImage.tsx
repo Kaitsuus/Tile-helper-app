@@ -2,12 +2,26 @@ import React from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 import { ShoppingItem, ShoppingList } from '../types';
 
+/**
+ * @interface ShoppingListImageProps
+ * @description Represents the props for the ShoppingListImage component.
+ * @property {ShoppingList[]} lists - The array of shopping lists.
+ * @property {string} currentListIndex - The index of the current shopping list.
+ * @property {ShoppingItem[]} items - The array of shopping items.
+ */
 interface ShoppingListImageProps {
   lists: ShoppingList[];
   currentListIndex: string;
   items: ShoppingItem[];
 }
 
+/**
+ * @component ListImage
+ * @description The ListImage component.
+ * @param {ShoppingListImageProps} props - The props for ListImage component.
+ * @param {React.ForwardedRef<View>} ref - The ref for the ListImage component.
+ * @returns {React.FC} A React functional component.
+ */
 const ListImage = React.forwardRef<View, ShoppingListImageProps>(
   ({ lists, currentListIndex, items }, ref) => {
     return (
