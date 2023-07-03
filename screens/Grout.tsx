@@ -51,7 +51,7 @@ const Grout: React.FC = () => {
   const [D, setD] = useState<string>(''); // grout width mm
   const [E, setE] = useState<string>(''); // area m²
   
-    /**
+  /**
    * Navigate to the ShoppingList screen.
    */
   const navigateToShoppingList = () => {

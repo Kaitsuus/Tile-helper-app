@@ -22,7 +22,7 @@ import CreateListModal from '../src/components/CreateListModal';
 
 const Adhesive: React.FC = () => {
 
-    /**
+  /**
    * @typedef {Object} State
    * @property {boolean} showModal - State for managing visibility of the modal.
    * @property {ShoppingItem[]} items - State for managing shopping items.
@@ -43,7 +43,7 @@ const Adhesive: React.FC = () => {
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [adhesiveAmount, setAdhesiveAmount] = useState<string>('');
 
-    /**
+  /**
    * Navigate to the ShoppingList screen.
    */
   const navigateToShoppingList = () => {
