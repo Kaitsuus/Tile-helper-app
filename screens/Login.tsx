@@ -20,11 +20,13 @@ import { useAuth } from '../service/AuthContext';
 
 const Login: React.FC = () => {
   /**
-   * @var {string} email - The email input state.
-   * @var {string} password - The password input state.
-   * @var {function} setUser - Function from AuthContext to set the user state.
+   * @typedef {Object} State
+   * @property {string} email - The email input state.
+   * @property {string} password - The password input state.
+   * @property {function} setUser - Function from AuthContext to set the user state.
    * @var {Object} navigation - Navigation object from react-navigation.
    */
+
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
