@@ -14,7 +14,7 @@ import CreateListModal from '../src/components/CreateListModal';
 
 /**
  * Plaster is a React functional component used for plaster calculations.
- * It provides UI to select plaster product, enter tile measurements and plaster width,
+ * It provides UI to select plaster product, enter squaremeters,
  * perform calculation of plaster consumption and total consumption, and add the calculated amount to shopping lists.
  * Users can also create new shopping lists from this component.
  * @component

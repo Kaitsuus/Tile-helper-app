@@ -14,7 +14,7 @@ import CreateListModal from '../src/components/CreateListModal';
 
 /**
  * Adhesive is a React functional component used for adhesive calculations.
- * It provides UI to select adhesive product, enter tile measurements and adhesive width,
+ * It provides UI to select adhesive product and throwel, user input for squaremeters,
  * perform calculation of adhesive consumption and total consumption, and add the calculated amount to shopping lists.
  * Users can also create new shopping lists from this component.
  * @component
