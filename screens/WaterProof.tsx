@@ -12,12 +12,35 @@ import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 
+/**
+ * Waterproof is a React functional component used for waterproof calculations.
+ * It provides UI to select waterproof product, enter are dimensions,
+ * perform calculation of waterproof consumption and total consumption, and add the calculated amount to shopping lists.
+ * Users can also create new shopping lists from this component.
+ * @component
+ */
+
 const WaterProof: React.FC = () => {
+
+  /**
+   * @typedef {Object} State
+   * @property {boolean} showModal - State for managing visibility of the modal.
+   * @property {ShoppingItem[]} items - State for managing shopping items.
+   * @property {ShoppingList[]} lists - State for managing shopping lists.
+   * @property {string} brand - State for managing the selected waterproof brand.
+   * @property {string} floorlitre - State for managing the floor's litre state.
+   * @property {string} wallLitre - State for managing the wall's litre state.
+   * @property {string} floorTimes - State for managing the floor's times state.
+   * @property {string} wallTimes - State for managing the wall's times state.
+   * @property {number} floorKilos - State for managing the floor's kilos state.
+   * @property {number} wallKilos - State for managing the wall's kilos state.
+   * @property {number} floorLitres - State for managing the floor's litres state.
+   * @property {number} wallLitres - State for managing the wall's litres state.
+   * @property {number} qty - State for managing the quantity state.
+   */
+
   const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  const navigateToShoppingList = () => {
-    navigation.navigate('ShoppingList');
-  };
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [lists, setLists] = useState<ShoppingList[]>([]);
@@ -32,14 +55,33 @@ const WaterProof: React.FC = () => {
   const [wallLitres, setWallLitres] = useState<number>(0);
   const [qty, setQty] = useState<number>(0);
 
+  /**
+   * @typedef {Object} LocalVariables
+   * @property {Option | undefined} selectedOption - The selected option from waterproof options.
+   * @property {number} consumptionWL - The consumption for wall litre.
+   * @property {number} consumptionWKg - The consumption for wall kilogram.
+   * @property {number} consumptionFL - The consumption for floor litre.
+   * @property {number} consumptionFKg - The consumption for floor kilogram.
+   */
+  
   const selectedOption = waterproofOptions.find(
     (option) => option.value === brand
-  );
-  const consumptionWL = selectedOption ? selectedOption.consumptionWL : 0;
-  const consumptionWKg = selectedOption ? selectedOption.consumptionWKg : 0;
-  const consumptionFL = selectedOption ? selectedOption.consumptionFL : 0;
-  const consumptionFKg = selectedOption ? selectedOption.consumptionFKg : 0;
+    );
+    const consumptionWL = selectedOption ? selectedOption.consumptionWL : 0;
+    const consumptionWKg = selectedOption ? selectedOption.consumptionWKg : 0;
+    const consumptionFL = selectedOption ? selectedOption.consumptionFL : 0;
+    const consumptionFKg = selectedOption ? selectedOption.consumptionFKg : 0;
 
+  /**
+   * Navigate to the ShoppingList screen.
+   */
+  const navigateToShoppingList = () => {
+    navigation.navigate('ShoppingList');
+  };
+
+  /**
+   * calculateKilogrammat function calculates the total amount of waterproof needed for floors and walls.
+   */
   const calculateKilogrammat = () => {
     const floorsLitres = parseFloat(floorlitre);
     const wallsLitres = parseFloat(wallLitre);
@@ -69,6 +111,9 @@ const WaterProof: React.FC = () => {
     setQty(parseFloat(totalLQty.toFixed(2)));
   };
 
+  /**
+   * fetchLists function fetches the shopping lists from the server.
+   */
   const fetchLists = async () => {
     try {
       const transformedLists = await fetchAndTransformLists();
@@ -94,6 +139,10 @@ const WaterProof: React.FC = () => {
     }
   }, [lists, currentListIndex]);
 
+  /**
+   * createNewList function creates a new shopping list on the server.
+   * @param {string} title - The title of the new list.
+   */
   const createNewList = async (title: string) => {
     try {
       const newList = {
@@ -110,6 +159,9 @@ const WaterProof: React.FC = () => {
     }
   };
 
+  /**
+   * addButtonPressed function adds the calculated waterproof amount to the selected shopping list.
+   */
   const addButtonPressed = async () => {
     if (lists.length === 0) {
       setShowModal(true);
@@ -144,6 +196,11 @@ const WaterProof: React.FC = () => {
 
   };
 
+  /**
+   * Handles changes to the floor litre input.
+   *
+   * @param {string} text - The new text in the floor litre input.
+   */
   const handleFloorlitreChange = (text: string) => {
     const newValue = parseFloat(text);
     if (!isNaN(newValue) && newValue !== parseFloat(floorlitre)) {
@@ -151,6 +208,11 @@ const WaterProof: React.FC = () => {
     }
   };
 
+  /**
+   * Handles changes to the wall litre input.
+   *
+   * @param {string} text - The new text in the wall litre input.
+   */
   const handleWallLitreChange = (text: string) => {
     const newValue = parseFloat(text);
     if (!isNaN(newValue) && newValue !== parseFloat(wallLitre)) {
@@ -158,6 +220,11 @@ const WaterProof: React.FC = () => {
     }
   };
 
+  /**
+   * Handles changes to the floor times input.
+   *
+   * @param {string} text - The new text in the floor times input.
+   */
   const handleFloorTimesChange = (text: string) => {
     const newValue = parseInt(text);
     if (!isNaN(newValue) && newValue !== parseInt(floorTimes)) {
@@ -165,6 +232,11 @@ const WaterProof: React.FC = () => {
     }
   };
 
+  /**
+   * Handles changes to the wall times input.
+   *
+   * @param {string} text - The new text in the wall times input.
+   */
   const handleWallTimesChange = (text: string) => {
     const newValue = parseInt(text);
     if (!isNaN(newValue) && newValue !== parseInt(wallTimes)) {

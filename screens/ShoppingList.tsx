@@ -1,3 +1,8 @@
+/**
+ * @module ShoppingList
+ * @description This module exports the ShoppingList component which is used to render the shopping list screen of the app.
+ */
+
 import React, { useState, useEffect, useRef } from 'react';
 import { FlatList, Text, TextInput, TouchableOpacity, View, Platform } from 'react-native';
 import { Center, Box, Select, Button, CheckIcon, Modal, FormControl, Input } from 'native-base';
@@ -12,6 +17,27 @@ import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 import ListImage from '../src/components/ListImage';
 
+/**
+ * @typedef ShoppingList
+ * @property {string} _id - The ID of the shopping list.
+ * @property {string} title - The title of the shopping list.
+ * @property {string} user - The user associated with the shopping list.
+ * @property {ShoppingItem[]} items - The items in the shopping list.
+ */
+
+/**
+ * @typedef {object} ShoppingItem
+ * @property {string} _id - The ID of the shopping item.
+ * @property {number} amount - The amount of the item.
+ * @property {object} content - The content of the item.
+ */
+
+/**
+ * @function ShoppingList
+ * @description This is the functional component for the ShoppingList screen.
+ * @returns {React.FC} A React functional component.
+ */
+
 interface ShoppingList {
   _id: string;
   title: string;
@@ -19,8 +45,23 @@ interface ShoppingList {
   items: ShoppingItem[];
 }
 
-
 const ShoppingList: React.FC = () => {
+
+  /**
+   * @typedef {Object} State
+   * @property {number} currentListIndex - Index of the currently selected list.
+   * @property {function} setCurrentListIndex - Function to change the value of currentListIndex.
+   * @property {ShoppingList[]} lists - State variable that holds an array of ShoppingList objects.
+   * @property {string} newListName - State variable to hold the name of a new list.
+   * @property {string} newItemName - State variable to hold the name of a new item.
+   * @property {number} newItemAmount - State variable to hold the amount of a new item.
+   * @property {string} newItemUnit - State variable to hold the unit of a new item.
+   * @property {EditingAmount|null} editingAmount - State variable to hold an object representing the amount currently being edited, or null if no amount is being edited.
+   * @property {ShoppingItem[]} items - State variable that holds an array of ShoppingItem objects.
+   * @property {boolean} showModal - State variable to control the visibility of a modal.
+   * @property {Object} shoppingListRef - Ref to the shopping list.
+   * @property {boolean} captureScreenshot - State variable to indicate if a screenshot should be captured.
+   */
   const { currentListIndex, setCurrentListIndex } = useUserContext();
   const [lists, setLists] = useState<ShoppingList[]>([]);
   const [newListName, setNewListName] = useState('');
@@ -33,7 +74,10 @@ const ShoppingList: React.FC = () => {
   const shoppingListRef = useRef(null);
   const [captureScreenshot, setCaptureScreenshot] = useState(false);
 
-
+  /**
+   * @function fetchLists
+   * @description Fetches the shopping lists from the server and updates the local state.
+   */
   const fetchLists = async () => {
     try {
       const transformedLists = await fetchAndTransformLists();
@@ -59,6 +103,10 @@ const ShoppingList: React.FC = () => {
     }
   }, [lists, currentListIndex]);
 
+  /**
+   * @function addItem
+   * @description Adds a new item to the shopping list.
+   */
   const addItem = async () => {
     if (lists.length === 0) {
       setShowModal(true);
@@ -91,7 +139,11 @@ const ShoppingList: React.FC = () => {
     }
   };
 
-  // Delete the item from the database
+  /**
+   * @function deleteItem
+   * @description Deletes an item from the shopping list.
+   * @param {string} itemId - The ID of the item to be deleted.
+   */
   const deleteItem = async (index: number) => {
     const itemToDelete = items[index];
     const itemId = itemToDelete._id;
@@ -112,6 +164,10 @@ const ShoppingList: React.FC = () => {
     setLists(updatedLists);
   };
 
+  /**
+   * @function deleteList
+   * @description Deletes the current shopping list.
+   */
   const deleteList = async (listId: string) => {
     try {
       await deleteListFromDB(listId);
@@ -123,6 +179,10 @@ const ShoppingList: React.FC = () => {
     }
   };
 
+  /**
+   * @function updateAmount
+   * @description Updates item amount.
+   */
   const updateAmount = async (index: number, value: number) => {
     const updatedItems = [...items];
     const updatedContent = {
@@ -145,6 +205,10 @@ const ShoppingList: React.FC = () => {
     }
   };
 
+  /**
+   * Create a new shopping list with the given title.
+   * @param {string} title - The title of the new shopping list.
+   */
   const createNewList = async (title: string) => {
     try {
       const newList = {
@@ -161,6 +225,14 @@ const ShoppingList: React.FC = () => {
     }
   };
 
+  /**
+   * Render a shopping item.
+   *
+   * @param {object} params - The parameters object.
+   * @param {ShoppingItem} params.item - The shopping item to render.
+   * @param {number} params.index - The index of the shopping item.
+   * @returns {JSX.Element} - The rendered item component.
+   */
   const renderItem = ({ item, index }: { item: ShoppingItem; index: number }) => {
     const content = item.content;
     
@@ -203,6 +275,11 @@ const ShoppingList: React.FC = () => {
     );
   };
 
+  /**
+   * Request permissions to access the media library on Android.
+   *
+   * @returns {Promise<void>} - A promise that resolves when the permissions are requested.
+   */
   const requestMediaLibraryPermissions = async () => {
     if (Platform.OS === 'android') {
       const { status } = await MediaLibrary.requestPermissionsAsync();
@@ -215,6 +292,11 @@ const ShoppingList: React.FC = () => {
     }
   };
 
+  /**
+   * Handle the save image action.
+   *
+   * @returns {Promise<void>} - A promise that resolves when the image is saved.
+   */
   const handleSaveImage = async () => {
     setCaptureScreenshot(true);
     await requestMediaLibraryPermissions();
@@ -239,6 +321,11 @@ const ShoppingList: React.FC = () => {
     }
   };
 
+  /**
+   * Handle the share image action.
+   *
+   * @returns {Promise<void>} - A promise that resolves when the image is shared.
+   */
   const handleShareImage = async () => {
     setCaptureScreenshot(true);
     await requestMediaLibraryPermissions();

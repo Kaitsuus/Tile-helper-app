@@ -12,12 +12,29 @@ import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 
+/**
+ * Adhesive is a React functional component used for adhesive calculations.
+ * It provides UI to select adhesive product and throwel, user input for squaremeters,
+ * perform calculation of adhesive consumption and total consumption, and add the calculated amount to shopping lists.
+ * Users can also create new shopping lists from this component.
+ * @component
+ */
+
 const Adhesive: React.FC = () => {
+
+  /**
+   * @typedef {Object} State
+   * @property {boolean} showModal - State for managing visibility of the modal.
+   * @property {ShoppingItem[]} items - State for managing shopping items.
+   * @property {ShoppingList[]} lists - State for managing shopping lists.
+   * @property {string} brand - State for managing the selected adhesive brand.
+   * @property {string} squareMeters - State for managing the squareMeters to calculate adhesive consumption.
+   * @property {string} adhesiveAmount - State for managing the total calculated adhesive consumption.
+   * @property {string} thickness - State for managing throwel thickness in mm.
+   */
+
   const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
-  const navigateToShoppingList = () => {
-    navigation.navigate('ShoppingList');
-  };
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [lists, setLists] = useState<ShoppingList[]>([]);
@@ -26,6 +43,16 @@ const Adhesive: React.FC = () => {
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [adhesiveAmount, setAdhesiveAmount] = useState<string>('');
 
+  /**
+   * Navigate to the ShoppingList screen.
+   */
+  const navigateToShoppingList = () => {
+    navigation.navigate('ShoppingList');
+  };
+
+  /**
+   * Fetch the shopping lists from the server.
+   */
   const fetchLists = async () => {
     try {
       const transformedLists = await fetchAndTransformLists();
@@ -51,6 +78,10 @@ const Adhesive: React.FC = () => {
     }
   }, [lists, currentListIndex]);
 
+  /**
+   * Create a new shopping list with the given title.
+   * @param {string} title - The title of the new shopping list.
+   */
   const createNewList = async (title: string) => {
     try {
       const newList = {
@@ -67,7 +98,9 @@ const Adhesive: React.FC = () => {
     }
   };
 
-
+  /**
+   * Calculate the consumption of adhesive and total consumption based on the user's input.
+   */
   const calculateConsumption = () => {
     const sqm = parseFloat(squareMeters);
     let consumption = 0;
@@ -90,6 +123,10 @@ const Adhesive: React.FC = () => {
     setAdhesiveAmount(result.toFixed(2));
   };
 
+  /**
+   * Add a new shopping item to the current shopping list.
+   * If no shopping list is selected, it prompts the user to create a new one.
+   */
   const addButtonPressed = async () => {
     if (lists.length === 0) {
       setShowModal(true);

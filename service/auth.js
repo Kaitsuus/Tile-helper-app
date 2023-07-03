@@ -2,6 +2,13 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from './api';
 
+/**
+ * Sign up a user with the provided email and password.
+ * @param {string} email - The user's email.
+ * @param {string} password - The user's password.
+ * @returns {Promise<Object>} A promise that resolves to the response data.
+ * @throws {Error} If there is an error during the signup process.
+ */
 export const signupUser = async (email, password) => {
   try {
     const response = await axios.post(api.users, { email, password });
@@ -17,6 +24,13 @@ export const signupUser = async (email, password) => {
   }
 };
 
+/**
+ * Log in a user with the provided email and password.
+ * @param {string} email - The user's email.
+ * @param {string} password - The user's password.
+ * @returns {Promise<Object>} A promise that resolves to the response data.
+ * @throws {Error} If there is an error during the login process.
+ */
 export const login = async (email, password) => {
   try {
     const response = await axios.post(
@@ -48,6 +62,14 @@ export const login = async (email, password) => {
   }
 };
 
+/**
+ * Make an authenticated request with the provided URL, method, and data.
+ * @param {string} url - The URL for the request.
+ * @param {string} method - The HTTP method for the request.
+ * @param {Object|null} data - The request data (optional).
+ * @returns {Promise<Object>} A promise that resolves to the response data.
+ * @throws {Error} If there is an error during the authenticated request.
+ */
 export const makeAuthenticatedRequest = async (url, method, data = null) => {
   try {
     const token = await AsyncStorage.getItem('token'); // Retrieve the token from local storage
@@ -90,12 +112,21 @@ export const makeAuthenticatedRequest = async (url, method, data = null) => {
   }
 };
 
+/**
+ * Get the logged-in user's ID.
+ * @returns {Promise<string|null>} A promise that resolves to the logged-in user's ID, or null if not logged in.
+ */
 export const getLoggedInUserId = async () => {
   const userId = await AsyncStorage.getItem('userId');
   return userId;
 };
 
-
+/**
+ * Fetch user data by ID.
+ * @param {string} userId - The user ID.
+ * @returns {Promise<Object>} A promise that resolves to the response data.
+ * @throws {Error} If there is an error during the fetch user data process.
+ */
 export const fetchUserDataById = async (userId) => {
   try {
     const token = await AsyncStorage.getItem('token');
@@ -113,6 +144,12 @@ export const fetchUserDataById = async (userId) => {
   }
 };
 
+/**
+ * Delete an item from the database.
+ * @param {string} listId - The list ID.
+ * @param {string} itemId - The item ID.
+ * @throws {Error} If there is an error during the delete item process.
+ */
 export const deleteItemFromDB = async (listId, itemId) => {
   try {
     const token = await AsyncStorage.getItem('token');
@@ -131,6 +168,12 @@ export const deleteItemFromDB = async (listId, itemId) => {
     throw error;
   }
 };
+
+/**
+ * Delete a list from the database.
+ * @param {string} listId - The list ID.
+ * @throws {Error} If there is an error during the delete list process.
+ */
 export const deleteListFromDB = async (listId) => {
   try {
     const token = await AsyncStorage.getItem('token');
@@ -149,6 +192,12 @@ export const deleteListFromDB = async (listId) => {
     throw error;
   }
 };
+
+/**
+ * Delete a user and associated lists from the database.
+ * @param {string} userId - The user ID.
+ * @throws {Error} If there is an error during the delete user process.
+ */
 export const deleteUserFromDB = async (userId) => {
   try {
     const token = await AsyncStorage.getItem('token');
@@ -182,6 +231,12 @@ export const deleteUserFromDB = async (userId) => {
     throw error;
   }
 };
+
+/**
+ * Fetch and transform lists associated with the logged-in user.
+ * @returns {Promise<Array>} A promise that resolves to the transformed lists.
+ * @throws {Error} If there is an error during the fetch and transform lists process.
+ */
 export const fetchAndTransformLists = async () => {
   const userId = await getLoggedInUserId();
   try {

@@ -1,3 +1,8 @@
+/**
+ * @module Login
+ * @description This module exports the Login component which is used to render the login screen of the app.
+ */
+
 import React, { useState } from 'react';
 import { TouchableOpacity, Alert, TextInput } from 'react-native';
 import { Button, Box, Text, Center, Heading, Image } from 'native-base';
@@ -7,13 +12,33 @@ import { HomeScreenNavigationProp } from '../src/types';
 import { login } from '../service/auth';
 import { useAuth } from '../service/AuthContext';
 
+/**
+ * @function Login
+ * @description This is the functional component for the Login screen.
+ * @returns {React.FC} A React functional component.
+ */
 
 const Login: React.FC = () => {
+  /**
+   * @typedef {Object} State
+   * @property {string} email - The email input state.
+   * @property {string} password - The password input state.
+   * @property {function} setUser - Function from AuthContext to set the user state.
+   * @var {Object} navigation - Navigation object from react-navigation.
+   */
+
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setUser } = useAuth();
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
+  /**
+   * @function handleLogin
+   * @description Handles the login process.
+   * @param {string} email - The email input value.
+   * @param {string} password - The password input value.
+   */
   const handleLogin = async (email: string, password: string) => {
     try {
       const response = await login(email, password);
@@ -25,6 +50,11 @@ const Login: React.FC = () => {
       Alert.alert('Error', error.message);
     }
   };
+
+  /**
+   * @function handleSignupPress
+   * @description Handles the press event on the signup button.
+   */
   const handleSignupPress = () => {
     navigation.navigate('Signup')
   }

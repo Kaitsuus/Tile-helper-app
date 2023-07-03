@@ -23,7 +23,11 @@ import HeaderLeft from './src/components/HeaderLeft';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-
+/**
+ * @component App
+ * @description The main App component.
+ * @returns {React.FC} A React functional component.
+ */
 const App: React.FC = () => {
   const [user, setUser] = useState(false);
 

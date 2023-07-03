@@ -7,12 +7,23 @@ import { HomeScreenNavigationProp } from '../src/types';
 import { LoginProps } from '../src/types';
 import { signupUser } from '../service/auth'
 
+/**
+ * @component Signup
+ * @description The Signup component for user registration.
+ * @param {LoginProps} handleLogin - The login function passed as a prop.
+ * @param {LoginProps} handleSignup - The signup function passed as a prop.
+ * @returns {React.FC} A React functional component.
+ */
 const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordAgain, setPasswordAgain] = useState<string>('');
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
+  /**
+   * Handles the signup button press.
+   * Validates the email and password fields, then calls the signupUser function.
+   */
   const handleSignupPress = async () => {
     if (email === '') {
       Alert.alert('Error', 'Please enter a username');
@@ -30,6 +41,10 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
     }
   };
 
+  /**
+   * Handles the login button press.
+   * Navigates to the Login screen.
+   */
   const handleLoginPress = () => {
     navigation.navigate('Login')
   }
