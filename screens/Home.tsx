@@ -1,10 +1,25 @@
+/**
+ * @module Home
+ * @description This module exports the Home component which is used to render the main screen of the app.
+ */
+
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { Button, Box, Text, Center, Heading } from 'native-base';
+import { Box, Center, Heading } from 'native-base';
 import NavigationButton from '../src/components/NavigationButton';
 import { useUserContext } from '../service/UserContext';
 
+/**
+ * @function Home
+ * @description This is the functional component for the Home screen.
+ * @returns {React.FC} A React functional component.
+ */
+
 const Home: React.FC = () => {
+  /**
+   * @var {Object} userData - The user data derived from the UserContext.
+   * @var {string} userEmailPrefix - The prefix of the user's email address.
+   */
+
   const { userData } = useUserContext();
   const userEmailPrefix = userData?.email.split('@')[0];
 
