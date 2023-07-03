@@ -12,13 +12,34 @@ import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 
+/**
+ * Grout is a React functional component used for grout calculations.
+ * It provides UI to select grout product, enter tile measurements and grout width,
+ * perform calculation of grout consumption and total consumption, and add the calculated amount to shopping lists.
+ * Users can also create new shopping lists from this component.
+ * @component
+ */
+
 const Grout: React.FC = () => {
+
+  /**
+   * @typedef {Object} State
+   * @property {boolean} showModal - State for managing visibility of the modal.
+   * @property {ShoppingItem[]} items - State for managing shopping items.
+   * @property {ShoppingList[]} lists - State for managing shopping lists.
+   * @property {string} brand - State for managing the selected grout brand.
+   * @property {string} groutResult - State for managing the calculated grout consumption.
+   * @property {string} totalResult - State for managing the total calculated grout consumption.
+   * @property {string} A - State for managing tile height in mm.
+   * @property {string} B - State for managing tile width in mm.
+   * @property {string} C - State for managing tile thickness in mm.
+   * @property {string} D - State for managing grout width in mm.
+   * @property {string} E - State for managing tile area in m².
+   */
+
   const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [showModal, setShowModal] = useState(false);
-  const navigateToShoppingList = () => {
-    navigation.navigate('ShoppingList');
-  };
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [lists, setLists] = useState<ShoppingList[]>([]);
   const [brand, setBrand] = useState<string>(groutOptions[0].value);
@@ -29,10 +50,20 @@ const Grout: React.FC = () => {
   const [C, setC] = useState<string>(''); // tile thickness mm
   const [D, setD] = useState<string>(''); // grout width mm
   const [E, setE] = useState<string>(''); // area m²
+  
+    /**
+   * Navigate to the ShoppingList screen.
+   */
+  const navigateToShoppingList = () => {
+    navigation.navigate('ShoppingList');
+  };
 
   const selectedOption = groutOptions.find((option) => option.value === brand);
   const consumption = selectedOption ? selectedOption.consumption : 0;
 
+  /**
+   * Calculate the consumption of grout and total consumption based on the user's input.
+   */
   const calculateConsumption = () => {
     const a = parseFloat(A);
     const b = parseFloat(B);
@@ -45,6 +76,9 @@ const Grout: React.FC = () => {
     setTotalResult(total.toFixed(2));
   };
 
+  /**
+   * Fetch the shopping lists from the server.
+   */
   const fetchLists = async () => {
     try {
       const transformedLists = await fetchAndTransformLists();
@@ -70,6 +104,10 @@ const Grout: React.FC = () => {
     }
   }, [lists, currentListIndex]);
 
+  /**
+   * Create a new shopping list with the given title.
+   * @param {string} title - The title of the new shopping list.
+   */
   const createNewList = async (title: string) => {
     try {
       const newList = {
@@ -86,6 +124,10 @@ const Grout: React.FC = () => {
     }
   };
 
+  /**
+   * Add a new shopping item to the current shopping list.
+   * If no shopping list is selected, it prompts the user to create a new one.
+   */
   const addButtonPressed = async () => {
     if (lists.length === 0) {
       setShowModal(true);
