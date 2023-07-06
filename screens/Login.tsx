@@ -72,17 +72,17 @@ const Login: React.FC = () => {
       </Box>
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="80%">
       <Heading size="2xl" color="#D9D9D9" py="2" textAlign="center">
-        KIRJAUDU
+      {t('login')}
       </Heading>
         <TextInput
-          placeholder="Käyttäjätunnus"
+          placeholder="Email"
           value={email}
           style={styles.input}
           keyboardType="email-address"
           onChangeText={(text) => setEmail(text)}
         />
         <TextInput
-          placeholder="Salasana"
+          placeholder={t('pwPlaceHolder')}
           value={password}
           style={styles.input}
           keyboardType="default"
@@ -95,15 +95,15 @@ const Login: React.FC = () => {
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}
           mt="2"
         >
-          Kirjaudu
+          {t('loginButton')}
         </Button>
         <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14, paddingTop: 2 }}>
-          Etkö ole käyttäjä?{' '}
+        {t('notUser')}{' '}
         </Text>
         <TouchableOpacity onPress={handleSignupPress} style={{marginLeft: -2 }}>
           <Text style={{ color: '#EF6F20', fontWeight: '600', fontSize: 14 }}>
             {' '}
-            Rekisteröidy
+            {t('register')}
           </Text>
         </TouchableOpacity>
       </Box>

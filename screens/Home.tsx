@@ -7,6 +7,7 @@ import React from 'react';
 import { Box, Center, Heading } from 'native-base';
 import NavigationButton from '../src/components/NavigationButton';
 import { useUserContext } from '../service/UserContext';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @function Home
@@ -20,23 +21,24 @@ const Home: React.FC = () => {
    * @var {string} userEmailPrefix - The prefix of the user's email address.
    */
 
+  const { t } = useTranslation();
   const { userData } = useUserContext();
   const userEmailPrefix = userData?.email.split('@')[0];
 
   return (
     <Center w="100%" flex={1} px="3" background="#D9D9D9">
       <Heading size="2xl" color="#D9D9D9" pt="5">
-        TERVETULOA
+        {t('welcome')}
       </Heading>
       <Heading size="xl" color="#D9D9D9" pt="5">
         {userEmailPrefix}
       </Heading>
       <Box pt="16" w="90%" maxW="290" position="relative">
-        <NavigationButton screenName="Grout" title="Saumaus" />
-        <NavigationButton screenName="WaterProof" title="Vedeneristys" />
-        <NavigationButton screenName="Adhesive" title="Kiinnitys" />
-        <NavigationButton screenName="Plaster" title="Tasoitus" />
-        <NavigationButton screenName="ShoppingList" title="Oma lista" />
+        <NavigationButton screenName="Grout" title={t('grout')} />
+        <NavigationButton screenName="WaterProof" title={t('waterproof')} />
+        <NavigationButton screenName="Adhesive" title={t('adhesive')} />
+        <NavigationButton screenName="Plaster" title={t('plaster')} />
+        <NavigationButton screenName="ShoppingList" title={t('list')} />
       </Box>
       <Box
         w="100%"

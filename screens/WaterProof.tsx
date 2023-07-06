@@ -11,6 +11,7 @@ import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/typ
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Waterproof is a React functional component used for waterproof calculations.
@@ -39,6 +40,7 @@ const WaterProof: React.FC = () => {
    * @property {number} qty - State for managing the quantity state.
    */
 
+  const { t } = useTranslation();
   const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [items, setItems] = useState<ShoppingItem[]>([]);
@@ -181,14 +183,14 @@ const WaterProof: React.FC = () => {
         'POST',
         { content: newItem.content }
       );
-      const message = `${newItem.content.name} ${newItem.content.amount} ${newItem.content.unit} lisätty listalle`;
-      Alert.alert(message, 'Siirrytäänkö listalle?', [
+      const message = `${newItem.content.name} ${newItem.content.amount} ${newItem.content.unit} ${t('addedToList')}`;
+      Alert.alert(message, t('toList'), [
         {
-          text: 'Ei',
+          text: t('no'),
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel'
         },
-        { text: 'Kyllä', onPress: () => navigateToShoppingList() }
+        { text: t('yes'), onPress: () => navigateToShoppingList() }
       ]);
     } catch (error) {
       console.error('Error adding item to the list:', error);
@@ -251,8 +253,8 @@ const WaterProof: React.FC = () => {
           bg="white"
           selectedValue={brand}
           minWidth={200}
-          accessibilityLabel="Valikoi tuote"
-          placeholder="Valikoi tuote"
+          accessibilityLabel={t('productLabel')}
+          placeholder={t('productLabel')}
           _selectedItem={{
             bg: 'orange.500',
             endIcon: <CheckIcon size="5" />
@@ -269,7 +271,7 @@ const WaterProof: React.FC = () => {
           ))}
         </Select>
         <Text mt="2" mb="2" color="#fafafa">
-          Syötä pinta-alat m²
+        {t('areInput')}
         </Text>
         <MaskedTextInput
           style={styles.input}
@@ -277,7 +279,7 @@ const WaterProof: React.FC = () => {
           onChangeText={handleFloorlitreChange}
           value={floorlitre.toString()}
           keyboardType="numeric"
-          placeholder="Anna lattioiden pinta-ala m²"
+          placeholder={t('floorPh')}
         />
         <MaskedTextInput
           style={styles.input}
@@ -285,7 +287,7 @@ const WaterProof: React.FC = () => {
           onChangeText={handleWallLitreChange}
           value={wallLitre.toString()}
           keyboardType="numeric"
-          placeholder="Anna seinien pinta-ala m²"
+          placeholder={t('wallPh')}
         />
         <MaskedTextInput
           style={styles.input}
@@ -293,7 +295,7 @@ const WaterProof: React.FC = () => {
           onChangeText={handleFloorTimesChange}
           value={floorTimes.toString()}
           keyboardType="numeric"
-          placeholder="Anna lattioiden levityskerrat"
+          placeholder={t('floorTimes')}
         />
         <MaskedTextInput
           style={styles.input}
@@ -301,7 +303,7 @@ const WaterProof: React.FC = () => {
           onChangeText={handleWallTimesChange}
           value={wallTimes.toString()}
           keyboardType="numeric"
-          placeholder="Anna seinien levityskerrat"
+          placeholder={t('wallTimes')}
         />
         <Button
           colorScheme="orange"
@@ -309,29 +311,28 @@ const WaterProof: React.FC = () => {
           mt="2"
           onPress={calculateKilogrammat}
         >
-          Laske
+          {t('calc')}
         </Button>
         {parseInt(floorTimes) !== 0 && (
           <Text mt="2" color="#fafafa">
-            Lattioiden levityskerrat: {floorTimes}
+            {t('floorTimesTxt')} {floorTimes}
           </Text>
         )}
         {parseInt(wallTimes) !== 0 && (
-          <Text color="#fafafa">Seinien levityskerrat: {wallTimes}</Text>
+          <Text color="#fafafa">{t('wallTimesTxt')} {wallTimes}</Text>
         )}
         {floorKilos !== 0 && (
           <Text mt="2" color="#fafafa">
-            Lattiat menekki {floorKilos}kg / {floorLitres}l
+            {t('floorConsumption')} {floorKilos}kg / {floorLitres}l
           </Text>
         )}
         {wallKilos !== 0 && (
           <Text color="#fafafa">
-            Seinät menekki {wallKilos}kg / {wallLitres}l
+            {t('wallConsumption')} {wallKilos}kg / {wallLitres}l
           </Text>
         )}
         <Text mt="2" color="#fafafa">
-          Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä
-          huomioida olosuhteita tai ainehukkaa.
+        {t('noticeTxt')}
         </Text>
         <ShoppingListSelect
           lists={lists}
@@ -343,14 +344,14 @@ const WaterProof: React.FC = () => {
           colorScheme="orange"
           _text={{ fontSize: 'lg', fontWeight: 'bold' }}
           mt="2" flex={1}>
-            Lisää listaan
+            {t('addToList')}
             </Button>
             <Button
               onPress={() => setShowModal(true)} colorScheme="orange"
               _text={{ fontSize: 'lg', fontWeight: 'bold' }}
                mt="2" flex={1}
             >
-              Uusi lista
+              {t('newList')}
             </Button>
           </Button.Group>
       </Box>

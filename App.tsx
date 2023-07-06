@@ -23,24 +23,34 @@ import HeaderLeft from './src/components/HeaderLeft';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import 'intl';
+import 'intl/locale-data/jsonp/fi';
+
 
 // Import language files
 import en from './src/data/lang/en.json';
 import fi from './src/data/lang/fi.json';
+import es from './src/data/lang/es.json';
 
 
 // Initialize i18next
 i18n
 .use(initReactI18next)
 .init({
-  lng: 'fi', // Set the default language
+  compatibilityJSON: 'v3',
+  lng: 'fi',
+  fallbackLng: 'fi',
   resources: {
     fi: { translation: fi },
     en: { translation: en },
+    es: { translation: es },
   },
   interpolation: {
     escapeValue: false,
   },
+  react: {
+    useSuspense:false,
+ }
 });
 
 const Stack = createStackNavigator<RootStackParamList>();

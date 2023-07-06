@@ -27,6 +27,8 @@
     "expo-status-bar": "~1.4.4",
     "firebase": "^9.20.0",
     "i18next": "^23.2.7",
+    "intl": "^1.2.5",
+    "intl-pluralrules": "^2.0.0",
     "lodash": "^4.17.21",
     "native-base": "^3.4.28",
     "react": "18.2.0",
@@ -47,6 +49,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/intl": "^1.2.0",
     "@types/lodash": "^4.14.195",
     "prettier": "2.8.8"
   },

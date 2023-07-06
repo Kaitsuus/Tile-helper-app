@@ -11,6 +11,7 @@ import { useAuth } from '../service/AuthContext';
 import { deleteUserFromDB } from '../service/auth';
 import DeleteUserModal from '../src/components/DeleteUserModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @function UserMenu
@@ -26,6 +27,7 @@ const UserMenu: React.FC = () => {
    * @var {Object} setUser - Function from AuthContext to set the user state.
    */
 
+  const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const { userData } = useUserContext();
   const [preffLang, setPreffLang] = useState(userData.languagePreference);
@@ -63,7 +65,7 @@ const UserMenu: React.FC = () => {
         {userData && userData.email ? userData.email : 'error while getting user'}
       </Text>
       <TouchableOpacity onPress={handleLogout}>
-        <Text color="#fafafa">Kirjaudu Ulos</Text>
+        <Text color="#fafafa">{t('logout')}</Text>
       </TouchableOpacity>
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="63%">
         <Box flexDirection="row" alignItems="center" justifyContent="center">
@@ -83,20 +85,20 @@ const UserMenu: React.FC = () => {
             <Select.Item label="es" value="es" />
           </Select>
           <Button colorScheme="orange" marginLeft={2}>
-            save
+          {t('save')}
           </Button>
         </Box>
         <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={8}>
-          Arvostele
+        {t('review')}
         </Button>
         <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2}>
-          Tietosuoja
+        {t('privacy')}
         </Button>
         <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2}>
           Report Bug
         </Button>
         <Button onPress={() => setShowModal(true)} colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2}>
-          Poista Tili
+        {t('deleteAccount')}
         </Button>
       </Box>
       <Box

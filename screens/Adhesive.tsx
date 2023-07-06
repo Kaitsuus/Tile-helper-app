@@ -11,6 +11,7 @@ import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/typ
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Adhesive is a React functional component used for adhesive calculations.
@@ -33,6 +34,7 @@ const Adhesive: React.FC = () => {
    * @property {string} thickness - State for managing throwel thickness in mm.
    */
 
+  const { t } = useTranslation();
   const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [items, setItems] = useState<ShoppingItem[]>([]);
@@ -146,15 +148,15 @@ const Adhesive: React.FC = () => {
         'POST',
         { content: newItem.content }
       );
-      const message = `${newItem.content.name} ${newItem.content.amount} kg lisätty listalle`;
+      const message = `${newItem.content.name} ${newItem.content.amount} ${t('kgToList')}`;
   
-      Alert.alert(message, 'Siirrytäänkö listalle?', [
+      Alert.alert(message, t('toList'), [
         {
-          text: 'Ei',
+          text: t('no'),
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel'
         },
-        { text: 'Kyllä', onPress: () => navigateToShoppingList() }
+        { text: t('yes'), onPress: () => navigateToShoppingList() }
       ]);
     } catch (error) {
       console.error('Error adding item to the list:', error);
@@ -165,14 +167,14 @@ const Adhesive: React.FC = () => {
     <Center w="100%" flex={1} px="3" background="#D9D9D9">
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="65%">
         <Text mt="2" mb="2" color="#fafafa">
-          Kiinnityslaasti Laskuri
+        {t('adhesiveCalc')}
         </Text>
         <Select
           bg="white"
           selectedValue={brand}
           minWidth="200"
-          accessibilityLabel="Valikoi tuote"
-          placeholder="Valikoi tuote"
+          accessibilityLabel={t('productLabel')}
+          placeholder={t('productLabel')}
           _selectedItem={{
             bg: 'orange.500',
             endIcon: <CheckIcon size="5" />
@@ -189,7 +191,7 @@ const Adhesive: React.FC = () => {
           ))}
         </Select>
         <Text mt="2" mb="2" color="#fafafa">
-          Valikoi hammastus:
+        {t('throwel')}
         </Text>
         <Select
           bg="white"
@@ -209,7 +211,7 @@ const Adhesive: React.FC = () => {
           <Select.Item label="10 mm" value="10" />
         </Select>
         <Text mt="2" mb="2" color="#fafafa">
-          Syötä alue (m²):
+        {t('areInput')}
         </Text>
         <MaskedTextInput
           style={styles.input}
@@ -217,7 +219,7 @@ const Adhesive: React.FC = () => {
           onChangeText={(text) => setSquareMeters(text)}
           value={squareMeters}
           keyboardType="numeric"
-          placeholder="Syötä m²"
+          placeholder={t('areInput')}
         />
         <Button
           colorScheme="orange"
@@ -225,16 +227,15 @@ const Adhesive: React.FC = () => {
           mt="2"
           onPress={calculateConsumption}
         >
-          Laske
+          {t('calc')}
         </Button>
         {adhesiveAmount !== '' && (
           <Text mt="2" color="#fafafa">
-            Laasti määrä: {adhesiveAmount} kg
+            {t('adhesiveAmount')} {adhesiveAmount} kg
           </Text>
         )}
         <Text mt="2" color="#fafafa">
-          Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä
-          huomioida olosuhteita tai ainehukkaa.
+        {t('noticeTxt')}
         </Text>
         <ShoppingListSelect
           lists={lists}
@@ -246,14 +247,14 @@ const Adhesive: React.FC = () => {
           colorScheme="orange"
           _text={{ fontSize: 'lg', fontWeight: 'bold' }}
           mt="2" flex={1}>
-            Lisää listaan
+            {t('addToList')}
             </Button>
             <Button
               onPress={() => setShowModal(true)} colorScheme="orange"
               _text={{ fontSize: 'lg', fontWeight: 'bold' }}
                mt="2" flex={1}
             >
-              Uusi lista
+              {t('newList')}
             </Button>
           </Button.Group>
       </Box>

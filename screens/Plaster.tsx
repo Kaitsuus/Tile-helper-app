@@ -11,6 +11,7 @@ import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/typ
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Plaster is a React functional component used for plaster calculations.
@@ -32,6 +33,7 @@ const Plaster: React.FC = () => {
    * @property {string} adhesiveAmount - State for managing the total calculated plaster consumption.
    */
 
+  const { t } = useTranslation();
   const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [items, setItems] = useState<ShoppingItem[]>([]);
@@ -133,15 +135,15 @@ const Plaster: React.FC = () => {
         'POST',
         { content: newItem.content }
       );
-      const message = `${newItem.content.name} ${newItem.content.amount} kg lisätty listalle`;
+      const message = `${newItem.content.name} ${newItem.content.amount} ${t('kgToList')}`;
 
-      Alert.alert(message, 'Siirrytäänkö listalle?', [
+      Alert.alert(message, t('toList'), [
         {
-          text: 'Ei',
+          text: t('no'),
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel'
         },
-        { text: 'Kyllä', onPress: () => navigateToShoppingList() }
+        { text: t('yes'), onPress: () => navigateToShoppingList() }
       ]);
     } catch (error) {
       console.error('Error adding item to the list:', error);
@@ -151,13 +153,13 @@ const Plaster: React.FC = () => {
   return (
     <Center w="100%" flex={1} px="3" background="#D9D9D9">
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="65%">
-        <Text color="#fafafa">Tasoite laskuri</Text>
+        <Text color="#fafafa">{t('plasterCalc')}</Text>
         <Select
           bg="white"
           selectedValue={brand}
           minWidth="200"
-          accessibilityLabel="Valikoi tuote"
-          placeholder="Valikoi tuote"
+          accessibilityLabel={t('productLabel')}
+          placeholder={t('productLabel')}
           _selectedItem={{
             bg: 'orange.500',
             endIcon: <CheckIcon size="5" />
@@ -174,7 +176,7 @@ const Plaster: React.FC = () => {
           ))}
         </Select>
         <Text mt="2" mb="2" color="#fafafa">
-          Syötä alue (m²):
+        {t('areInput')}
         </Text>
         <MaskedTextInput
           style={styles.input}
@@ -182,7 +184,7 @@ const Plaster: React.FC = () => {
           onChangeText={(text) => setSquareMeters(text)}
           value={squareMeters}
           keyboardType="numeric"
-          placeholder="Syötä m²"
+          placeholder={t('areInput')}
         />
         <Button
           colorScheme="orange"
@@ -190,16 +192,15 @@ const Plaster: React.FC = () => {
           mt="2"
           onPress={calculateConsumption}
         >
-          Laske
+          {t('calc')}
         </Button>
         {plasterAmount !== '' && (
           <Text mt="2" color="#fafafa">
-            Tasoite määrä: {plasterAmount} kg
+            {t('plasterAmount')} {plasterAmount} kg
           </Text>
         )}
         <Text mt="2" color="#fafafa">
-          Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä
-          huomioida olosuhteita tai ainehukkaa.
+        {t('noticeTxt')}
         </Text>
         <ShoppingListSelect
           lists={lists}
@@ -211,14 +212,14 @@ const Plaster: React.FC = () => {
           colorScheme="orange"
           _text={{ fontSize: 'lg', fontWeight: 'bold' }}
           mt="2" flex={1}>
-            Lisää listaan
+            {t('addToList')}
             </Button>
             <Button
               onPress={() => setShowModal(true)} colorScheme="orange"
               _text={{ fontSize: 'lg', fontWeight: 'bold' }}
                mt="2" flex={1}
             >
-              Uusi lista
+              {t('newList')}
             </Button>
           </Button.Group>
       </Box>

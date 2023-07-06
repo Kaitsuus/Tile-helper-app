@@ -16,6 +16,7 @@ import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 import ListImage from '../src/components/ListImage';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @typedef ShoppingList
@@ -62,6 +63,8 @@ const ShoppingList: React.FC = () => {
    * @property {Object} shoppingListRef - Ref to the shopping list.
    * @property {boolean} captureScreenshot - State variable to indicate if a screenshot should be captured.
    */
+
+  const { t } = useTranslation();
   const { currentListIndex, setCurrentListIndex } = useUserContext();
   const [lists, setLists] = useState<ShoppingList[]>([]);
   const [newListName, setNewListName] = useState('');
@@ -376,7 +379,7 @@ const ShoppingList: React.FC = () => {
           <TextInput
             value={newItemName}
             onChangeText={setNewItemName}
-            placeholder="Item name"
+            placeholder={t('item')}
             style={{
               borderWidth: 1,
               borderColor: 'gray',
@@ -417,7 +420,7 @@ const ShoppingList: React.FC = () => {
             <Select.Item label="kg" value="kg" />
           </Select>
 
-          <Button onPress={addItem} colorScheme="orange" marginLeft={2}>Add Item</Button>
+          <Button onPress={addItem} colorScheme="orange" marginLeft={2}>{t('add')}</Button>
         </Box>
       </Box>
       <Box
@@ -429,16 +432,16 @@ const ShoppingList: React.FC = () => {
         }}
       >
         <Button colorScheme="orange" mt={2} w={20} onPress={handleSaveImage}>
-          Save
+        {t('save')}
         </Button>
 
         <Button colorScheme="orange" mt={2} w={20} onPress={handleShareImage}>
-          Share
+        {t('share')}
         </Button>
         <Button onPress={() => deleteList(lists[currentListIndex]._id)} colorScheme="orange" mt={2} w={20}>
-          delete
+        {t('delete')}
         </Button>
-        <Button onPress={() => setShowModal(true)} colorScheme="orange" mt={2} w={20}>new</Button>
+        <Button onPress={() => setShowModal(true)} colorScheme="orange" mt={2} w={20}>{t('new')}</Button>
       </Box>
       <CreateListModal
         isOpen={showModal}
