@@ -150,7 +150,7 @@ const Plaster: React.FC = () => {
 
   return (
     <Center w="100%" flex={1} px="3" background="#D9D9D9">
-      <Box safeArea p="2" py="8" w="90%" maxW="290" h="80%">
+      <Box safeArea p="2" py="8" w="90%" maxW="290" h="65%">
         <Text color="#fafafa">Tasoite laskuri</Text>
         <Select
           bg="white"
@@ -206,23 +206,26 @@ const Plaster: React.FC = () => {
           currentListIndex={currentListIndex}
           setCurrentListIndex={setCurrentListIndex}
         />
-        <Button onPress={() => setShowModal(true)} colorScheme="orange"
-         _text={{ fontSize: 'xl', fontWeight: 'bold' }}
-          mt="2"
-        >Uusi lista</Button>
-        <Button
+        <Button.Group>
+            <Button onPress={addButtonPressed}
           colorScheme="orange"
-          _text={{ fontSize: 'xl', fontWeight: 'bold' }}
-          mt="2"
-          onPress={addButtonPressed}
-        >
-          Lisää Listaan
-        </Button>
+          _text={{ fontSize: 'lg', fontWeight: 'bold' }}
+          mt="2" flex={1}>
+            Lisää listaan
+            </Button>
+            <Button
+              onPress={() => setShowModal(true)} colorScheme="orange"
+              _text={{ fontSize: 'lg', fontWeight: 'bold' }}
+               mt="2" flex={1}
+            >
+              Uusi lista
+            </Button>
+          </Button.Group>
       </Box>
       <Box
         w="100%"
         position="absolute"
-        height="85%"
+        height="80%"
         bottom="0"
         background="#242424"
         opacity="100"
