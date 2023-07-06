@@ -6,6 +6,7 @@ import styles from '../src/styles/style';
 import { HomeScreenNavigationProp } from '../src/types';
 import { LoginProps } from '../src/types';
 import { signupUser } from '../service/auth'
+import { useTranslation } from 'react-i18next';
 
 /**
  * @component Signup
@@ -15,6 +16,7 @@ import { signupUser } from '../service/auth'
  * @returns {React.FC} A React functional component.
  */
 const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordAgain, setPasswordAgain] = useState<string>('');
@@ -61,7 +63,7 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
       </Box>
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="80%">
       <Heading size="2xl" color="#D9D9D9" py="2" textAlign="center">
-        REKISTERÖIDY
+      {t('signup')}
       </Heading>
         <TextInput
           placeholder="Email"
@@ -71,7 +73,7 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
           onChangeText={(text) => setEmail(text)}
         />
         <TextInput
-          placeholder="Salasana"
+          placeholder={t('pwPlaceHolder')}
           value={password}
           style={styles.input}
           keyboardType="default"
@@ -79,7 +81,7 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
           onChangeText={(text) => setPassword(text)}
         />
         <TextInput
-          placeholder="Salasana uudelleen"
+          placeholder={t('pwAgain')}
           value={passwordAgain}
           style={styles.input}
           keyboardType="default"
@@ -92,10 +94,10 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}
           mt="2"
         >
-          Rekisteröidy
+          {t('register')}
         </Button>
         <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14, paddingTop: 2 }}>
-          Oletko jo rekisteröitynyt?{' '}
+        {t('alreadyUser')}{' '}
         </Text>
         <TouchableOpacity onPress={handleLoginPress} style={{marginLeft: -2 }}>
           <Text style={{ color: '#EF6F20', fontWeight: '600', fontSize: 14 }}>

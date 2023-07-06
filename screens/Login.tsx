@@ -5,12 +5,13 @@
 
 import React, { useState } from 'react';
 import { TouchableOpacity, Alert, TextInput } from 'react-native';
-import { Button, Box, Text, Center, Heading, Image } from 'native-base';
+import { Button, Box, Text, Center, Heading, Image, Select, CheckIcon } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { HomeScreenNavigationProp } from '../src/types';
 import { login } from '../service/auth';
 import { useAuth } from '../service/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @function Login
@@ -27,11 +28,20 @@ const Login: React.FC = () => {
    * @var {Object} navigation - Navigation object from react-navigation.
    */
 
-
+  const { t, i18n } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setUser } = useAuth();
   const navigation = useNavigation<HomeScreenNavigationProp>();
+
+  /**
+   * @function changeLanguage
+   * @description Handles the language change.
+   * @param {string} language - The language value.
+   */
+  const changeLanguage = (language: string) => {
+    i18n.changeLanguage(language);
+  };
 
   /**
    * @function handleLogin
@@ -71,17 +81,17 @@ const Login: React.FC = () => {
       </Box>
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="80%">
       <Heading size="2xl" color="#D9D9D9" py="2" textAlign="center">
-        KIRJAUDU
+      {t('login')}
       </Heading>
         <TextInput
-          placeholder="Käyttäjätunnus"
+          placeholder="Email"
           value={email}
           style={styles.input}
           keyboardType="email-address"
           onChangeText={(text) => setEmail(text)}
         />
         <TextInput
-          placeholder="Salasana"
+          placeholder={t('pwPlaceHolder')}
           value={password}
           style={styles.input}
           keyboardType="default"
@@ -94,17 +104,32 @@ const Login: React.FC = () => {
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}
           mt="2"
         >
-          Kirjaudu
+          {t('loginButton')}
         </Button>
         <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14, paddingTop: 2 }}>
-          Etkö ole käyttäjä?{' '}
+        {t('notUser')}{' '}
         </Text>
         <TouchableOpacity onPress={handleSignupPress} style={{marginLeft: -2 }}>
           <Text style={{ color: '#EF6F20', fontWeight: '600', fontSize: 14 }}>
             {' '}
-            Rekisteröidy
+            {t('register')}
           </Text>
         </TouchableOpacity>
+        <Select
+          mt="2"
+          bg="white"
+          placeholder="Select Language"
+          onValueChange={changeLanguage}
+          selectedValue={i18n.language}
+          _selectedItem={{
+            bg: 'orange.500',
+            endIcon: <CheckIcon size={3} />
+          }}
+        >
+          <Select.Item label="Finnish" value="fi" />
+          <Select.Item label="English" value="en" />
+          <Select.Item label="Estonian" value="es" />
+        </Select>
       </Box>
       <Box
         w="100%"

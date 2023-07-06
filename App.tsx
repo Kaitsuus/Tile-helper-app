@@ -20,9 +20,40 @@ import AuthContext from './service/AuthContext';
 import { UserProvider } from './service/UserContext';
 import HeaderAvatar from './src/components/HeaderAvatar';
 import HeaderLeft from './src/components/HeaderLeft';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import 'intl';
+import 'intl/locale-data/jsonp/fi';
+
+
+// Import language files
+import en from './src/data/lang/en.json';
+import fi from './src/data/lang/fi.json';
+import es from './src/data/lang/es.json';
+
+
+// Initialize i18next
+i18n
+.use(initReactI18next)
+.init({
+  compatibilityJSON: 'v3',
+  lng: 'fi',
+  fallbackLng: 'fi',
+  resources: {
+    fi: { translation: fi },
+    en: { translation: en },
+    es: { translation: es },
+  },
+  interpolation: {
+    escapeValue: false,
+  },
+  react: {
+    useSuspense:false,
+ }
+});
 
 const Stack = createStackNavigator<RootStackParamList>();
-
 /**
  * @component App
  * @description The main App component.
@@ -30,9 +61,11 @@ const Stack = createStackNavigator<RootStackParamList>();
  */
 const App: React.FC = () => {
   const [user, setUser] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
+      <I18nextProvider i18n={i18n}>
       <NativeBaseProvider>
         <NavigationContainer>
           <UserProvider>
@@ -48,36 +81,36 @@ const App: React.FC = () => {
                     headerRight: () => <HeaderAvatar />
                   }}
                 >
-                  <Stack.Screen name="Home" component={Home} options={{ title: 'Home' }} />
+                  <Stack.Screen name="Home" component={Home} options={{ title: t('home') }} />
                   <Stack.Screen
                     name="Grout"
                     component={Grout}
-                    options={{ title: 'Grout' }}
+                    options={{ title: t('grout') }}
                   />
                   <Stack.Screen
                     name="Adhesive"
                     component={Adhesive}
-                    options={{ title: 'Adhesive' }}
+                    options={{ title: t('adhesive') }}
                   />
                   <Stack.Screen
                     name="WaterProof"
                     component={WaterProof}
-                    options={{ title: 'WaterProof' }}
+                    options={{ title: t('waterproof') }}
                   />
                   <Stack.Screen
                     name="Plaster"
                     component={Plaster}
-                    options={{ title: 'Plaster' }}
+                    options={{ title: t('plaster') }}
                   />
                   <Stack.Screen
                     name="ShoppingList"
                     component={ShoppingList}
-                    options={{ title: 'ShoppingList' }}
+                    options={{ title: t('list') }}
                   />
                   <Stack.Screen
                     name="UserMenu"
                     component={UserMenu}
-                    options={{ title: 'ShoppingList' }}
+                    options={{ title: t('userMenu') }}
                   />
                 </Stack.Group>
               ) : (
@@ -90,6 +123,7 @@ const App: React.FC = () => {
           </UserProvider>
         </NavigationContainer>
       </NativeBaseProvider>
+      </I18nextProvider>
     </AuthContext.Provider>
   );
 };

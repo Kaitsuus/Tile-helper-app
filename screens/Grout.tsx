@@ -11,6 +11,7 @@ import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/typ
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Grout is a React functional component used for grout calculations.
@@ -37,6 +38,7 @@ const Grout: React.FC = () => {
    * @property {string} E - State for managing tile area in m².
    */
 
+  const { t } = useTranslation();
   const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [showModal, setShowModal] = useState(false);
@@ -147,15 +149,15 @@ const Grout: React.FC = () => {
         'POST',
         { content: newItem.content }
       );
-      const message = `${newItem.content.name} ${newItem.content.amount} kg lisätty listalle`;
+      const message = `${newItem.content.name} ${newItem.content.amount} ${t('kgToList')}`;
   
-      Alert.alert(message, 'Siirrytäänkö listalle?', [
+      Alert.alert(message, t('toList'), [
         {
-          text: 'Ei',
+          text: t('no'),
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel'
         },
-        { text: 'Kyllä', onPress: () => navigateToShoppingList() }
+        { text: t('yes'), onPress: () => navigateToShoppingList() }
       ]);
     } catch (error) {
       console.error('Error adding item to the list:', error);
@@ -169,8 +171,8 @@ const Grout: React.FC = () => {
           bg="white"
           selectedValue={brand}
           minWidth="200"
-          accessibilityLabel="Valikoi tuote"
-          placeholder="Valikoi tuote"
+          accessibilityLabel={t('productLabel')}
+          placeholder={t('productLabel')}
           _selectedItem={{
             bg: 'orange.500',
             endIcon: <CheckIcon size="5" />
@@ -187,7 +189,7 @@ const Grout: React.FC = () => {
           ))}
         </Select>
         <Text mt="2" mb="2" color="#fafafa">
-          Syötä laatan mitat (mm) ja sauman leveys (mm)
+        {t('inputTile')}
         </Text>
         <MaskedTextInput
           style={styles.input}
@@ -195,7 +197,7 @@ const Grout: React.FC = () => {
           onChangeText={(text) => setA(text)}
           value={A}
           keyboardType="numeric"
-          placeholder="Laatan pituus (mm)"
+          placeholder={t('tileH')}
         />
         <MaskedTextInput
           style={styles.input}
@@ -203,7 +205,7 @@ const Grout: React.FC = () => {
           onChangeText={(text) => setB(text)}
           value={B}
           keyboardType="numeric"
-          placeholder="Laatan leveys (mm)"
+          placeholder={t('tileW')}
         />
         <MaskedTextInput
           style={styles.input}
@@ -211,7 +213,7 @@ const Grout: React.FC = () => {
           onChangeText={(text) => setC(text)}
           value={C}
           keyboardType="numeric"
-          placeholder="Laatan paksuus (mm)"
+          placeholder={t('tileT')}
         />
         <MaskedTextInput
           style={styles.input}
@@ -219,7 +221,7 @@ const Grout: React.FC = () => {
           onChangeText={(text) => setD(text)}
           value={D}
           keyboardType="numeric"
-          placeholder="Sauman leveys (mm)"
+          placeholder={t('groutW')}
         />
         <MaskedTextInput
           style={styles.input}
@@ -227,7 +229,7 @@ const Grout: React.FC = () => {
           onChangeText={(text) => setE(text)}
           value={E}
           keyboardType="numeric"
-          placeholder="Saumattava alue (m²)"
+          placeholder={t('groutArea')}
         />
         <Button
           onPress={calculateConsumption}
@@ -235,21 +237,20 @@ const Grout: React.FC = () => {
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}
           mt="2"
         >
-          Laske
+          {t('calc')}
         </Button>
         {groutResult !== '' && (
           <Text mt="2" color="#fafafa" fontSize="lg">
-            Menekki: {groutResult} kg/m²
+            {t('consumption')} {groutResult} kg/m²
           </Text>
         )}
         {groutResult !== '' && (
           <Text color="#fafafa" fontSize="lg">
-            Menekki: {totalResult} kg/{E}m²
+            {t('consumption')} {totalResult} kg/{E}m²
           </Text>
         )}
         <Text mt="2" color="#fafafa">
-          Huomioi materiaalihukka! Laskelma on vain arvio menekistä eikä siinä
-          huomioida olosuhteita tai ainehukkaa.
+        {t('noticeTxt')}
         </Text>
         <ShoppingListSelect
           lists={lists}
@@ -261,14 +262,14 @@ const Grout: React.FC = () => {
           colorScheme="orange"
           _text={{ fontSize: 'lg', fontWeight: 'bold' }}
           mt="2" flex={1}>
-            Lisää listaan
+            {t('addToList')}
             </Button>
             <Button
               onPress={() => setShowModal(true)} colorScheme="orange"
               _text={{ fontSize: 'lg', fontWeight: 'bold' }}
                mt="2" flex={1}
             >
-              Uusi lista
+              {t('newList')}
             </Button>
           </Button.Group>
       </Box>
