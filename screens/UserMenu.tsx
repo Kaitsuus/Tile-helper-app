@@ -27,11 +27,19 @@ const UserMenu: React.FC = () => {
    * @var {Object} setUser - Function from AuthContext to set the user state.
    */
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const { userData } = useUserContext();
-  const [preffLang, setPreffLang] = useState(userData.languagePreference);
   const { setUser } = useAuth();
+
+    /**
+   * @function changeLanguage
+   * @description Handles the language change.
+   * @param {string} language - The language value.
+   */
+    const changeLanguage = (language: string) => {
+      i18n.changeLanguage(language);
+    };
 
   /**
    * @function handleLogout
@@ -69,21 +77,21 @@ const UserMenu: React.FC = () => {
       </TouchableOpacity>
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="63%">
         <Box flexDirection="row" alignItems="center" justifyContent="center">
-          <Select
-            bg="white"
-            selectedValue={preffLang}
-            minWidth="90"
-            _selectedItem={{
-              bg: 'orange.500',
-              endIcon: <CheckIcon size={3} />,
-            }}
-            mt={1}
-            onValueChange={(itemValue) => setPreffLang(itemValue)}
-          >
-            <Select.Item label="fi" value="fi" />
-            <Select.Item label="en" value="en" />
-            <Select.Item label="es" value="es" />
-          </Select>
+        <Select
+          bg="white"
+          placeholder=""
+          minWidth="200"
+          onValueChange={changeLanguage}
+          selectedValue={i18n.language}
+          _selectedItem={{
+            bg: 'orange.500',
+            endIcon: <CheckIcon size={3} />
+          }}
+        >
+          <Select.Item label="Finnish" value="fi" />
+          <Select.Item label="English" value="en" />
+          <Select.Item label="Estonian" value="es" />
+        </Select>
           <Button colorScheme="orange" marginLeft={2}>
           {t('save')}
           </Button>

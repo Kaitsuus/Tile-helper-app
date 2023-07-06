@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { TouchableOpacity, Alert, TextInput } from 'react-native';
-import { Button, Box, Text, Center, Heading, Image } from 'native-base';
+import { Button, Box, Text, Center, Heading, Image, Select, CheckIcon } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { HomeScreenNavigationProp } from '../src/types';
@@ -28,11 +28,20 @@ const Login: React.FC = () => {
    * @var {Object} navigation - Navigation object from react-navigation.
    */
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setUser } = useAuth();
   const navigation = useNavigation<HomeScreenNavigationProp>();
+
+  /**
+   * @function changeLanguage
+   * @description Handles the language change.
+   * @param {string} language - The language value.
+   */
+  const changeLanguage = (language: string) => {
+    i18n.changeLanguage(language);
+  };
 
   /**
    * @function handleLogin
@@ -106,6 +115,21 @@ const Login: React.FC = () => {
             {t('register')}
           </Text>
         </TouchableOpacity>
+        <Select
+          mt="2"
+          bg="white"
+          placeholder="Select Language"
+          onValueChange={changeLanguage}
+          selectedValue={i18n.language}
+          _selectedItem={{
+            bg: 'orange.500',
+            endIcon: <CheckIcon size={3} />
+          }}
+        >
+          <Select.Item label="Finnish" value="fi" />
+          <Select.Item label="English" value="en" />
+          <Select.Item label="Estonian" value="es" />
+        </Select>
       </Box>
       <Box
         w="100%"

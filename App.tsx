@@ -61,6 +61,7 @@ const Stack = createStackNavigator<RootStackParamList>();
  */
 const App: React.FC = () => {
   const [user, setUser] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
@@ -80,36 +81,36 @@ const App: React.FC = () => {
                     headerRight: () => <HeaderAvatar />
                   }}
                 >
-                  <Stack.Screen name="Home" component={Home} options={{ title: 'Home' }} />
+                  <Stack.Screen name="Home" component={Home} options={{ title: t('home') }} />
                   <Stack.Screen
                     name="Grout"
                     component={Grout}
-                    options={{ title: 'Grout' }}
+                    options={{ title: t('grout') }}
                   />
                   <Stack.Screen
                     name="Adhesive"
                     component={Adhesive}
-                    options={{ title: 'Adhesive' }}
+                    options={{ title: t('adhesive') }}
                   />
                   <Stack.Screen
                     name="WaterProof"
                     component={WaterProof}
-                    options={{ title: 'WaterProof' }}
+                    options={{ title: t('waterproof') }}
                   />
                   <Stack.Screen
                     name="Plaster"
                     component={Plaster}
-                    options={{ title: 'Plaster' }}
+                    options={{ title: t('plaster') }}
                   />
                   <Stack.Screen
                     name="ShoppingList"
                     component={ShoppingList}
-                    options={{ title: 'ShoppingList' }}
+                    options={{ title: t('list') }}
                   />
                   <Stack.Screen
                     name="UserMenu"
                     component={UserMenu}
-                    options={{ title: 'ShoppingList' }}
+                    options={{ title: t('userMenu') }}
                   />
                 </Stack.Group>
               ) : (
