@@ -11,6 +11,7 @@ import styles from '../src/styles/style';
 import { HomeScreenNavigationProp } from '../src/types';
 import { login } from '../service/auth';
 import { useAuth } from '../service/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 /**
  * @function Login
@@ -27,7 +28,7 @@ const Login: React.FC = () => {
    * @var {Object} navigation - Navigation object from react-navigation.
    */
 
-
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setUser } = useAuth();

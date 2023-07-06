@@ -20,9 +20,30 @@ import AuthContext from './service/AuthContext';
 import { UserProvider } from './service/UserContext';
 import HeaderAvatar from './src/components/HeaderAvatar';
 import HeaderLeft from './src/components/HeaderLeft';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+// Import language files
+import en from './src/data/lang/en.json';
+import fi from './src/data/lang/fi.json';
+
+
+// Initialize i18next
+i18n
+.use(initReactI18next)
+.init({
+  lng: 'fi', // Set the default language
+  resources: {
+    fi: { translation: fi },
+    en: { translation: en },
+  },
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 const Stack = createStackNavigator<RootStackParamList>();
-
 /**
  * @component App
  * @description The main App component.
@@ -33,6 +54,7 @@ const App: React.FC = () => {
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
+      <I18nextProvider i18n={i18n}>
       <NativeBaseProvider>
         <NavigationContainer>
           <UserProvider>
@@ -90,6 +112,7 @@ const App: React.FC = () => {
           </UserProvider>
         </NavigationContainer>
       </NativeBaseProvider>
+      </I18nextProvider>
     </AuthContext.Provider>
   );
 };
