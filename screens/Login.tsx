@@ -128,7 +128,8 @@ const Login: React.FC = () => {
         >
           <Select.Item label="Finnish" value="fi" />
           <Select.Item label="English" value="en" />
-          <Select.Item label="Estonian" value="es" />
+          <Select.Item label="Estonian" value="et" />
+          <Select.Item label="Swedish" value="sv" />
         </Select>
       </Box>
       <Box
