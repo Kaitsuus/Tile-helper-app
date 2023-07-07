@@ -12,6 +12,7 @@ import api from './api';
 export const signupUser = async (email, password) => {
   try {
     const response = await axios.post(api.users, { email, password });
+    console.log(response.data)
     return response.data;
   } catch (error) {
     if (error.response && error.response.data && error.response.data.error) {
