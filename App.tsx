@@ -31,6 +31,7 @@ import 'intl/locale-data/jsonp/fi';
 import en from './src/data/lang/en.json';
 import fi from './src/data/lang/fi.json';
 import et from './src/data/lang/et.json';
+import sv from './src/data/lang/sv.json';
 
 
 // Initialize i18next
@@ -44,6 +45,8 @@ i18n
     fi: { translation: fi },
     en: { translation: en },
     et: { translation: et },
+    sv: { translation: sv },
+
   },
   interpolation: {
     escapeValue: false,
