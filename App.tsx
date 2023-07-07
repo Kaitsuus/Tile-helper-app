@@ -30,7 +30,7 @@ import 'intl/locale-data/jsonp/fi';
 // Import language files
 import en from './src/data/lang/en.json';
 import fi from './src/data/lang/fi.json';
-import es from './src/data/lang/es.json';
+import et from './src/data/lang/et.json';
 
 
 // Initialize i18next
@@ -43,7 +43,7 @@ i18n
   resources: {
     fi: { translation: fi },
     en: { translation: en },
-    es: { translation: es },
+    et: { translation: et },
   },
   interpolation: {
     escapeValue: false,
