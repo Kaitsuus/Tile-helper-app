@@ -5,10 +5,12 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { signupUser } from '../service/auth';
 import { login } from '../service/auth';
+import { makeAuthenticatedRequest } from '../service/auth';
 import { BASE_URL } from '@env'; // Import the base URL
 
 jest.mock('axios'); // Mocking Axios
 jest.mock('@react-native-async-storage/async-storage');
+
 
 describe('signupUser', () => {
   beforeEach(() => {
@@ -94,3 +96,60 @@ describe('login', () => {
     await expect(login('test@example.com', 'password')).rejects.toThrow('Test error');
   });
 });
+describe('makeAuthenticatedRequest', () => {
+  const mockedData = {userId: "userId1"};
+  const url = '/testUrl';
+  const method = 'GET';
+
+  beforeEach(() => {
+    AsyncStorage.getItem.mockClear();
+    axios.mockClear();
+  });
+
+  it('fetches user data successfully by ID', async () => {
+    // Mock the getItem method to return a token
+    AsyncStorage.getItem.mockResolvedValue('testToken');
+  
+    // Mock axios to resolve to mockedData
+    axios.mockResolvedValue({data: mockedData});
+  
+    // Make the request
+    const result = await makeAuthenticatedRequest(url, method);
+  
+    // Verify the axios request was made with the correct parameters
+    expect(axios).toHaveBeenCalledWith({
+      method: method,
+      url: url,
+      data: null, // Add this line
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer testToken`,
+      },
+    });
+  
+    // Check that the function correctly returns the data
+    expect(result).toEqual({data: mockedData});
+  });
+
+  it('cannot fetch user data as Token is not available', async() => {
+
+    // Mock the getItem method to return null
+    AsyncStorage.getItem.mockResolvedValue(null);
+
+    await expect(makeAuthenticatedRequest(url, method)).rejects.toThrow('No token available. User is not logged in.');
+    expect(axios).not.toHaveBeenCalled();
+  });
+
+  it('throws an error when the axios request fails', async() => {
+    const error = new Error('Test error');
+
+    // Mock the getItem method to return a token
+    AsyncStorage.getItem.mockResolvedValue('testToken');
+
+    // Mock axios to reject with error
+    axios.mockRejectedValue(error);
+
+    await expect(makeAuthenticatedRequest(url, method)).rejects.toThrow('Test error');
+  });
+});
+
