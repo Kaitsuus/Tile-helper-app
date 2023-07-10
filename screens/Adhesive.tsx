@@ -41,7 +41,7 @@ const Adhesive: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [lists, setLists] = useState<ShoppingList[]>([]);
   const [brand, setBrand] = useState<string>(adhesiveOptions[0].value);
-  const [thickness, setThickness] = useState<string>('3.5');
+  const [thickness, setThickness] = useState<string>('');
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [adhesiveAmount, setAdhesiveAmount] = useState<string>('');
 
@@ -106,21 +106,16 @@ const Adhesive: React.FC = () => {
   const calculateConsumption = () => {
     const sqm = parseFloat(squareMeters);
     let consumption = 0;
-
-    switch (thickness) {
-      case '3.5':
-        consumption = 1.6;
-        break;
-      case '6':
-        consumption = 2.1;
-        break;
-      case '10':
-        consumption = 3.2;
-        break;
-      default:
-        consumption = 0;
+  
+    const selectedAdhesive = adhesiveOptions.find((option) => option.value === brand);
+    const selectedThicknessOption = selectedAdhesive?.thicknessOptions.find(
+      (option) => option.thickness === thickness
+    );
+  
+    if (selectedThicknessOption) {
+      consumption = selectedThicknessOption.consumption;
     }
-
+  
     const result = consumption * sqm;
     setAdhesiveAmount(result.toFixed(2));
   };
@@ -206,9 +201,15 @@ const Adhesive: React.FC = () => {
           mt={1}
           onValueChange={(itemValue) => setThickness(itemValue)}
         >
-          <Select.Item label="3.5 mm" value="3.5" />
-          <Select.Item label="6 mm" value="6" />
-          <Select.Item label="10 mm" value="10" />
+          {adhesiveOptions
+            .find((option) => option.value === brand)
+            ?.thicknessOptions.map((option) => (
+              <Select.Item
+                key={option.thickness}
+                label={option.label}
+                value={option.thickness} // Use `option.thickness` instead of `option.value`
+              />
+            ))}
         </Select>
         <Text mt="2" mb="2" color="#fafafa">
         {t('areInput')}
