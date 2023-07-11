@@ -54,4 +54,59 @@ export const adhesiveOptions = [
     ],
     url: 'https://www.litokol.it/it/adesivi-cementizi/355-powerflex-k50.html'
   },
+  {
+    label: 'Casco MultiFix',
+    value: 'Casco MultiFix',
+    thicknessOptions: [
+      { label: '3 mm', thickness: '3', consumption: 1.65 },
+      { label: '6 mm', thickness: '6', consumption: 2.4 },
+      { label: '8 mm', thickness: '8', consumption: 2.9 },
+      { label: '10 mm', thickness: '10', consumption: 3.4 },
+    ],
+    url: 'https://www.casco.eu/fi/tuotteet/?pc=111&p=777'
+  },
+  {
+    label: 'Casco MultiFix Premium',
+    value: 'Casco MultiFix Premium',
+    thicknessOptions: [
+      { label: '3 mm', thickness: '3', consumption: 1.25 },
+      { label: '6 mm', thickness: '6', consumption: 1.9 },
+      { label: '8 mm', thickness: '8', consumption: 2.4 },
+      { label: '10 mm', thickness: '10', consumption: 2.8 },
+    ],
+    url: 'https://www.casco.eu/fi/tuotteet/?pc=111&p=779'
+  },
+  {
+    label: 'Casco MultiFix SuperFlex',
+    value: 'Casco MultiFix SuperFlex',
+    thicknessOptions: [
+      { label: '3 mm', thickness: '3', consumption: 1.35 },
+      { label: '6 mm', thickness: '6', consumption: 1.7 },
+      { label: '8 mm', thickness: '8', consumption: 2.2 },
+      { label: '10 mm', thickness: '10', consumption: 2.7 },
+    ],
+    url: 'https://www.casco.eu/fi/tuotteet/?pc=111&p=782'
+  },
+  {
+    label: 'Weber Flex Fix',
+    value: 'Weber Flex Fix',
+    thicknessOptions: [
+      { label: '3 mm', thickness: '3', consumption: 1.75 },
+      { label: '6 mm', thickness: '6', consumption: 2.5 },
+      { label: '8 mm', thickness: '8', consumption: 3.0 },
+      { label: '10 mm', thickness: '10', consumption: 3.5 },
+    ],
+    url: 'https://www.fi.weber/laatoitusratkaisut-ja-tuotteet/kiinnityslaastit/weber-flex-fix-superjoustava-kiinnityslaasti#tab-product_documentation'
+  },
+  {
+    label: 'Weber Rex Fix',
+    value: 'Weber Rex Fix',
+    thicknessOptions: [
+      { label: '3 mm', thickness: '3', consumption: 2.5 },
+      { label: '6 mm', thickness: '6', consumption: 3.0 },
+      { label: '8 mm', thickness: '8', consumption: 3.5 },
+      { label: '10 mm', thickness: '10', consumption: 4.0 },
+    ],
+    url: 'https://www.fi.weber/laatoitusratkaisut-ja-tuotteet/kiinnityslaastit/weber-rex-fix-saneerauslaasti#tab-product_documentation'
+  },
 ]
