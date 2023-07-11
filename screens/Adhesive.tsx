@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Alert } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
+import { MaterialIcons } from '@expo/vector-icons';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
@@ -12,6 +13,7 @@ import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 import { useTranslation } from 'react-i18next';
+import InfoModal from '../src/components/InfoModal';
 
 /**
  * Adhesive is a React functional component used for adhesive calculations.
@@ -39,6 +41,7 @@ const Adhesive: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
   const [lists, setLists] = useState<ShoppingList[]>([]);
   const [brand, setBrand] = useState<string>(adhesiveOptions[0].value);
   const [thickness, setThickness] = useState<string>('');
@@ -225,7 +228,7 @@ const Adhesive: React.FC = () => {
         <Button
           colorScheme="orange"
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}
-          mt="2"
+          mt="2" mb="1"
           onPress={calculateConsumption}
         >
           {t('calc')}
@@ -235,9 +238,6 @@ const Adhesive: React.FC = () => {
             {t('adhesiveAmount')} {adhesiveAmount} kg
           </Text>
         )}
-        <Text mt="2" color="#fafafa">
-        {t('noticeTxt')}
-        </Text>
         <ShoppingListSelect
           lists={lists}
           currentListIndex={currentListIndex}
@@ -268,11 +268,21 @@ const Adhesive: React.FC = () => {
         opacity="100"
         roundedTopLeft="20"
         zIndex="-10"
-      ></Box>
+      >
+        <TouchableOpacity onPress={() => setShowInfoModal(true)}>
+          <Box position="absolute" top={1} right={1} p={2}>
+            <MaterialIcons name="info-outline" size={24} color="orange" />
+          </Box>
+        </TouchableOpacity>
+      </Box>
         <CreateListModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         createNewList={createNewList}
+      />
+      <InfoModal 
+      isOpen={showInfoModal}
+      onClose={() => setShowInfoModal(false)}
       />
     </Center>
   );

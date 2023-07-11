@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Alert, Keyboard } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
+import { MaterialIcons } from '@expo/vector-icons';
 import { groutOptions } from '../src/data/groutMockData';
 import styles from '../src/styles/style';
 import api from '../service/api';
@@ -11,6 +12,7 @@ import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/typ
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
+import InfoModal from '../src/components/InfoModal';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -42,11 +44,13 @@ const Grout: React.FC = () => {
   const { currentListIndex, setCurrentListIndex } = useUserContext();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [showModal, setShowModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [lists, setLists] = useState<ShoppingList[]>([]);
   const [brand, setBrand] = useState<string>(groutOptions[0].value);
   const [groutResult, setGroutResult] = useState<string>('');
   const [totalResult, setTotalResult] = useState<string>('');
+  const [color, setColor] = useState<string>('');
   const [A, setA] = useState<string>(''); // tile height mm
   const [B, setB] = useState<string>(''); // tile width mm
   const [C, setC] = useState<string>(''); // tile thickness mm
@@ -138,7 +142,7 @@ const Grout: React.FC = () => {
     const newItem: Omit<ShoppingItem, '_id'> = {
       amount: 0,
       content: {
-        name: `${brand}`,
+        name: `${brand} ${color}`,
         amount: parseFloat(totalResult),
         unit: 'kg',
       },
@@ -167,30 +171,52 @@ const Grout: React.FC = () => {
   return (
     <Center w="100%" flex={1} px="3" background="#D9D9D9">
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="65%">
-        <Select
-          bg="white"
-          selectedValue={brand}
-          minWidth="200"
-          accessibilityLabel={t('productLabel')}
-          placeholder={t('productLabel')}
-          _selectedItem={{
-            bg: 'orange.500',
-            endIcon: <CheckIcon size="5" />
-          }}
-          mt={1}
-          onValueChange={(itemValue) => setBrand(itemValue)}
-        >
-          {groutOptions.map((option) => (
-            <Select.Item
-              key={option.value}
-              label={option.label}
-              value={option.value}
-            />
-          ))}
-        </Select>
-        <Text mt="2" mb="2" color="#fafafa">
-        {t('inputTile')}
-        </Text>
+      <Box flexDirection="row" marginBottom={2}>
+      <Select
+        bg="white"
+        selectedValue={brand}
+        minWidth="190"
+        accessibilityLabel={t('productLabel')}
+        placeholder={t('productLabel')}
+        _selectedItem={{
+          bg: 'orange.500',
+          endIcon: <CheckIcon size="5" />
+        }}
+        mt={1}
+        onValueChange={(itemValue) => setBrand(itemValue)}
+      >
+        {groutOptions.map((option) => (
+          <Select.Item
+            key={option.value}
+            label={option.label}
+            value={option.value}
+          />
+        ))}
+      </Select>
+      <Box width={2} />
+      <Select
+        bg="white"
+        pr={2}
+        selectedValue={color}
+        minWidth="75"
+        accessibilityLabel='color'
+        placeholder='color'
+        _selectedItem={{
+          bg: 'orange.500',
+          endIcon: <CheckIcon size="5" />
+        }}
+        mt={1}
+        onValueChange={(itemValue) => setColor(itemValue)}
+      >
+        {groutOptions.find((option) => option.value === brand)?.color.map((colorOption) => (
+          <Select.Item
+            key={colorOption}
+            label={colorOption}
+            value={colorOption}
+          />
+        ))}
+      </Select>
+    </Box>
         <MaskedTextInput
           style={styles.input}
           mask="9999"
@@ -236,6 +262,7 @@ const Grout: React.FC = () => {
           colorScheme="orange"
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}
           mt="2"
+          mb="1"
         >
           {t('calc')}
         </Button>
@@ -249,9 +276,6 @@ const Grout: React.FC = () => {
             {t('consumption')} {totalResult} kg/{E}m²
           </Text>
         )}
-        <Text mt="2" color="#fafafa">
-        {t('noticeTxt')}
-        </Text>
         <ShoppingListSelect
           lists={lists}
           currentListIndex={currentListIndex}
@@ -282,11 +306,21 @@ const Grout: React.FC = () => {
         opacity="100"
         roundedTopLeft="20"
         zIndex="-10"
-      ></Box>
+      >
+        <TouchableOpacity onPress={() => setShowInfoModal(true)}>
+          <Box position="absolute" top={1} right={1} p={2}>
+            <MaterialIcons name="info-outline" size={24} color="orange" />
+          </Box>
+        </TouchableOpacity>
+      </Box>
         <CreateListModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         createNewList={createNewList}
+      />
+      <InfoModal 
+      isOpen={showInfoModal}
+      onClose={() => setShowInfoModal(false)}
       />
     </Center>
   );

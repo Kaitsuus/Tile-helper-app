@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Alert } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
+import { MaterialIcons } from '@expo/vector-icons';
 import { waterproofOptions } from '../src/data/waterproofMockData';
 import styles from '../src/styles/style';
 import api from '../service/api';
@@ -12,6 +13,7 @@ import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 import { useTranslation } from 'react-i18next';
+import InfoModal from '../src/components/InfoModal';
 
 /**
  * Waterproof is a React functional component used for waterproof calculations.
@@ -45,6 +47,7 @@ const WaterProof: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
   const [lists, setLists] = useState<ShoppingList[]>([]);
   const [brand, setBrand] = useState<string>(waterproofOptions[0].value);
   const [floorlitre, setFloorlitre] = useState<string>('');
@@ -331,9 +334,6 @@ const WaterProof: React.FC = () => {
             {t('wallConsumption')} {wallKilos}kg / {wallLitres}l
           </Text>
         )}
-        <Text mt="2" color="#fafafa">
-        {t('noticeTxt')}
-        </Text>
         <ShoppingListSelect
           lists={lists}
           currentListIndex={currentListIndex}
@@ -364,11 +364,21 @@ const WaterProof: React.FC = () => {
         opacity={100}
         roundedTopLeft={20}
         zIndex={-10}
-      ></Box>
+      >
+        <TouchableOpacity onPress={() => setShowInfoModal(true)}>
+          <Box position="absolute" top={1} right={1} p={2}>
+            <MaterialIcons name="info-outline" size={24} color="orange" />
+          </Box>
+        </TouchableOpacity>
+      </Box>
         <CreateListModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         createNewList={createNewList}
+      />
+      <InfoModal 
+      isOpen={showInfoModal}
+      onClose={() => setShowInfoModal(false)}
       />
     </Center>
   );
