@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Alert } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
 import styles from '../src/styles/style';
 import { plasterOptions } from '../src/data/plasterMockData';
 import api from '../service/api';
+import { MaterialIcons } from '@expo/vector-icons';
 import { fetchAndTransformLists, makeAuthenticatedRequest } from '../service/auth';
 import { ShoppingList, ShoppingItem, HomeScreenNavigationProp } from '../src/types'
 import ShoppingListSelect from '../src/components/ShoppingListSelect';
 import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 import { useTranslation } from 'react-i18next';
+import InfoModal from '../src/components/InfoModal';
 
 /**
  * Plaster is a React functional component used for plaster calculations.
@@ -38,6 +40,7 @@ const Plaster: React.FC = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
   const [lists, setLists] = useState<ShoppingList[]>([]);
   const [brand, setBrand] = useState<string>(plasterOptions[0].value);
   const [squareMeters, setSquareMeters] = useState<string>('');
@@ -189,7 +192,7 @@ const Plaster: React.FC = () => {
         <Button
           colorScheme="orange"
           _text={{ fontSize: 'xl', fontWeight: 'bold' }}
-          mt="2"
+          mt="2" mb="1"
           onPress={calculateConsumption}
         >
           {t('calc')}
@@ -199,9 +202,6 @@ const Plaster: React.FC = () => {
             {t('plasterAmount')} {plasterAmount} kg
           </Text>
         )}
-        <Text mt="2" color="#fafafa">
-        {t('noticeTxt')}
-        </Text>
         <ShoppingListSelect
           lists={lists}
           currentListIndex={currentListIndex}
@@ -232,11 +232,21 @@ const Plaster: React.FC = () => {
         opacity="100"
         roundedTopLeft="20"
         zIndex="-10"
-      ></Box>
+      >
+        <TouchableOpacity onPress={() => setShowInfoModal(true)}>
+          <Box position="absolute" top={1} right={1} p={2}>
+            <MaterialIcons name="info-outline" size={24} color="orange" />
+          </Box>
+        </TouchableOpacity>
+      </Box>
         <CreateListModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         createNewList={createNewList}
+      />
+      <InfoModal 
+      isOpen={showInfoModal}
+      onClose={() => setShowInfoModal(false)}
       />
     </Center>
   );
