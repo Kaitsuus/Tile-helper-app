@@ -241,40 +241,41 @@ const ShoppingList: React.FC = () => {
     
     return (
       <Box
-        p={4}
-        borderBottomWidth={1}
-        borderBottomColor="gray"
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
+      p={4}
+      borderBottomWidth={1}
+      borderBottomColor="gray"
+      flexDirection="row"
+      alignItems="center"
+    >
+      <Box flex={1} pr={1}>
         <Text>{content.name}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <TextInput
-            value={editingAmount !== null && index === editingAmount.index ? editingAmount.value.toString() : content.amount.toString()}
-            onChangeText={(text) => setEditingAmount({ index, value: Number(text) })}
-            onBlur={() => {
-              if (editingAmount !== null && index === editingAmount.index) {
-                updateAmount(editingAmount.index, editingAmount.value);
-                setEditingAmount(null);
-              }
-            }}
-            keyboardType="numeric"
-            style={{
-              borderWidth: 1,
-              borderColor: 'gray',
-              borderRadius: 4,
-              padding: 8,
-              marginRight: 8,
-              width: 60,
-            }}
-          />
-          <Text>{content.unit}</Text>
-          <TouchableOpacity onPress={() => deleteItem(index)}>
-            <Text style={{ color: 'red', marginLeft: 10 }}>Delete</Text>
-          </TouchableOpacity>
-        </View>
       </Box>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <TextInput
+          value={editingAmount !== null && index === editingAmount.index ? editingAmount.value.toString() : content.amount.toString()}
+          onChangeText={(text) => setEditingAmount({ index, value: Number(text) })}
+          onBlur={() => {
+            if (editingAmount !== null && index === editingAmount.index) {
+              updateAmount(editingAmount.index, editingAmount.value);
+              setEditingAmount(null);
+            }
+          }}
+          keyboardType="numeric"
+          style={{
+            borderWidth: 1,
+            borderColor: 'gray',
+            borderRadius: 4,
+            padding: 8,
+            marginRight: 8,
+            width: 60,
+          }}
+        />
+        <Text>{content.unit}</Text>
+      </View>
+      <TouchableOpacity onPress={() => deleteItem(index)}>
+        <Text style={{ color: 'red', marginLeft: 10 }}>Delete</Text>
+      </TouchableOpacity>
+    </Box>
     );
   };
 
