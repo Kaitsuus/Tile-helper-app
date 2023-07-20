@@ -56,5 +56,8 @@
     "review": "Review",
     "privacy": "Privacy",
     "deleteAccount": "Delete Account",
-    "createNewList": "Create new list"
+    "createNewList": "Create new list",
+    "errorEmail": "Email is required to reset password.",
+    "succesPasswordReset": "Password reset successful. Check your email for instructions.",
+    "forgotPassword": "Forgot your Password?"
     }

@@ -56,6 +56,9 @@
     "review": "Arvostele",
     "privacy": "Tietosuoja",
     "deleteAccount": "Poista Tili",
-    "createNewList": "Luo uusi lista"
+    "createNewList": "Luo uusi lista",
+    "errorEmail": "Sähköposti vaaditaan salasanan nollaukseen.",
+    "succesPasswordReset": "Salasanan nollaus onnistui. Tarkista sähköpostisi ohjeita varten.",
+    "forgotPassword": "Unohditko salasanasi?"
 }
   

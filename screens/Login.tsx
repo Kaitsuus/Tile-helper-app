@@ -89,7 +89,7 @@ const Login: React.FC = () => {
     if (!email) {
       Toast.show({
         title: 'Error',
-        description: 'Email is required to reset password.',
+        description: t('errorEmail'),
         duration: 4000,
       });
       return;
@@ -102,7 +102,7 @@ const Login: React.FC = () => {
       Toast.show({
         title: 'Success',
         variant: "subtle",
-        description: 'Password reset successful. Check your email for instructions.',
+        description: t('succesPasswordReset'),
         duration: 4000,
       });
     } catch (error) {
@@ -183,7 +183,7 @@ const Login: React.FC = () => {
         <TouchableOpacity onPress={() => handleResetPassword(email)} style={{marginLeft: -2 }}>
           <Text style={{ color: '#EF6F20', fontWeight: '600', fontSize: 14 }}>
             {' '}
-            {'Unohditko salasanan?'}
+            {t('forgotPassword')}
           </Text>
         </TouchableOpacity>
         <Select
