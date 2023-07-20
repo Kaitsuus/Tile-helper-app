@@ -28,6 +28,7 @@ const Adhesive: React.FC = () => {
   /**
    * @typedef {Object} State
    * @property {boolean} showModal - State for managing visibility of the modal.
+   * @property {boolean} showInfoModal - State for managing visibility of the modal.
    * @property {ShoppingItem[]} items - State for managing shopping items.
    * @property {ShoppingList[]} lists - State for managing shopping lists.
    * @property {string} brand - State for managing the selected adhesive brand.

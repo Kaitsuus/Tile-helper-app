@@ -8,7 +8,7 @@ export const adhesiveOptions = [
       { label: '8 mm', thickness: '8', consumption: 2.55 },
       { label: '10 mm', thickness: '10', consumption: 3.25 },
     ],
-    url: 'https://www.kiilto.fi/tuote/kiilto-superfix-df-vaalea-saneerauslaasti/'
+    url: 'https://www.kiilto.fi/tuote/kiilto-superfix-df-vaalea-saneerauslaasti/',
   },
   {
     label: 'Ardex X77',
@@ -19,7 +19,7 @@ export const adhesiveOptions = [
       { label: '8 mm', thickness: '8', consumption: 2.2 },
       { label: '10 mm', thickness: '10', consumption: 2.8 },
     ],
-    url: 'https://ardex.fi/product/ardex-x-77/'
+    url: 'https://ardex.fi/product/ardex-x-77/',
   },
   {
     label: 'Ardex X78',
@@ -30,7 +30,7 @@ export const adhesiveOptions = [
       { label: '8 mm', thickness: '8', consumption: 2.7 },
       { label: '10 mm', thickness: '10', consumption: 3.26 },
     ],
-    url: 'https://ardex.fi/product/ardex-x-78/'
+    url: 'https://ardex.fi/product/ardex-x-78/',
   },
   {
     label: 'Litokol K100',
@@ -41,7 +41,7 @@ export const adhesiveOptions = [
       { label: '8 mm', thickness: '8', consumption: 2.5 },
       { label: '10 mm', thickness: '10', consumption: 3.2 },
     ],
-    url: 'https://www.litokol.it/en/powder-adhesives/357-hyperflex-k100.html'
+    url: 'https://www.litokol.it/en/powder-adhesives/357-hyperflex-k100.html',
   },
   {
     label: 'Litokol K50',
@@ -52,7 +52,7 @@ export const adhesiveOptions = [
       { label: '8 mm', thickness: '8', consumption: 3.25 },
       { label: '10 mm', thickness: '10', consumption: 4 },
     ],
-    url: 'https://www.litokol.it/it/adesivi-cementizi/355-powerflex-k50.html'
+    url: 'https://www.litokol.it/it/adesivi-cementizi/355-powerflex-k50.html',
   },
   {
     label: 'Casco MultiFix',
@@ -63,7 +63,7 @@ export const adhesiveOptions = [
       { label: '8 mm', thickness: '8', consumption: 2.9 },
       { label: '10 mm', thickness: '10', consumption: 3.4 },
     ],
-    url: 'https://www.casco.eu/fi/tuotteet/?pc=111&p=777'
+    url: 'https://www.casco.eu/fi/tuotteet/?pc=111&p=777',
   },
   {
     label: 'Casco MultiFix Premium',
@@ -74,7 +74,7 @@ export const adhesiveOptions = [
       { label: '8 mm', thickness: '8', consumption: 2.4 },
       { label: '10 mm', thickness: '10', consumption: 2.8 },
     ],
-    url: 'https://www.casco.eu/fi/tuotteet/?pc=111&p=779'
+    url: 'https://www.casco.eu/fi/tuotteet/?pc=111&p=779',
   },
   {
     label: 'Casco MultiFix SuperFlex',
@@ -85,7 +85,7 @@ export const adhesiveOptions = [
       { label: '8 mm', thickness: '8', consumption: 2.2 },
       { label: '10 mm', thickness: '10', consumption: 2.7 },
     ],
-    url: 'https://www.casco.eu/fi/tuotteet/?pc=111&p=782'
+    url: 'https://www.casco.eu/fi/tuotteet/?pc=111&p=782',
   },
   {
     label: 'Weber Flex Fix',
@@ -96,7 +96,7 @@ export const adhesiveOptions = [
       { label: '8 mm', thickness: '8', consumption: 3.0 },
       { label: '10 mm', thickness: '10', consumption: 3.5 },
     ],
-    url: 'https://www.fi.weber/laatoitusratkaisut-ja-tuotteet/kiinnityslaastit/weber-flex-fix-superjoustava-kiinnityslaasti#tab-product_documentation'
+    url: 'https://www.fi.weber/laatoitusratkaisut-ja-tuotteet/kiinnityslaastit/weber-flex-fix-superjoustava-kiinnityslaasti#tab-product_documentation',
   },
   {
     label: 'Weber Rex Fix',
@@ -107,6 +107,6 @@ export const adhesiveOptions = [
       { label: '8 mm', thickness: '8', consumption: 3.5 },
       { label: '10 mm', thickness: '10', consumption: 4.0 },
     ],
-    url: 'https://www.fi.weber/laatoitusratkaisut-ja-tuotteet/kiinnityslaastit/weber-rex-fix-saneerauslaasti#tab-product_documentation'
+    url: 'https://www.fi.weber/laatoitusratkaisut-ja-tuotteet/kiinnityslaastit/weber-rex-fix-saneerauslaasti#tab-product_documentation',
   },
-]
+];
