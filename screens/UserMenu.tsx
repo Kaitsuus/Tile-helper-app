@@ -8,8 +8,9 @@ import { TouchableOpacity } from 'react-native';
 import { Center, Avatar, Box, Text, Select, CheckIcon, Button } from 'native-base';
 import { useUserContext } from '../service/UserContext';
 import { useAuth } from '../service/AuthContext';
-import { deleteUserFromDB } from '../service/auth';
+import { deleteUserFromDB, changePassword } from '../service/auth';
 import DeleteUserModal from '../src/components/DeleteUserModal';
+import ChangePasswordModal from '../src/components/ChangePasswordModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 
@@ -29,6 +30,7 @@ const UserMenu: React.FC = () => {
 
   const { t, i18n } = useTranslation();
   const [showModal, setShowModal] = useState(false);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const { userData } = useUserContext();
   const { setUser } = useAuth();
 
@@ -103,8 +105,8 @@ const UserMenu: React.FC = () => {
         <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2}>
         {t('privacy')}
         </Button>
-        <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2}>
-          Report Bug
+        <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2} onPress={() => setShowChangePasswordModal(true)}>
+          Vaihda salasana
         </Button>
         <Button onPress={() => setShowModal(true)} colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2}>
         {t('deleteAccount')}
@@ -125,6 +127,11 @@ const UserMenu: React.FC = () => {
         onClose={() => setShowModal(false)}
         deleteUser={deleteUser}
         userId={userData.id}
+      />
+      <ChangePasswordModal
+        isOpen={showChangePasswordModal}
+        onClose={() => setShowChangePasswordModal(false)}
+        updatePassword={changePassword}
       />
     </Center>
   );

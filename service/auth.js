@@ -193,6 +193,48 @@ export const deleteItemFromDB = async (listId, itemId) => {
 };
 
 /**
+ * Change the user's password with the provided old and new password.
+ * @param {string} oldPassword - The user's old password.
+ * @param {string} newPassword - The user's new password.
+ * @returns {Promise<Object>} A promise that resolves to the response data.
+ * @throws {Error} If there is an error during the change password process.
+ */
+export const changePassword = async (oldPassword, newPassword) => {
+  try {
+    const token = await AsyncStorage.getItem('token'); // Retrieve the token from local storage
+    // Check if the token is available
+    if (!token) {
+      throw new Error('No token available. User is not logged in.');
+    }
+    const response = await axios.put(
+      `${api.users}/change-password`,
+      {
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log('Change password response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error during change password:', error);
+
+    if (error.response && error.response.data && error.response.data.error) {
+      // Throw a custom error with the error message from the server
+      throw new Error(error.response.data.error);
+    } else {
+      // Throw the original error if there's no custom error message from the server
+      throw error;
+    }
+  }
+};
+
+/**
  * Delete a list from the database.
  * @param {string} listId - The list ID.
  * @throws {Error} If there is an error during the delete list process.
