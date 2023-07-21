@@ -64,5 +64,9 @@
     "oldPassword": "Vana parool",
     "newPassword": "Uus parool",
     "newPasswordAgain": "Uus parool uuesti",
-    "changePassword": "Muuda parooli"
+    "changePassword": "Muuda parooli",
+    "noLink": "Ei saanud kinnitamise linki",
+    "enterEmail": "Palun sisesta e-posti aadress",
+    "LinkSentTo": "Kinnituslink saadetud aadressile",
+    "requestLink": "Päri kinnituslinki"
     }

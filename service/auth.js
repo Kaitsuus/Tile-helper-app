@@ -50,6 +50,33 @@ export const resetPassword = async (email) => {
 };
 
 /**
+ * Request verification link with the provided email.
+ * @param {string} email - The user's email.
+ * @returns {Promise<Object>} A promise that resolves to the response data.
+ * @throws {Error} If there is an error during the signup process.
+ */
+export const verificationLink = async (email) => {
+  try {
+    const response = await axios.post(
+      `${api.users}/request-verification-email`,
+      {
+        email,
+      }
+    );
+    console.log('reset responso ', response.data);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+      // Throw a custom error with the error message from the server
+      throw new Error(error.response.data.error);
+    } else {
+      // Throw the original error if there's no custom error message from the server
+      throw error;
+    }
+  }
+};
+
+/**
  * Log in a user with the provided email and password.
  * @param {string} email - The user's email.
  * @param {string} password - The user's password.
