@@ -26,6 +26,30 @@ export const signupUser = async (email, password) => {
 };
 
 /**
+ * Request password reset with the provided email.
+ * @param {string} email - The user's email.
+ * @returns {Promise<Object>} A promise that resolves to the response data.
+ * @throws {Error} If there is an error during the signup process.
+ */
+export const resetPassword = async (email) => {
+  try {
+    const response = await axios.post(`${api.users}/request-new-password`, {
+      email,
+    });
+    console.log('reset responso ', response.data);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+      // Throw a custom error with the error message from the server
+      throw new Error(error.response.data.error);
+    } else {
+      // Throw the original error if there's no custom error message from the server
+      throw error;
+    }
+  }
+};
+
+/**
  * Log in a user with the provided email and password.
  * @param {string} email - The user's email.
  * @param {string} password - The user's password.
@@ -167,6 +191,48 @@ export const deleteItemFromDB = async (listId, itemId) => {
   } catch (error) {
     console.error('Error during delete item from DB:', error);
     throw error;
+  }
+};
+
+/**
+ * Change the user's password with the provided old and new password.
+ * @param {string} oldPassword - The user's old password.
+ * @param {string} newPassword - The user's new password.
+ * @returns {Promise<Object>} A promise that resolves to the response data.
+ * @throws {Error} If there is an error during the change password process.
+ */
+export const changePassword = async (oldPassword, newPassword) => {
+  try {
+    const token = await AsyncStorage.getItem('token'); // Retrieve the token from local storage
+    // Check if the token is available
+    if (!token) {
+      throw new Error('No token available. User is not logged in.');
+    }
+    const response = await axios.put(
+      `${api.users}/change-password`,
+      {
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log('Change password response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error during change password:', error);
+
+    if (error.response && error.response.data && error.response.data.error) {
+      // Throw a custom error with the error message from the server
+      throw new Error(error.response.data.error);
+    } else {
+      // Throw the original error if there's no custom error message from the server
+      throw error;
+    }
   }
 };
 

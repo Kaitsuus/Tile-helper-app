@@ -4,12 +4,12 @@
  */
 
 import React, { useState } from 'react';
-import { TouchableOpacity, Alert, TextInput } from 'react-native';
-import { Button, Box, Text, Center, Heading, Image, Select, CheckIcon } from 'native-base';
+import { TouchableOpacity, TextInput } from 'react-native';
+import { Button, Box, Text, Center, Heading, Image, Select, CheckIcon, Spinner, Toast, HStack } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { HomeScreenNavigationProp } from '../src/types';
-import { login } from '../service/auth';
+import { login, resetPassword } from '../service/auth';
 import { useAuth } from '../service/AuthContext';
 import { useTranslation } from 'react-i18next';
 
@@ -24,6 +24,7 @@ const Login: React.FC = () => {
    * @typedef {Object} State
    * @property {string} email - The email input state.
    * @property {string} password - The password input state.
+   * @property {boolean} loading - The loading state.
    * @property {function} setUser - Function from AuthContext to set the user state.
    * @var {Object} navigation - Navigation object from react-navigation.
    */
@@ -31,6 +32,7 @@ const Login: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const { setUser } = useAuth();
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
@@ -50,14 +52,68 @@ const Login: React.FC = () => {
    * @param {string} password - The password input value.
    */
   const handleLogin = async (email: string, password: string) => {
+    // Check if the loading state is true, if yes, return early
+    if (loading) {
+      return;
+    }
+
     try {
+      setLoading(true); // Set loading state to true when starting the login process
       const response = await login(email, password);
       console.log('Login successful:', response.data);
-      setUser(true); // Update the user state after successful login
+      setUser(true);
     } catch (error) {
       console.error('Login failed:', error);
-      // Show the custom error message from the server in an alert
-      Alert.alert('Error', error.message);
+      Toast.show({
+        title: 'Error',
+        variant: "subtle",
+        description: error.message,
+        duration: 4000,
+      });
+    } finally {
+      setLoading(false); // Set loading state to false when login process is done
+    }
+  };
+
+  /**
+   * @function handleResetPassword
+   * @description Handles the password reset process.
+   * @param {string} email - The email input value.
+   */
+
+  const handleResetPassword = async (email: string) => {
+    // Check if the loading state is true, if yes, return early
+    if (loading) {
+      return;
+    }
+    if (!email) {
+      Toast.show({
+        title: 'Error',
+        description: t('errorEmail'),
+        duration: 4000,
+      });
+      return;
+    }
+    try {
+      setLoading(true); // Set loading state to true when starting the password reset process
+      const response = await resetPassword(email);
+      console.log('Reset successful:', response.data);
+      Toast.show({
+        title: 'Success',
+        variant: "subtle",
+        description: t('succesPasswordReset'),
+        duration: 4000,
+      });
+    } catch (error) {
+      console.error('Reset failed:', error);
+      Toast.show({
+        title: 'Error',
+        variant: "subtle",
+        description: error.message,
+        duration: 4000,
+      });
+    } finally {
+      setLoading(false); // Set loading state to false when password reset process is done
     }
   };
 
@@ -65,6 +121,7 @@ const Login: React.FC = () => {
    * @function handleSignupPress
    * @description Handles the press event on the signup button.
    */
+  
   const handleSignupPress = () => {
     navigation.navigate('Signup')
   }
@@ -80,6 +137,14 @@ const Login: React.FC = () => {
       />
       </Box>
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="80%">
+      {loading && 
+      <HStack space={8} justifyContent="center" alignItems="center">
+      <Spinner accessibilityLabel="Loading" size={'lg'} color={"orange.400"}/>
+      <Heading color="orange.400" fontSize="lg">
+        Loading
+      </Heading>
+      </HStack>
+      }
       <Heading size="2xl" color="#D9D9D9" py="2" textAlign="center">
       {t('login')}
       </Heading>
@@ -113,6 +178,12 @@ const Login: React.FC = () => {
           <Text style={{ color: '#EF6F20', fontWeight: '600', fontSize: 14 }}>
             {' '}
             {t('register')}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleResetPassword(email)} style={{marginLeft: -2 }}>
+          <Text style={{ color: '#EF6F20', fontWeight: '600', fontSize: 14 }}>
+            {' '}
+            {t('forgotPassword')}
           </Text>
         </TouchableOpacity>
         <Select

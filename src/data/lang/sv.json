@@ -56,5 +56,13 @@
     "review": "Recension",
     "privacy": "Integritet",
     "deleteAccount": "Radera konto",
-    "createNewList": "Skapa ny lista"
+    "createNewList": "Skapa ny lista",
+    "errorEmail": "E-post krävs för att återställa lösenordet.",
+    "succesPasswordReset": "Lösenordet har återställts. Kontrollera din e-post för instruktioner.",
+    "forgotPassword": "Glömt ditt lösenord?",
+    "update": "Uppdatera",
+    "oldPassword": "Gammalt lösenord",
+    "newPassword": "Nytt lösenord",
+    "newPasswordAgain": "Nytt lösenord igen",
+    "changePassword": "Ändra lösenord"
     }
