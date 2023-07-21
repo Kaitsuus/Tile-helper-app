@@ -80,12 +80,12 @@ const Login: React.FC = () => {
    * @description Handles the password reset process.
    * @param {string} email - The email input value.
    */
+
   const handleResetPassword = async (email: string) => {
     // Check if the loading state is true, if yes, return early
     if (loading) {
       return;
     }
-
     if (!email) {
       Toast.show({
         title: 'Error',
@@ -94,7 +94,6 @@ const Login: React.FC = () => {
       });
       return;
     }
-
     try {
       setLoading(true); // Set loading state to true when starting the password reset process
       const response = await resetPassword(email);
@@ -122,6 +121,7 @@ const Login: React.FC = () => {
    * @function handleSignupPress
    * @description Handles the press event on the signup button.
    */
+  
   const handleSignupPress = () => {
     navigation.navigate('Signup')
   }

@@ -106,7 +106,7 @@ const UserMenu: React.FC = () => {
         {t('privacy')}
         </Button>
         <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2} onPress={() => setShowChangePasswordModal(true)}>
-          Vaihda salasana
+          {t('changePassword')}
         </Button>
         <Button onPress={() => setShowModal(true)} colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2}>
         {t('deleteAccount')}

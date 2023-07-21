@@ -59,5 +59,10 @@
     "createNewList": "Loo uus nimekiri",
     "errorEmail": "Parooli lähtestamiseks on vajalik e-posti aadress.",
     "succesPasswordReset": "Parooli lähtestamine õnnestus. Vaata oma e-posti juhiste saamiseks.",
-    "forgotPassword": "Unustasid oma parooli?"
+    "forgotPassword": "Unustasid oma parooli?",
+    "update": "Uuenda",
+    "oldPassword": "Vana parool",
+    "newPassword": "Uus parool",
+    "newPasswordAgain": "Uus parool uuesti",
+    "changePassword": "Muuda parooli"
     }

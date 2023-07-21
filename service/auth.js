@@ -33,8 +33,10 @@ export const signupUser = async (email, password) => {
  */
 export const resetPassword = async (email) => {
   try {
-    const response = await axios.post(`${api.users}/request-new-password`, { email });
-    console.log('reset responso ',response.data);
+    const response = await axios.post(`${api.users}/request-new-password`, {
+      email,
+    });
+    console.log('reset responso ', response.data);
     return response.data;
   } catch (error) {
     if (error.response && error.response.data && error.response.data.error) {

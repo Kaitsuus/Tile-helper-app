@@ -59,5 +59,10 @@
     "createNewList": "Create new list",
     "errorEmail": "Email is required to reset password.",
     "succesPasswordReset": "Password reset successful. Check your email for instructions.",
-    "forgotPassword": "Forgot your Password?"
+    "forgotPassword": "Forgot your Password?",
+    "update": "Update",
+    "oldPassword": "Old Password",
+    "newPassword": "New Password",
+    "newPasswordAgain": "New Password again",
+    "changePassword": "Change Password"
     }
