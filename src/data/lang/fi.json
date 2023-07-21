@@ -64,6 +64,10 @@
     "oldPassword": "Vanha salasana",
     "newPassword": "Uusi salasana",
     "newPasswordAgain": "Uusi salasana uudelleen",
-    "changePassword": "Vaihda salasana"
+    "changePassword": "Vaihda salasana",
+    "noLink": "En saanut vahvistuslinkkiä",
+    "enterEmail": "Syötä sähköpostiosoite",
+    "LinkSentTo": "Vahvistuslinkki lähetetty osoitteeseen",
+    "requestLink": "Pyydä vahvistuslinkkiä"
 }
   

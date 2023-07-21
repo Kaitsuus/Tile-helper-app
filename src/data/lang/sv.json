@@ -64,5 +64,9 @@
     "oldPassword": "Gammalt lösenord",
     "newPassword": "Nytt lösenord",
     "newPasswordAgain": "Nytt lösenord igen",
-    "changePassword": "Ändra lösenord"
+    "changePassword": "Ändra lösenord",
+    "noLink": "Fick inte verifieringslänken",
+    "enterEmail": "Ange e-postadress",
+    "LinkSentTo": "Verifieringslänk skickad till",
+    "requestLink": "Begär verifieringslänk"
     }

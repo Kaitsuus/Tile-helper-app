@@ -64,5 +64,9 @@
     "oldPassword": "Old Password",
     "newPassword": "New Password",
     "newPasswordAgain": "New Password again",
-    "changePassword": "Change Password"
+    "changePassword": "Change Password",
+    "noLink": "Did not receive verification link?",
+    "enterEmail": "Please enter Email",
+    "LinkSentTo": "Verification link sent to",
+    "requestLink": "Request Verification Link"
     }

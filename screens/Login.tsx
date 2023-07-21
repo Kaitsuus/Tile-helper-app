@@ -9,9 +9,10 @@ import { Button, Box, Text, Center, Heading, Image, Select, CheckIcon, Spinner, 
 import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { HomeScreenNavigationProp } from '../src/types';
-import { login, resetPassword } from '../service/auth';
+import { login, resetPassword, verificationLink } from '../service/auth';
 import { useAuth } from '../service/AuthContext';
 import { useTranslation } from 'react-i18next';
+import RequestVerification from '../src/components/RequestVerificationModal';
 
 /**
  * @function Login
@@ -35,6 +36,7 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const { setUser } = useAuth();
   const navigation = useNavigation<HomeScreenNavigationProp>();
+  const [showRequestVerificationModal, setShowRequestVerificationModal] = useState(false);
 
   /**
    * @function changeLanguage
@@ -137,17 +139,17 @@ const Login: React.FC = () => {
       />
       </Box>
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="80%">
+      <Heading size="2xl" color="#D9D9D9" py="2" textAlign="center">
+      {t('login')}
+      </Heading>
       {loading && 
-      <HStack space={8} justifyContent="center" alignItems="center">
+      <HStack space={8} justifyContent="center" alignItems="center" mb={2}>
       <Spinner accessibilityLabel="Loading" size={'lg'} color={"orange.400"}/>
       <Heading color="orange.400" fontSize="lg">
         Loading
       </Heading>
       </HStack>
       }
-      <Heading size="2xl" color="#D9D9D9" py="2" textAlign="center">
-      {t('login')}
-      </Heading>
         <TextInput
           placeholder="Email"
           value={email}
@@ -186,6 +188,12 @@ const Login: React.FC = () => {
             {t('forgotPassword')}
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => setShowRequestVerificationModal(true)} style={{marginLeft: -2 }}>
+          <Text style={{ color: '#EF6F20', fontWeight: '600', fontSize: 14 }}>
+            {' '}
+            {t('noLink')}
+          </Text>
+        </TouchableOpacity>
         <Select
           mt="2"
           bg="white"
@@ -213,6 +221,11 @@ const Login: React.FC = () => {
         roundedTopLeft="20"
         zIndex="-10"
       ></Box>
+      <RequestVerification 
+        isOpen={showRequestVerificationModal}
+        onClose={() => setShowRequestVerificationModal(false)}
+        requestVerification={verificationLink}
+      />
     </Center>
   );
 };

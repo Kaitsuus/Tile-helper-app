@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, Alert, TextInput } from 'react-native';
-import { Button, Box, Text, Center, Image, Heading } from 'native-base';
+import { Button, Box, Text, Center, Image, Heading, Spinner, Toast, HStack } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../src/styles/style';
 import { HomeScreenNavigationProp } from '../src/types';
 import { LoginProps } from '../src/types';
-import { signupUser } from '../service/auth'
+import { signupUser, verificationLink } from '../service/auth'
 import { useTranslation } from 'react-i18next';
+import RequestVerification from '../src/components/RequestVerificationModal';
 
 /**
  * @component Signup
@@ -21,6 +22,8 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
   const [password, setPassword] = useState<string>('');
   const [passwordAgain, setPasswordAgain] = useState<string>('');
   const navigation = useNavigation<HomeScreenNavigationProp>();
+  const [loading, setLoading] = useState(false);
+  const [showRequestVerificationModal, setShowRequestVerificationModal] = useState(false);
 
   /**
    * Handles the signup button press.
@@ -32,13 +35,27 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
     } else if (password !== passwordAgain) {
       Alert.alert('Error', "Passwords don't match");
     } else {
+          // Check if the loading state is true, if yes, return early
+    if (loading) {
+      return;
+    }
       try {
+        setLoading(true); // Set loading state to true when starting the login process
         await signupUser(email, password); // Call the signupUser function
-        Alert.alert('Success', 'You have successfully registered');
+        Toast.show({
+          title: 'Success',
+          variant: "subtle",
+          description: "Success', 'Verification link has been sent to your email",
+        });
         navigation.navigate('Login');
       } catch (error) {
         // Display the custom error message from the server
-        Alert.alert('Error', error.message);
+        Toast.show({
+          title: 'Error',
+          variant: "subtle",
+          description: error.message,
+          duration: 4000,
+        });
       }
     }
   };
@@ -48,6 +65,7 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
    * Navigates to the Login screen.
    */
   const handleLoginPress = () => {
+    setLoading(false);
     navigation.navigate('Login')
   }
 
@@ -65,6 +83,14 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
       <Heading size="2xl" color="#D9D9D9" py="2" textAlign="center">
       {t('signup')}
       </Heading>
+      {loading && 
+      <HStack space={8} justifyContent="center" alignItems="center" mb={2}>
+      <Spinner accessibilityLabel="Loading" size={'lg'} color={"orange.400"}/>
+      <Heading color="orange.400" fontSize="lg">
+        Loading
+      </Heading>
+      </HStack>
+      }
         <TextInput
           placeholder="Email"
           value={email}
@@ -105,6 +131,12 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
             Login
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => setShowRequestVerificationModal(true)} style={{marginLeft: -2 }}>
+          <Text style={{ color: '#EF6F20', fontWeight: '600', fontSize: 14 }}>
+            {' '}
+            {t('noLink')}
+          </Text>
+        </TouchableOpacity>
       </Box>
       <Box
         w="100%"
@@ -116,6 +148,11 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
         roundedTopLeft="20"
         zIndex="-10"
       ></Box>
+            <RequestVerification 
+        isOpen={showRequestVerificationModal}
+        onClose={() => setShowRequestVerificationModal(false)}
+        requestVerification={verificationLink}
+      />
     </Center>
   );
 };
