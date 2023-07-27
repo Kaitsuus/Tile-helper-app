@@ -13,6 +13,7 @@ import { login, resetPassword, verificationLink } from '../service/auth';
 import { useAuth } from '../service/AuthContext';
 import { useTranslation } from 'react-i18next';
 import RequestVerification from '../src/components/RequestVerificationModal';
+import TermsModal from '../src/components/TermsModal';
 
 /**
  * @function Login
@@ -37,6 +38,8 @@ const Login: React.FC = () => {
   const { setUser } = useAuth();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [showRequestVerificationModal, setShowRequestVerificationModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   /**
    * @function changeLanguage
@@ -127,6 +130,15 @@ const Login: React.FC = () => {
   const handleSignupPress = () => {
     navigation.navigate('Signup')
   }
+
+  const handleAcceptTerms = () => {
+    setTermsAccepted(true);
+    setShowTermsModal(false);
+  };
+  const handleRejectTerms = () => {
+    // For simplicity, we'll just close the modal here
+    setShowTermsModal(false);
+  };
 
   return (
     <Center w="100%" flex={1} px="3" background="#D9D9D9">
@@ -225,6 +237,12 @@ const Login: React.FC = () => {
         isOpen={showRequestVerificationModal}
         onClose={() => setShowRequestVerificationModal(false)}
         requestVerification={verificationLink}
+      />
+        <TermsModal
+        isOpen={showTermsModal}
+        onClose={() => setShowTermsModal(false)}
+        onAccept={handleAcceptTerms}
+        onReject={handleRejectTerms}
       />
     </Center>
   );
