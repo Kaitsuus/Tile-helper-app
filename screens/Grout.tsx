@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Alert, TouchableOpacity } from 'react-native';
+import { Alert, TouchableOpacity, View } from 'react-native';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -14,6 +14,7 @@ import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 import InfoModal from '../src/components/InfoModal';
 import { useTranslation } from 'react-i18next';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 /**
  * Grout is a React functional component used for grout calculations.
@@ -168,9 +169,19 @@ const Grout: React.FC = () => {
       console.error('Error adding item to the list:', error);
     }
   };
+  const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
 
   return (
     <Center w="100%" flex={1} px="3" background="#D9D9D9">
+      <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
+      <BannerAd
+        unitId={adUnitId}
+        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        requestOptions={{
+          requestNonPersonalizedAdsOnly: true,
+        }}
+      />
+    </View>
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="65%">
       <Box flexDirection="row" marginBottom={2}>
       <Select

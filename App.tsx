@@ -25,6 +25,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import 'intl';
 import 'intl/locale-data/jsonp/fi';
+import 'expo-dev-client';
 
 
 // Import language files
