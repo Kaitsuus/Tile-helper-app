@@ -1,21 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Modal, Button, Spinner} from 'native-base';
-import { BackHandler } from 'react-native';
 
 /**
- * @typedef {object} TermsModalProps
+ * @typedef {object} ReadTermsModalProps
  * @property {boolean} isOpen - Indicates whether the Modal is open
  * @property {() => void} onClose - Callback function to close the Modal
- * @property {() => void} onAccept - Callback function when the user accepts the terms
  * @property {() => void} onReject - Callback function when the user rejects the terms
  */
 
 
-interface TermsModalProps {
+interface ReadTermsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAccept: () => void;
   onReject: () => void;
 }
 
@@ -26,10 +22,9 @@ interface TermsModalProps {
  * @returns {JSX.Element}
  */
 
-const TermsModal: React.FC<TermsModalProps> = ({
+const ReadTermsModal: React.FC<ReadTermsModalProps> = ({
   isOpen,
   onClose,
-  onAccept,
   onReject,
 }) => {
   const [mdContent, setMdContent] = useState('');
@@ -52,19 +47,8 @@ const TermsModal: React.FC<TermsModalProps> = ({
     fetchMarkdown();
   }, []);
 
-  const handleAccept = () => {
-    AsyncStorage.setItem('accepted_terms', 'true')
-      .then(() => {
-        onAccept();
-      })
-      .catch((error) => {
-        console.error('Error saving accepted terms:', error);
-      });
-  };
-
   const handleReject = () => {
     onReject();
-    BackHandler.exitApp(); // Close the app when the user rejects
   };
 
   return (
@@ -82,10 +66,7 @@ const TermsModal: React.FC<TermsModalProps> = ({
         <Modal.Footer>
           <Button.Group space={2}>
             <Button variant="ghost" onPress={handleReject} colorScheme="orange">
-              Reject
-            </Button>
-            <Button onPress={handleAccept} colorScheme="orange">
-              Accept
+              Close
             </Button>
           </Button.Group>
         </Modal.Footer>
@@ -94,4 +75,4 @@ const TermsModal: React.FC<TermsModalProps> = ({
   );
 };
 
-export default TermsModal;
+export default ReadTermsModal;

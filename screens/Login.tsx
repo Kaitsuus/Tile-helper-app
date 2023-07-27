@@ -3,7 +3,7 @@
  * @description This module exports the Login component which is used to render the login screen of the app.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, TextInput } from 'react-native';
 import { Button, Box, Text, Center, Heading, Image, Select, CheckIcon, Spinner, Toast, HStack } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
@@ -14,6 +14,7 @@ import { useAuth } from '../service/AuthContext';
 import { useTranslation } from 'react-i18next';
 import RequestVerification from '../src/components/RequestVerificationModal';
 import TermsModal from '../src/components/TermsModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
  * @function Login
@@ -38,7 +39,7 @@ const Login: React.FC = () => {
   const { setUser } = useAuth();
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [showRequestVerificationModal, setShowRequestVerificationModal] = useState(false);
-  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   /**
@@ -140,6 +141,19 @@ const Login: React.FC = () => {
     setShowTermsModal(false);
   };
 
+  useEffect(() => {
+    AsyncStorage.getItem('accepted_terms').then(value => {
+      if (value === 'true') {
+        setShowTermsModal(false);
+      } else {
+        setShowTermsModal(true);
+      }
+    }).catch(err => {
+      console.error('Error reading accepted terms from AsyncStorage:', err);
+      setShowTermsModal(true);
+    });
+  }, []);
+
   return (
     <Center w="100%" flex={1} px="3" background="#D9D9D9">
       <Box safeArea mb={5}>
@@ -238,12 +252,13 @@ const Login: React.FC = () => {
         onClose={() => setShowRequestVerificationModal(false)}
         requestVerification={verificationLink}
       />
-        <TermsModal
-        isOpen={showTermsModal}
-        onClose={() => setShowTermsModal(false)}
-        onAccept={handleAcceptTerms}
-        onReject={handleRejectTerms}
-      />
+    {showTermsModal !== null && 
+    <TermsModal
+      isOpen={showTermsModal}
+      onClose={() => setShowTermsModal(false)}
+      onAccept={handleAcceptTerms}
+      onReject={handleRejectTerms}
+    />}
     </Center>
   );
 };

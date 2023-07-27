@@ -13,6 +13,7 @@ import DeleteUserModal from '../src/components/DeleteUserModal';
 import ChangePasswordModal from '../src/components/ChangePasswordModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
+import ReadTermsModal from '../src/components/ReadTerms';
 
 /**
  * @function UserMenu
@@ -33,6 +34,7 @@ const UserMenu: React.FC = () => {
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const { userData } = useUserContext();
   const { setUser } = useAuth();
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
     /**
    * @function changeLanguage
@@ -64,6 +66,9 @@ const UserMenu: React.FC = () => {
     } catch (error) {
       console.error('Error deleting user:', error);
     }
+  };
+  const handleRejectTerms = () => {
+    setShowTermsModal(false);
   };
 
   return (
@@ -102,7 +107,7 @@ const UserMenu: React.FC = () => {
         <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={8}>
         {t('review')}
         </Button>
-        <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2}>
+        <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2} onPress={() => setShowTermsModal(true)}>
         {t('privacy')}
         </Button>
         <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2} onPress={() => setShowChangePasswordModal(true)}>
@@ -133,6 +138,11 @@ const UserMenu: React.FC = () => {
         onClose={() => setShowChangePasswordModal(false)}
         updatePassword={changePassword}
       />
+      <ReadTermsModal
+      isOpen={showTermsModal}
+      onReject={handleRejectTerms}
+      onClose={() => setShowTermsModal(false)}
+    />
     </Center>
   );
 };
