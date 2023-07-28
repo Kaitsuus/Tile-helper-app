@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Alert, TouchableOpacity, View } from 'react-native';
+import { Alert, TouchableOpacity, View, Keyboard } from 'react-native';
 import { MaskedTextInput } from 'react-native-mask-text';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -58,6 +58,7 @@ const Grout: React.FC = () => {
   const [C, setC] = useState<string>(''); // tile thickness mm
   const [D, setD] = useState<string>(''); // grout width mm
   const [E, setE] = useState<string>(''); // area m²
+  const [keyboardStatus, setKeyboardStatus] = React.useState(false);
   
   /**
    * Navigate to the ShoppingList screen.
@@ -171,17 +172,39 @@ const Grout: React.FC = () => {
   };
   const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
 
+  React.useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardStatus(true); // or some other action
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardStatus(false); // or some other action
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   return (
     <Center w="100%" flex={1} px="3" background="#D9D9D9">
-      <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
-      <BannerAd
-        unitId={adUnitId}
-        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        requestOptions={{
-          requestNonPersonalizedAdsOnly: true,
-        }}
-      />
-    </View>
+      {!keyboardStatus && 
+        <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
+          <BannerAd
+            unitId={adUnitId}
+            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            requestOptions={{
+              requestNonPersonalizedAdsOnly: true,
+            }}
+          />
+        </View>
+      }
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="65%">
       <Box flexDirection="row" marginBottom={2}>
       <Select

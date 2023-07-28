@@ -172,11 +172,17 @@ const ShoppingList: React.FC = () => {
    * @description Deletes the current shopping list.
    */
   const deleteList = async (listId: string) => {
+    const newListIndex = lists.findIndex((list) => list._id !== listId);
+    const updatedLists = lists.filter((list) => list._id !== listId);
+    
     try {
+      if (lists[currentListIndex]?._id === listId) {
+        setItems([]);
+      }
+      setCurrentListIndex((newListIndex).toString());
       await deleteListFromDB(listId);
-      const updatedLists = lists.filter((list) => list._id !== listId);
+
       setLists(updatedLists);
-      setCurrentListIndex('0');
     } catch (error) {
       console.error('Error deleting list:', error);
     }
