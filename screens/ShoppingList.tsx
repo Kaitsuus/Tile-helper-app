@@ -443,7 +443,7 @@ const ShoppingList: React.FC = () => {
   
   return (
     <Center w="100%" flex={1} px={3} background="#fafafa">
-                  {!keyboardStatus && 
+      {!keyboardStatus && 
         <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
           <BannerAd
             unitId={bannerAdUnitId}
@@ -530,7 +530,7 @@ const ShoppingList: React.FC = () => {
         }}
       >
         <Button colorScheme="orange" mb={6} w={20} onPress={handleSaveImage}>
-        {t('save')}
+        save
         </Button>
 
         <Button colorScheme="orange" mb={6} w={20} onPress={handleShareImage}>

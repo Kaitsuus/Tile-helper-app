@@ -265,7 +265,7 @@ const Grout: React.FC = () => {
           />
         </View>
       }
-      <Box safeArea p="2" py="8" w="90%" maxW="290" h="65%">
+      <Box safeArea p="2" py="8" w="90%" maxW="290" h="75%">
       <Box flexDirection="row" marginBottom={2}>
       <Select
         bg="white"
@@ -379,13 +379,11 @@ const Grout: React.FC = () => {
         <Button.Group>
             <Button onPress={addButtonPressed}
           colorScheme="orange"
-          _text={{ fontSize: 'lg', fontWeight: 'bold' }}
           mt="2" flex={1}>
             {t('addToList')}
             </Button>
             <Button
               onPress={handleButtonPress} colorScheme="orange"
-              _text={{ fontSize: 'lg', fontWeight: 'bold' }}
                mt="2" flex={1}
             >
               {t('newList')}
@@ -395,7 +393,7 @@ const Grout: React.FC = () => {
       <Box
         w="100%"
         position="absolute"
-        height="82%"
+        height="90%"
         bottom="0"
         background="#242424"
         opacity="100"
