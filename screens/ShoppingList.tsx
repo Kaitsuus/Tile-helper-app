@@ -174,7 +174,7 @@ const ShoppingList: React.FC = () => {
   const deleteList = async (listId: string) => {
     const newListIndex = lists.findIndex((list) => list._id !== listId);
     const updatedLists = lists.filter((list) => list._id !== listId);
-    
+
     try {
       if (lists[currentListIndex]?._id === listId) {
         setItems([]);
@@ -445,8 +445,13 @@ const ShoppingList: React.FC = () => {
         <Button colorScheme="orange" mt={2} w={20} onPress={handleShareImage}>
         {t('share')}
         </Button>
-        <Button onPress={() => deleteList(lists[currentListIndex]._id)} colorScheme="orange" mt={2} w={20}>
-        {t('delete')}
+        <Button 
+            onPress={currentListIndex === "-1" ? null : () => deleteList(lists[currentListIndex]._id)} 
+            colorScheme={currentListIndex === "-1" ? "gray" : "orange"} 
+            mt={2} 
+            w={20}
+        >
+            {t('delete')}
         </Button>
         <Button onPress={() => setShowModal(true)} colorScheme="orange" mt={2} w={20}>{t('new')}</Button>
       </Box>
