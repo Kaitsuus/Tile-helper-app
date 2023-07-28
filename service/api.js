@@ -1,9 +1,5 @@
-import { BASE_URL } from '@env';
-
-const baseUrl = BASE_URL;
-
 export default {
-  login: `${baseUrl}/login`,
-  users: `${baseUrl}/users`,
-  lists: `${baseUrl}/lists`,
+  login: `https://apu-user-api.herokuapp.com/api/login`,
+  users: `https://apu-user-api.herokuapp.com/api/users`,
+  lists: `https://apu-user-api.herokuapp.com/api/lists`,
 };

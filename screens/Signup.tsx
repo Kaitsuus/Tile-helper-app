@@ -70,7 +70,7 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
   }
 
   return (
-    <Center w="100%" flex={1} px="3" background="#D9D9D9">
+    <Center w="100%" flex={1} px="3" background="#fafafa">
       <Box safeArea mb={5}>
       <Image
         source={require('../assets/apuriLogo.png')}
@@ -141,7 +141,7 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
       <Box
         w="100%"
         position="absolute"
-        height="80%"
+        height="82%"
         bottom="0"
         background="#242424"
         opacity="100"

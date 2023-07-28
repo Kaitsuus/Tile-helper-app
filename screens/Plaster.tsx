@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Alert, TouchableOpacity } from 'react-native';
+import { Alert, TouchableOpacity, View, Keyboard } from 'react-native';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaskedTextInput } from 'react-native-mask-text';
 import styles from '../src/styles/style';
@@ -14,6 +14,7 @@ import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 import { useTranslation } from 'react-i18next';
 import InfoModal from '../src/components/InfoModal';
+import { BannerAd, BannerAdSize, useInterstitialAd, TestIds, } from 'react-native-google-mobile-ads';
 
 /**
  * Plaster is a React functional component used for plaster calculations.
@@ -34,6 +35,7 @@ const Plaster: React.FC = () => {
    * @property {string} brand - State for managing the selected plaster brand.
    * @property {string} squareMeters - State for managing the squareMeters to calculate adhesive consumption.
    * @property {string} adhesiveAmount - State for managing the total calculated plaster consumption.
+   * @property {boolean} keyboardStatus - State for tracking visibility of the keyboard.
    */
 
   const { t } = useTranslation();
@@ -46,6 +48,7 @@ const Plaster: React.FC = () => {
   const [brand, setBrand] = useState<string>(plasterOptions[0].value);
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [plasterAmount, setPlasterAmount] = useState<string>('');
+  const [keyboardStatus, setKeyboardStatus] = React.useState(false);
 
   /**
    * Navigate to the ShoppingList screen.
@@ -154,8 +157,96 @@ const Plaster: React.FC = () => {
     }
   };
 
+  /**
+   * Ad unit ID for banner ads.
+   * Uses test ID in development mode and actual ID in production mode.
+   * @type {string}
+   */
+  const bannerAdUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1024020746297755/9369623631';
+
+  /**
+   * Ad unit ID for interstitial ads.
+   * Uses test ID in development mode and actual ID in production mode.
+   * @type {string}
+   */
+  const interstitialAdUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-1024020746297755/2979329311';
+
+  /**
+   * Hooks and functions for handling interstitial ads.
+   * @type {Object}
+   */
+  const { isLoaded, isClosed, load, show } = useInterstitialAd(interstitialAdUnitId, {
+    requestNonPersonalizedAdsOnly: true,
+  });
+
+  /**
+   * Load ad when the component mounts
+   */
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  /**
+   * Reload ad each time it's closed and show modal
+   */
+  useEffect(() => {
+    if (isClosed) {
+      load();
+      setShowModal(true);
+    }
+  }, [isClosed, load]);
+
+  /**
+   * Function to handle button press.
+   * If lists have more than 0 items and ad is loaded, show ad.
+   * Otherwise, show modal.
+   */
+  const handleButtonPress = () => {
+    if (lists.length > 0) {
+      if (isLoaded) {
+        show();
+      }
+    } else {
+      setShowModal(true);
+    }
+  };
+
+  /**
+   * Listener for keyboard show/hide events.
+   */
+  React.useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardStatus(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardStatus(false);
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   return (
-    <Center w="100%" flex={1} px="3" background="#D9D9D9">
+    <Center w="100%" flex={1} px="3" background="#fafafa">
+            {!keyboardStatus && 
+        <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
+          <BannerAd
+            unitId={bannerAdUnitId}
+            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            requestOptions={{
+              requestNonPersonalizedAdsOnly: true,
+            }}
+          />
+        </View>
+      }
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="65%">
         <Text color="#fafafa">{t('plasterCalc')}</Text>
         <Select
@@ -216,7 +307,7 @@ const Plaster: React.FC = () => {
             {t('addToList')}
             </Button>
             <Button
-              onPress={() => setShowModal(true)} colorScheme="orange"
+              onPress={handleButtonPress} colorScheme="orange"
               _text={{ fontSize: 'lg', fontWeight: 'bold' }}
                mt="2" flex={1}
             >
@@ -227,7 +318,7 @@ const Plaster: React.FC = () => {
       <Box
         w="100%"
         position="absolute"
-        height="80%"
+        height="82%"
         bottom="0"
         background="#242424"
         opacity="100"

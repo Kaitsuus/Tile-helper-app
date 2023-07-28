@@ -72,7 +72,7 @@ const UserMenu: React.FC = () => {
   };
 
   return (
-    <Center w="100%" flex={1} px={3} background="#D9D9D9">
+    <Center w="100%" flex={1} px={3} background="#fafafa">
       <Avatar bg="#EF6F20" size="2xl" mt="40">
         {userData && userData.email ? userData.email[0].toUpperCase() : 'A'}
       </Avatar>
