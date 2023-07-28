@@ -26,7 +26,7 @@ const Home: React.FC = () => {
   const userEmailPrefix = userData?.email.split('@')[0];
 
   return (
-    <Center w="100%" flex={1} px="3" background="#D9D9D9">
+    <Center w="100%" flex={1} px="3" background="#fafafa">
       <Heading size="2xl" color="#D9D9D9" pt="5">
         {t('welcome')}
       </Heading>

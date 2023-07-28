@@ -163,7 +163,7 @@ const Adhesive: React.FC = () => {
   };
 
   return (
-    <Center w="100%" flex={1} px="3" background="#D9D9D9">
+    <Center w="100%" flex={1} px="3" background="#fafafa">
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="65%">
         <Text mt="2" mb="2" color="#fafafa">
         {t('adhesiveCalc')}

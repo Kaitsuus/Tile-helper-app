@@ -14,7 +14,7 @@ import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 import InfoModal from '../src/components/InfoModal';
 import { useTranslation } from 'react-i18next';
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import { BannerAd, BannerAdSize, useInterstitialAd, TestIds, } from 'react-native-google-mobile-ads';
 
 /**
  * Grout is a React functional component used for grout calculations.
@@ -59,6 +59,8 @@ const Grout: React.FC = () => {
   const [D, setD] = useState<string>(''); // grout width mm
   const [E, setE] = useState<string>(''); // area m²
   const [keyboardStatus, setKeyboardStatus] = React.useState(false);
+  const [loaded, setLoaded] = useState(false);
+
   
   /**
    * Navigate to the ShoppingList screen.
@@ -170,7 +172,33 @@ const Grout: React.FC = () => {
       console.error('Error adding item to the list:', error);
     }
   };
+  /* ADS TESTING*/
   const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+
+  const { isLoaded, isClosed, load, show } = useInterstitialAd(TestIds.INTERSTITIAL, {
+    requestNonPersonalizedAdsOnly: true,
+  });
+  
+  useEffect(() => {
+    load();
+  }, [load]);
+  
+  useEffect(() => {
+    if (isClosed) {
+      load();
+      setShowModal(true);
+    }
+  }, [isClosed, load]);
+  
+  const handleButtonPress = () => {
+    if (lists.length > 0) {
+      if (isLoaded) {
+        show();
+      }
+    } else {
+      setShowModal(true);
+    }
+  };
 
   React.useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -192,8 +220,10 @@ const Grout: React.FC = () => {
     };
   }, []);
 
+  
+
   return (
-    <Center w="100%" flex={1} px="3" background="#D9D9D9">
+    <Center w="100%" flex={1} px="3" background="#fafafa">
       {!keyboardStatus && 
         <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
           <BannerAd
@@ -324,7 +354,7 @@ const Grout: React.FC = () => {
             {t('addToList')}
             </Button>
             <Button
-              onPress={() => setShowModal(true)} colorScheme="orange"
+              onPress={handleButtonPress} colorScheme="orange"
               _text={{ fontSize: 'lg', fontWeight: 'bold' }}
                mt="2" flex={1}
             >
