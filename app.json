@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "apuri",
-    "slug": "apuri",
-    "version": "1.0.0",
+    "name": "APU-App",
+    "slug": "APU-App",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

@@ -40,6 +40,7 @@ const Grout: React.FC = () => {
    * @property {string} C - State for managing tile thickness in mm.
    * @property {string} D - State for managing grout width in mm.
    * @property {string} E - State for managing tile area in m².
+   * @property {boolean} keyboardStatus - State for tracking visibility of the keyboard.
    */
 
   const { t } = useTranslation();
@@ -59,7 +60,7 @@ const Grout: React.FC = () => {
   const [D, setD] = useState<string>(''); // grout width mm
   const [E, setE] = useState<string>(''); // area m²
   const [keyboardStatus, setKeyboardStatus] = React.useState(false);
-  const [loaded, setLoaded] = useState(false);
+
 
   
   /**
@@ -172,24 +173,52 @@ const Grout: React.FC = () => {
       console.error('Error adding item to the list:', error);
     }
   };
-  /* ADS TESTING*/
-  const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+  
 
-  const { isLoaded, isClosed, load, show } = useInterstitialAd(TestIds.INTERSTITIAL, {
+  /**
+   * Ad unit ID for banner ads.
+   * Uses test ID in development mode and actual ID in production mode.
+   * @type {string}
+   */
+  const bannerAdUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1024020746297755/9369623631';
+
+  /**
+   * Ad unit ID for interstitial ads.
+   * Uses test ID in development mode and actual ID in production mode.
+   * @type {string}
+   */
+  const interstitialAdUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-1024020746297755/2979329311';
+
+  /**
+   * Hooks and functions for handling interstitial ads.
+   * @type {Object}
+   */
+  const { isLoaded, isClosed, load, show } = useInterstitialAd(interstitialAdUnitId, {
     requestNonPersonalizedAdsOnly: true,
   });
-  
+
+  /**
+   * Load ad when the component mounts
+   */
   useEffect(() => {
     load();
   }, [load]);
-  
+
+  /**
+   * Reload ad each time it's closed and show modal
+   */
   useEffect(() => {
     if (isClosed) {
       load();
       setShowModal(true);
     }
   }, [isClosed, load]);
-  
+
+  /**
+   * Function to handle button press.
+   * If lists have more than 0 items and ad is loaded, show ad.
+   * Otherwise, show modal.
+   */
   const handleButtonPress = () => {
     if (lists.length > 0) {
       if (isLoaded) {
@@ -200,17 +229,20 @@ const Grout: React.FC = () => {
     }
   };
 
+  /**
+   * Listener for keyboard show/hide events.
+   */
   React.useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
-        setKeyboardStatus(true); // or some other action
+        setKeyboardStatus(true);
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => {
-        setKeyboardStatus(false); // or some other action
+        setKeyboardStatus(false);
       }
     );
 
@@ -220,14 +252,12 @@ const Grout: React.FC = () => {
     };
   }, []);
 
-  
-
   return (
     <Center w="100%" flex={1} px="3" background="#fafafa">
       {!keyboardStatus && 
         <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
           <BannerAd
-            unitId={adUnitId}
+            unitId={bannerAdUnitId}
             size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
             requestOptions={{
               requestNonPersonalizedAdsOnly: true,
@@ -365,7 +395,7 @@ const Grout: React.FC = () => {
       <Box
         w="100%"
         position="absolute"
-        height="80%"
+        height="82%"
         bottom="0"
         background="#242424"
         opacity="100"

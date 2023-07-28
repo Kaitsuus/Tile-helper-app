@@ -240,7 +240,7 @@ const Login: React.FC = () => {
       <Box
         w="100%"
         position="absolute"
-        height="80%"
+        height="82%"
         bottom="0"
         background="#242424"
         opacity="100"

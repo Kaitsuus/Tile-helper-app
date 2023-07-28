@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { FlatList, Text, TextInput, TouchableOpacity, View, Platform } from 'react-native';
+import { FlatList, Text, TextInput, TouchableOpacity, View, Platform, Keyboard } from 'react-native';
 import { Center, Box, Select, Button, CheckIcon, Modal, FormControl, Input } from 'native-base';
 import { makeAuthenticatedRequest, deleteItemFromDB, deleteListFromDB, fetchAndTransformLists } from '../service/auth';
 import api from '../service/api';
@@ -17,6 +17,7 @@ import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 import ListImage from '../src/components/ListImage';
 import { useTranslation } from 'react-i18next';
+import { BannerAd, BannerAdSize, useInterstitialAd, TestIds, } from 'react-native-google-mobile-ads';
 
 /**
  * @typedef ShoppingList
@@ -62,6 +63,7 @@ const ShoppingList: React.FC = () => {
    * @property {boolean} showModal - State variable to control the visibility of a modal.
    * @property {Object} shoppingListRef - Ref to the shopping list.
    * @property {boolean} captureScreenshot - State variable to indicate if a screenshot should be captured.
+   * @property {boolean} keyboardStatus - State for tracking visibility of the keyboard.
    */
 
   const { t } = useTranslation();
@@ -76,6 +78,7 @@ const ShoppingList: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const shoppingListRef = useRef(null);
   const [captureScreenshot, setCaptureScreenshot] = useState(false);
+  const [keyboardStatus, setKeyboardStatus] = React.useState(false);
 
   /**
    * @function fetchLists
@@ -360,9 +363,97 @@ const ShoppingList: React.FC = () => {
       }, 100);
     }
   };
+
+  /**
+   * Ad unit ID for banner ads.
+   * Uses test ID in development mode and actual ID in production mode.
+   * @type {string}
+   */
+  const bannerAdUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1024020746297755/9369623631';
+
+  /**
+   * Ad unit ID for interstitial ads.
+   * Uses test ID in development mode and actual ID in production mode.
+   * @type {string}
+   */
+  const interstitialAdUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-1024020746297755/2979329311';
+
+  /**
+   * Hooks and functions for handling interstitial ads.
+   * @type {Object}
+   */
+  const { isLoaded, isClosed, load, show } = useInterstitialAd(interstitialAdUnitId, {
+    requestNonPersonalizedAdsOnly: true,
+  });
+
+  /**
+   * Load ad when the component mounts
+   */
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  /**
+   * Reload ad each time it's closed and show modal
+   */
+  useEffect(() => {
+    if (isClosed) {
+      load();
+      setShowModal(true);
+    }
+  }, [isClosed, load]);
+
+  /**
+   * Function to handle button press.
+   * If lists have more than 0 items and ad is loaded, show ad.
+   * Otherwise, show modal.
+   */
+  const handleButtonPress = () => {
+    if (lists.length > 0) {
+      if (isLoaded) {
+        show();
+      }
+    } else {
+      setShowModal(true);
+    }
+  };
+
+  /**
+   * Listener for keyboard show/hide events.
+   */
+  React.useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardStatus(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardStatus(false);
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []); 
   
   return (
     <Center w="100%" flex={1} px={3} background="#fafafa">
+                  {!keyboardStatus && 
+        <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
+          <BannerAd
+            unitId={bannerAdUnitId}
+            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            requestOptions={{
+              requestNonPersonalizedAdsOnly: true,
+            }}
+          />
+        </View>
+      }
       <Modal isOpen={captureScreenshot}>
         <ListImage
           ref={shoppingListRef}
@@ -371,7 +462,7 @@ const ShoppingList: React.FC = () => {
           items={items}
         />
       </Modal>
-      <Box safeArea p={2} py={8} w="100%" h="80%">
+      <Box safeArea p={2} pb={2} py={8} w="100%" h="80%">
       <ShoppingListSelect
           lists={lists}
           currentListIndex={currentListIndex}
@@ -438,22 +529,22 @@ const ShoppingList: React.FC = () => {
           gap: 2
         }}
       >
-        <Button colorScheme="orange" mt={2} w={20} onPress={handleSaveImage}>
+        <Button colorScheme="orange" mb={6} w={20} onPress={handleSaveImage}>
         {t('save')}
         </Button>
 
-        <Button colorScheme="orange" mt={2} w={20} onPress={handleShareImage}>
+        <Button colorScheme="orange" mb={6} w={20} onPress={handleShareImage}>
         {t('share')}
         </Button>
         <Button 
             onPress={currentListIndex === "-1" ? null : () => deleteList(lists[currentListIndex]._id)} 
             colorScheme={currentListIndex === "-1" ? "gray" : "orange"} 
-            mt={2} 
+            mb={6} 
             w={20}
         >
             {t('delete')}
         </Button>
-        <Button onPress={() => setShowModal(true)} colorScheme="orange" mt={2} w={20}>{t('new')}</Button>
+        <Button onPress={handleButtonPress} colorScheme="orange" mb={6} w={20}>{t('new')}</Button>
       </Box>
       <CreateListModal
         isOpen={showModal}

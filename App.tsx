@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NativeBaseProvider } from 'native-base';
 import {
   NavigationContainer,
@@ -26,6 +26,7 @@ import { initReactI18next } from 'react-i18next';
 import 'intl';
 import 'intl/locale-data/jsonp/fi';
 import 'expo-dev-client';
+import mobileAds from 'react-native-google-mobile-ads';
 
 
 // Import language files
@@ -66,6 +67,14 @@ const Stack = createStackNavigator<RootStackParamList>();
 const App: React.FC = () => {
   const [user, setUser] = useState(false);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    mobileAds()
+      .initialize()
+      .then(adapterStatuses => {
+        console.log('AdMob initialization complete');
+      });
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

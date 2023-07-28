@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, TouchableOpacity } from 'react-native';
+import { Alert, TouchableOpacity, Keyboard, View } from 'react-native';
 import { Button, Box, Text, Center, Select, CheckIcon } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaskedTextInput } from 'react-native-mask-text';
@@ -14,6 +14,7 @@ import { useUserContext } from '../service/UserContext';
 import CreateListModal from '../src/components/CreateListModal';
 import { useTranslation } from 'react-i18next';
 import InfoModal from '../src/components/InfoModal';
+import { BannerAd, BannerAdSize, useInterstitialAd, TestIds, } from 'react-native-google-mobile-ads';
 
 /**
  * Adhesive is a React functional component used for adhesive calculations.
@@ -35,6 +36,7 @@ const Adhesive: React.FC = () => {
    * @property {string} squareMeters - State for managing the squareMeters to calculate adhesive consumption.
    * @property {string} adhesiveAmount - State for managing the total calculated adhesive consumption.
    * @property {string} thickness - State for managing throwel thickness in mm.
+   * @property {boolean} keyboardStatus - State for tracking visibility of the keyboard.
    */
 
   const { t } = useTranslation();
@@ -48,6 +50,7 @@ const Adhesive: React.FC = () => {
   const [thickness, setThickness] = useState<string>('');
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [adhesiveAmount, setAdhesiveAmount] = useState<string>('');
+  const [keyboardStatus, setKeyboardStatus] = React.useState(false);
 
   /**
    * Navigate to the ShoppingList screen.
@@ -162,8 +165,96 @@ const Adhesive: React.FC = () => {
     }
   };
 
+  /**
+   * Ad unit ID for banner ads.
+   * Uses test ID in development mode and actual ID in production mode.
+   * @type {string}
+   */
+  const bannerAdUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-1024020746297755/9369623631';
+
+  /**
+   * Ad unit ID for interstitial ads.
+   * Uses test ID in development mode and actual ID in production mode.
+   * @type {string}
+   */
+  const interstitialAdUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-1024020746297755/2979329311';
+
+  /**
+   * Hooks and functions for handling interstitial ads.
+   * @type {Object}
+   */
+  const { isLoaded, isClosed, load, show } = useInterstitialAd(interstitialAdUnitId, {
+    requestNonPersonalizedAdsOnly: true,
+  });
+
+  /**
+   * Load ad when the component mounts
+   */
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  /**
+   * Reload ad each time it's closed and show modal
+   */
+  useEffect(() => {
+    if (isClosed) {
+      load();
+      setShowModal(true);
+    }
+  }, [isClosed, load]);
+
+  /**
+   * Function to handle button press.
+   * If lists have more than 0 items and ad is loaded, show ad.
+   * Otherwise, show modal.
+   */
+  const handleButtonPress = () => {
+    if (lists.length > 0) {
+      if (isLoaded) {
+        show();
+      }
+    } else {
+      setShowModal(true);
+    }
+  };
+
+  /**
+   * Listener for keyboard show/hide events.
+   */
+  React.useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardStatus(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardStatus(false);
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   return (
     <Center w="100%" flex={1} px="3" background="#fafafa">
+      {!keyboardStatus && 
+      <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
+        <BannerAd
+          unitId={bannerAdUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+          requestOptions={{
+            requestNonPersonalizedAdsOnly: true,
+          }}
+          />
+      </View>
+      }
       <Box safeArea p="2" py="8" w="90%" maxW="290" h="65%">
         <Text mt="2" mb="2" color="#fafafa">
         {t('adhesiveCalc')}
@@ -252,7 +343,7 @@ const Adhesive: React.FC = () => {
             {t('addToList')}
             </Button>
             <Button
-              onPress={() => setShowModal(true)} colorScheme="orange"
+              onPress={handleButtonPress} colorScheme="orange"
               _text={{ fontSize: 'lg', fontWeight: 'bold' }}
                mt="2" flex={1}
             >
@@ -263,7 +354,7 @@ const Adhesive: React.FC = () => {
       <Box
         w="100%"
         position="absolute"
-        height="80%"
+        height="82%"
         bottom="0"
         background="#242424"
         opacity="100"
