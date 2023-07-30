@@ -68,7 +68,7 @@ const Plaster: React.FC = () => {
    */
   const calculateConsumption = () => {
     const sqm = parseFloat(squareMeters);
-    const result = consumption * sqm * parseFloat(thickness);
+    const result = consumption * sqm * (parseFloat(thickness));
     setPlasterAmount(result.toFixed(2));
   };
 
