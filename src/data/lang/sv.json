@@ -68,5 +68,7 @@
     "noLink": "Fick inte verifieringslänken",
     "enterEmail": "Ange e-postadress",
     "LinkSentTo": "Verifieringslänk skickad till",
-    "requestLink": "Begär verifieringslänk"
+    "requestLink": "Begär verifieringslänk",
+    "pcs": "pcs",
+    "pkg": "förp"
     }

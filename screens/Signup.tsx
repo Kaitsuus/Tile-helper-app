@@ -96,7 +96,7 @@ const Signup: React.FC<LoginProps>= ({ handleLogin, handleSignup }) => {
           value={email}
           style={styles.input}
           keyboardType="email-address"
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text) => setEmail(text.toLowerCase())}
         />
         <TextInput
           placeholder={t('pwPlaceHolder')}

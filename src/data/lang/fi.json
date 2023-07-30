@@ -68,6 +68,8 @@
     "noLink": "En saanut vahvistuslinkkiä",
     "enterEmail": "Syötä sähköpostiosoite",
     "LinkSentTo": "Vahvistuslinkki lähetetty osoitteeseen",
-    "requestLink": "Pyydä vahvistuslinkkiä"
+    "requestLink": "Pyydä vahvistuslinkkiä",
+    "pcs": "kpl",
+    "pkg": "pkt"
 }
   

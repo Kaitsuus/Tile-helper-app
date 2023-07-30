@@ -26,7 +26,7 @@ const ListImage = React.forwardRef<View, ShoppingListImageProps>(
   ({ lists, currentListIndex, items }, ref) => {
     return (
       <View style={styles.container} ref={ref}>
-        <Image source={require('../../assets/apuriLogo.png')} style={styles.logo} />
+        <Image source={require('../../assets/favicon.png')} style={styles.logo} />
 
         {/* Add the shopping list title */}
         <Text style={styles.title}>{lists[currentListIndex]?.title}</Text>

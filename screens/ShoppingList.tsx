@@ -72,7 +72,7 @@ const ShoppingList: React.FC = () => {
   const [newListName, setNewListName] = useState('');
   const [newItemName, setNewItemName] = useState('');
   const [newItemAmount, setNewItemAmount] = useState<number>(0);
-  const [newItemUnit, setNewItemUnit] = useState<string>('kpl');
+  const [newItemUnit, setNewItemUnit] = useState<string>(t('pcs'));
   const [editingAmount, setEditingAmount] = useState<EditingAmount | null>(null);
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -512,9 +512,9 @@ const ShoppingList: React.FC = () => {
             }}
           >
             <Select.Item label="m²" value="m²" />
-            <Select.Item label="kpl" value="kpl" />
+            <Select.Item label={t('pcs')} value={t('pcs')} />
             <Select.Item label="l" value="l" />
-            <Select.Item label="pkt" value="pkt" />
+            <Select.Item label={t('pkg')} value={t('pkg')} />
             <Select.Item label="kg" value="kg" />
           </Select>
 

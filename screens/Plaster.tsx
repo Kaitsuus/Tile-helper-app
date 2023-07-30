@@ -48,6 +48,7 @@ const Plaster: React.FC = () => {
   const [brand, setBrand] = useState<string>(plasterOptions[0].value);
   const [squareMeters, setSquareMeters] = useState<string>('');
   const [plasterAmount, setPlasterAmount] = useState<string>('');
+  const [thickness, setThickness] = useState<string>('');
   const [keyboardStatus, setKeyboardStatus] = React.useState(false);
 
   /**
@@ -67,7 +68,7 @@ const Plaster: React.FC = () => {
    */
   const calculateConsumption = () => {
     const sqm = parseFloat(squareMeters);
-    const result = consumption * sqm;
+    const result = consumption * sqm * parseFloat(thickness);
     setPlasterAmount(result.toFixed(2));
   };
 
@@ -280,6 +281,14 @@ const Plaster: React.FC = () => {
           value={squareMeters}
           keyboardType="numeric"
           placeholder={t('areInput')}
+        />
+        <MaskedTextInput
+          style={styles.input}
+          mask="9999"
+          onChangeText={(text) => setThickness(text)}
+          value={thickness}
+          keyboardType="numeric"
+          placeholder='mm'
         />
         <Button
           colorScheme="orange"

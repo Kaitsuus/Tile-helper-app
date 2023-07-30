@@ -68,5 +68,7 @@
     "noLink": "Ei saanud kinnitamise linki",
     "enterEmail": "Palun sisesta e-posti aadress",
     "LinkSentTo": "Kinnituslink saadetud aadressile",
-    "requestLink": "Päri kinnituslinki"
+    "requestLink": "Päri kinnituslinki",
+    "pcs": "tk",
+    "pkg": "pk"
     }
