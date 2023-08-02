@@ -298,13 +298,17 @@ const WaterProof: React.FC = () => {
    * Otherwise, show modal.
    */
   const handleButtonPress = () => {
-    if (lists.length > 0) {
-      if (isLoaded) {
-        show();
+      /*
+      Disable this add for now
+      if (lists.length > 0) {
+        if (isLoaded) {
+          show();
+        }
+      } else {
+        setShowModal(true);
       }
-    } else {
-      setShowModal(true);
-    }
+      */
+     setShowModal(true)
   };
 
   /**

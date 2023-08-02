@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Linking } from 'react-native';
 import { Center, Avatar, Box, Text, Select, CheckIcon, Button } from 'native-base';
 import { useUserContext } from '../service/UserContext';
 import { useAuth } from '../service/AuthContext';
@@ -52,6 +52,13 @@ const UserMenu: React.FC = () => {
   const handleLogout = () => {
     setUser(false);
   };
+
+  const handleReviewClick = () => {
+    const googlePlayStoreUrl = 'https://play.google.com/store/apps/details?id=com.kaijukarainen.apuapp';
+    Linking.openURL(googlePlayStoreUrl).catch((err) =>
+      console.error('An error occurred while opening the link:', err)
+      );
+    };
 
   /**
    * @function deleteUser
@@ -104,7 +111,7 @@ const UserMenu: React.FC = () => {
           {t('save')}
           </Button>
         </Box>
-        <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={8}>
+        <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={8} onPress={handleReviewClick}>
         {t('review')}
         </Button>
         <Button colorScheme="orange" _text={{ fontSize: 'lg', fontWeight: 'bold' }} mt={2} onPress={() => setShowTermsModal(true)}>

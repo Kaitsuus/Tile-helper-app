@@ -132,10 +132,12 @@ const Adhesive: React.FC = () => {
    * If no shopping list is selected, it prompts the user to create a new one.
    */
   const addButtonPressed = async () => {
+
     if (lists.length === 0) {
       setShowModal(true);
       return;
     }
+
     const newItem: Omit<ShoppingItem, '_id'> = {
       amount: 0,
       content: {
@@ -210,6 +212,8 @@ const Adhesive: React.FC = () => {
    * Otherwise, show modal.
    */
   const handleButtonPress = () => {
+    /*
+    Disable this add for now
     if (lists.length > 0) {
       if (isLoaded) {
         show();
@@ -217,6 +221,9 @@ const Adhesive: React.FC = () => {
     } else {
       setShowModal(true);
     }
+    */
+   setShowModal(true)
+    
   };
 
   /**
@@ -302,7 +309,7 @@ const Adhesive: React.FC = () => {
               <Select.Item
                 key={option.thickness}
                 label={option.label}
-                value={option.thickness} // Use `option.thickness` instead of `option.value`
+                value={option.thickness}
               />
             ))}
         </Select>
