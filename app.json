@@ -2,7 +2,7 @@
   "expo": {
     "name": "APU-App",
     "slug": "apuri",
-    "versionCode": 6,
+    "versionCode": 8,
     "version": "2.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,7 +22,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.kaijukarainen.apuapp",
-      "versionCode": 6
+      "versionCode": 8
     },
     "web": {
       "favicon": "./assets/favicon.png"
