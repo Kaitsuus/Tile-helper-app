@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { signupUser } from '../service/auth';
 import { login } from '../service/auth';
 import { makeAuthenticatedRequest } from '../service/auth';
-import { BASE_URL } from '@env'; // Import the base URL
+const BASE_URL = 'https://apu-user-api.herokuapp.com/api';
 
 jest.mock('axios'); // Mocking Axios
 jest.mock('@react-native-async-storage/async-storage');
