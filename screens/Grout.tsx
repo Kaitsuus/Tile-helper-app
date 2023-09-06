@@ -220,7 +220,6 @@ const Grout: React.FC = () => {
    * Otherwise, show modal.
    */
   const handleButtonPress = () => {
-      /*
       if (lists.length > 0) {
         if (isLoaded) {
           show();
@@ -228,7 +227,6 @@ const Grout: React.FC = () => {
       } else {
         setShowModal(true);
       }
-      */
       setShowModal(true);
   };
 

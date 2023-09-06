@@ -203,7 +203,6 @@ const Plaster: React.FC = () => {
    * Otherwise, show modal.
    */
   const handleButtonPress = () => {
-      /*
       if (lists.length > 0) {
         if (isLoaded) {
           show();
@@ -211,7 +210,6 @@ const Plaster: React.FC = () => {
       } else {
         setShowModal(true);
       }
-      */
       setShowModal(true);
   };
 

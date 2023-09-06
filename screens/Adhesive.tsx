@@ -210,7 +210,6 @@ const Adhesive: React.FC = () => {
    * Otherwise, show modal.
    */
   const handleButtonPress = () => {
-    /*
     if (lists.length > 0) {
       if (isLoaded) {
         show();
@@ -218,7 +217,6 @@ const Adhesive: React.FC = () => {
     } else {
       setShowModal(true);
     }
-    */
     setShowModal(true);
   };
 
